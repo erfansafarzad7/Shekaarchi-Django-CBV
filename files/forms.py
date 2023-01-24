@@ -8,4 +8,3 @@ class ItemForm(forms.ModelForm):
         model = Item
         fields = '__all__'
 
-

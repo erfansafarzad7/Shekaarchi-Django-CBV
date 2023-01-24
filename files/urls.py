@@ -2,8 +2,8 @@ from django.urls import path
 from . import views
 
 
-app_name = 'accounts'
+app_name = 'files'
 urlpatterns = [
-    # path('/', views..as_view(), name=''),
+    path('<int:code>/', views.ItemDetailView.as_view(), name='item_detail'),
 
 ]

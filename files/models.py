@@ -4,17 +4,17 @@ from ckeditor.fields import RichTextField
 
 class Item(models.Model):
     code = models.CharField(max_length=7)
-    image = models.ImageField(null=True)
+    image = models.ImageField(null=True, blank=True)
     address = models.TextField(max_length=250)
     area = models.PositiveIntegerField()
-    foundation = models.PositiveIntegerField()
+    foundation = models.PositiveIntegerField(null=True, blank=True)
     floor = models.PositiveSmallIntegerField(null=True, blank=True)
     bedroom = models.PositiveSmallIntegerField(null=True, blank=True)
     year = models.PositiveIntegerField(null=True, blank=True)
     all_price = models.CharField(max_length=15)
     owner = models.CharField(max_length=30)
     owner_info = models.TextField(max_length=200)
-    description = RichTextField()
+    description = RichTextField(null=True, blank=True)
     deed = models.BooleanField(default=False)
     exchange = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -30,6 +30,9 @@ class Item(models.Model):
     remote_door = models.BooleanField(default=False)
     parking = models.BooleanField(default=False)
     warehouse = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.code}"
 
 
 
