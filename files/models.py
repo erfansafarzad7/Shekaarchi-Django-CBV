@@ -17,7 +17,6 @@ class Item(models.Model):
     description = RichTextField(null=True, blank=True)
     deed = models.BooleanField(default=False)
     exchange = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
 
     # Item Options
     points = models.BooleanField(default=False)
@@ -30,6 +29,7 @@ class Item(models.Model):
     remote_door = models.BooleanField(default=False)
     parking = models.BooleanField(default=False)
     warehouse = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.code}"
