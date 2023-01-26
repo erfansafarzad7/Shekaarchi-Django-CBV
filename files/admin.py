@@ -8,7 +8,18 @@ class AreaFilter(SimpleListFilter):
     parameter_name = 'Area Filter'
 
     def lookups(self, request, model_admin):
-        return [(i.area, i.area) for i in model_admin.model.objects.all()]
+        # return [(i.area, i.area) for i in model_admin.model.objects.all()]
+        return (
+            ('100', '100'),
+            ('300', '300'),
+            ('500', '500'),
+            ('1000', '1000'),
+            ('3000', '3000'),
+            ('5000', '5000'),
+            ('10000', '10000'),
+            ('30000', '30000'),
+            ('50000', '50000'),
+        )
 
     def queryset(self, request, queryset):
         if self.value():
@@ -31,6 +42,8 @@ class AllPriceFilter(admin.SimpleListFilter):
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     search_fields = ('code', )
-    list_display = ('code', 'area', 'foundation', 'all_price', 'created')
-    list_filter = (AreaFilter, AllPriceFilter, 'deed', 'exchange', 'created')
+    list_display = ('code', 'type', 'area', 'foundation', 'all_price', 'created')
+    list_filter = (AreaFilter, AllPriceFilter,
+                   'type', 'deed', 'exchange', 'residential', 'garden', 'commercial',
+                   'rice_field', 'mechanized', 'traditional', 'inside_plan', 'created')
 

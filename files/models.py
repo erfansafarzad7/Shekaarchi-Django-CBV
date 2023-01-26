@@ -3,7 +3,8 @@ from ckeditor.fields import RichTextField
 
 
 class Item(models.Model):
-    code = models.CharField(max_length=7)
+    code = models.CharField(max_length=7, unique=True)
+    type = models.CharField(max_length=100, choices=[('land', 'land'), ('house', 'house')])
     image = models.ImageField(null=True, blank=True)
     address = models.TextField(max_length=250)
     area = models.PositiveIntegerField()
@@ -15,11 +16,22 @@ class Item(models.Model):
     owner = models.CharField(max_length=30)
     owner_info = models.TextField(max_length=200)
     description = RichTextField(null=True, blank=True)
+
+    # Item Details
     deed = models.BooleanField(default=False)
     exchange = models.BooleanField(default=False)
+    residential = models.BooleanField(default=False)
+    garden = models.BooleanField(default=False)
+    commercial = models.BooleanField(default=False)
+    rice_field = models.BooleanField(default=False)
+    mechanized = models.BooleanField(default=False)
+    traditional = models.BooleanField(default=False)
+    inside_plan = models.BooleanField(default=False)
+    points = models.BooleanField(default=False)
 
     # Item Options
-    points = models.BooleanField(default=False)
+    house_type = models.CharField(max_length=100, choices=[('villa', 'villa'), ('apartment', 'apartment')], null=True, blank=True)
+
     mdf = models.BooleanField(default=False)
     cooler = models.BooleanField(default=False)
     heating = models.BooleanField(default=False)
