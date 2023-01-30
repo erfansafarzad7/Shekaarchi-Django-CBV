@@ -8,17 +8,16 @@ class AreaFilter(SimpleListFilter):
     parameter_name = 'Area Filter'
 
     def lookups(self, request, model_admin):
-        # return [(i.area, i.area) for i in model_admin.model.objects.all()]
         return (
-            ('100', '100'),
-            ('300', '300'),
-            ('500', '500'),
-            ('1000', '1000'),
-            ('3000', '3000'),
-            ('5000', '5000'),
-            ('10000', '10000'),
-            ('30000', '30000'),
-            ('50000', '50000'),
+            (100, '100'),
+            (300, '300'),
+            (500, '500'),
+            (1000, '1000'),
+            (3000, '3000'),
+            (5000, '5000'),
+            (10000, '10000'),
+            (30000, '30000'),
+            (50000, '50000'),
         )
 
     def queryset(self, request, queryset):
@@ -32,7 +31,15 @@ class AllPriceFilter(admin.SimpleListFilter):
     parameter_name = 'All Price'
 
     def lookups(self, request, model_admin):
-        return [(i.all_price, i.all_price) for i in model_admin.model.objects.all()]
+        return (
+            (500000000, '500/000/000'),
+            (1000000000, '1/000/000/000'),
+            (2000000000, '2/000/000/000'),
+            (3000000000, '3/000/000/000'),
+            (4000000000, '4/000/000/000'),
+            (5000000000, '5/000/000/000'),
+            (10000000000, '10/000/000/000'),
+        )
 
     def queryset(self, request, queryset):
         if self.value():

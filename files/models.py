@@ -1,9 +1,11 @@
 from django.db import models
 from ckeditor.fields import RichTextField
+from accounts.models import User
 
 
 class Item(models.Model):
-    code = models.CharField(max_length=7, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.BigIntegerField(unique=True)
     type = models.CharField(max_length=100, choices=[('land', 'land'), ('house', 'house')])
     image = models.ImageField(null=True, blank=True)
     address = models.TextField(max_length=250)
@@ -12,7 +14,7 @@ class Item(models.Model):
     floor = models.PositiveSmallIntegerField(null=True, blank=True)
     bedroom = models.PositiveSmallIntegerField(null=True, blank=True)
     year = models.PositiveIntegerField(null=True, blank=True)
-    all_price = models.CharField(max_length=15)
+    all_price = models.BigIntegerField()
     owner = models.CharField(max_length=30)
     owner_info = models.TextField(max_length=200)
     description = RichTextField(null=True, blank=True)
@@ -45,7 +47,4 @@ class Item(models.Model):
 
     def __str__(self):
         return f"{self.code}"
-
-
-
 
