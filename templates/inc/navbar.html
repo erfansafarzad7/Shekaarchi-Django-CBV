@@ -9,6 +9,10 @@
                 <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
                 {% endif %}
                 <a class="nav-link" href="{% url 'files:create' %}">Create</a>
+                <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
             </div>
         </div>
     </div>

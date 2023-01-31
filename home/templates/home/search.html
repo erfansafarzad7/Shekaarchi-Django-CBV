@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+    {% block content %}
+        {% if results.exists %}
+          {% for result in results %}
+            <a href="{% url 'files:item_detail' result %}">{{result}}</a>
+            <br/>
+          {% endfor %}
+        {% else %}
+          <p>Nope</p>
+        {% endif %}
+    {% endblock %}
