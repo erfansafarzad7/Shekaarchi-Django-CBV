@@ -12,6 +12,9 @@ class HomeView(ListView):
 
 
 class ItemSearchView(TemplateView):
+    """
+    Search items.
+    """
     model = Item
     template_name = "home/search.html"
 

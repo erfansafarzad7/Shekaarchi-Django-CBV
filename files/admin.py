@@ -51,6 +51,6 @@ class ItemAdmin(admin.ModelAdmin):
     search_fields = ('code', )
     list_display = ('code', 'type', 'area', 'foundation', 'all_price', 'created')
     list_filter = (AreaFilter, AllPriceFilter,
-                   'type', 'deed', 'exchange', 'residential', 'garden', 'commercial',
+                   'type', 'house_type',  'deed', 'exchange', 'residential', 'garden', 'commercial',
                    'rice_field', 'mechanized', 'traditional', 'inside_plan', 'created')
 
