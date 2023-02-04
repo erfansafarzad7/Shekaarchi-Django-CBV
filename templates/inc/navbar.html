@@ -1,20 +1,81 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <div class="navbar-nav">
+
             <a class="navbar-brand" href="{% url 'home:home' %}">Home</a>
-            <div class="nav-item">
+
                 {% if not request.user.is_authenticated %}
-                <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
-                <a class="nav-link" href="{% url 'accounts:register' %}">Register</a>
+                <div class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:register' %}">Register</a>
+                </div>
                 {% else %}
-                <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+                <div class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+                </div>
                 {% endif %}
                 <a class="nav-link" href="{% url 'files:create' %}">Create</a>
-                <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+
+
+            <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
+                <!-- code search field -->
+                    <input class="form-control me-2" type="search"
+                           placeholder="code : 11228" aria-label="Search" name="code">
+                    <button class="btn btn-outline-success" type="submit">Search code</button>
                 </form>
-            </div>
+                <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
+
+                <!-- area search field and dropdown -->
+                <input class="form-control me-2" value="0" placeholder="area : 1000"
+                       name="area" type="search" aria-label="Search" >
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Area</button>
+                    <ul class="dropdown-menu">
+                        <button class="btn btn-outline-success dropdown-item"
+                                type="submit" name="area" value="500">500</button>
+                        <button class="btn btn-outline-success dropdown-item"
+                                type="submit" name="area" value="1000">1000</button>
+                        <button class="btn btn-outline-success dropdown-item"
+                                type="submit" name="area" value="2000">2000</button>
+                        <button class="btn btn-outline-success dropdown-item"
+                                type="submit" name="area" value="3000">3000</button>
+                    </ul>
+                </div>
+
+                <!-- all price search field and dropdown -->
+                <input class="form-control me-2" value="0" placeholder="all price : 1,000,000,000"
+                        name="all-price" aria-label="Search" type="search">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">All Price</button>
+                    <ul class="dropdown-menu">
+                        <button class="btn btn-outline-success dropdown-item"
+                                type="submit" name="all-price" value="1000000000">1,000,000,000</button>
+                        <button class="btn btn-outline-success dropdown-item"
+                                type="submit" name="all-price" value="2000000000">2,000,000,000</button>
+                        <button class="btn btn-outline-success dropdown-item"
+                                type="submit" name="all-price" value="3000000000">3,000,000,000</button>
+                    </ul>
+                </div>
+
+                    <select name="type">
+                        <option value="">-</option>
+                        <option value="house">house</option>
+                        <option value="land">land</option>
+                    </select>
+
+                    <select name="house-type">
+                        <option value="">-</option>
+                        <option value="villa">villa</option>
+                        <option value="apartment">apartment</option>
+                    </select>
+
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+
         </div>
     </div>
 </nav>
