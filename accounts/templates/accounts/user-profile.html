@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+    {% block content %}
+
+        {% if user.is_authenticated %}
+
+            {% if request.user.id == items_user.id %}
+                <p>edit profile btn</p>
+            {% endif %}
+
+            {% for item in items %}
+
+                {% if request.user.id == item.user.id %}
+                    <p>dlt btn</p>
+                    <p>edit btn</p>
+                {% endif %}
+
+                <a href="{% url 'files:item_detail' item.code %}">{{ item }}</a>
+
+            {% endfor %}
+
+        {% else %}
+            <h1>You Are Not Logged In</h1>
+        {% endif %}
+
+    {% endblock %}
