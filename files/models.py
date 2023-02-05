@@ -4,7 +4,7 @@ from accounts.models import User
 
 
 class Item(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item_user')
     code = models.BigIntegerField(unique=True)
     type = models.CharField(max_length=100, choices=[('land', 'land'), ('house', 'house')])
     image = models.ImageField(null=True, blank=True)

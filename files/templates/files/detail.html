@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
     {% block content %}
-        <p>{{ item.code }}</p>
-        <p>{{ item.owner }}</p>
-        <p>{{ item.area }}</p>
-        <p>{{ item.all_price }}</p>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'accounts:user_profile' item.user.id %}">{{item.user}}</a>
+            <p>{{ item.code }}</p>
+            <p>{{ item.owner }}</p>
+            <p>{{ item.area }}</p>
+            <p>{{ item.all_price }}</p>
+        {% else %}
+            <h1>You Are Not Logged In</h1>
+        {% endif %}
+
     {% endblock %}

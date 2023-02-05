@@ -3,7 +3,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView, ListView
+from files.models import Item
 from .models import User
 from .forms import UserCreationForm
 
@@ -39,4 +40,24 @@ class RegisterView(SuccessMessageMixin, CreateView):
         new_user = authenticate(username=username, password=password)
         login(self.request, new_user)
         return valid
+
+
+class UserProfileView(ListView):
+    """
+    Show users profile and posts.
+    Users can edit profile and delete/edit their post if it's their own.
+    """
+    template_name = 'accounts/user-profile.html'
+    model = Item
+    context_object_name = 'items'
+
+    def get_queryset(self):
+        return Item.objects.filter(user=self.kwargs['pk'])
+
+    def get(self, request, *args, **kwargs):
+        self.items_user = User.objects.get(id=kwargs['pk'])
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(items_user=self.items_user, **kwargs)
 
