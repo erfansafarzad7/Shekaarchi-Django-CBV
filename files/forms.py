@@ -10,3 +10,11 @@ class ItemCreateForm(forms.ModelForm):
         fields = '__all__'
         exclude = ('user', )
 
+
+class ItemUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Item
+        fields = '__all__'
+        exclude = ('user', 'code')
+

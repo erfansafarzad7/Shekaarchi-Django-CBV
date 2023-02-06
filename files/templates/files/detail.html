@@ -3,14 +3,14 @@
 
         {% if user.is_authenticated %}
             <a href="{% url 'accounts:user_profile' item.user.id %}">{{item.user}}</a>
-            <p>{{ item.code }}</p>
-            <p>{{ item.owner }}</p>
-            <p>{{ item.area }}</p>
-            <p>{{ item.all_price }}</p>
+            <p>code : {{ item.code }}</p>
+            <p>owner : {{ item.owner }}</p>
+            <p>area : {{ item.area }}</p>
+            <p>all price : {{ item.all_price }}</p>
 
                 {% if request.user.id == item.user.id %}
                     <a href="{% url 'files:delete_item' item.code %}"><button class="btn btn-danger">Delete</button></a>
-                    <p>edit btn</p>
+                    <a href="{% url 'files:update_item' item.code %}"><button class="btn btn-warning">Update</button></a>
                 {% endif %}
 
         {% else %}

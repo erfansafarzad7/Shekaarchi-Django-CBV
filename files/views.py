@@ -1,10 +1,10 @@
 from django.contrib.messages.views import SuccessMessageMixin
 from .models import Item
-from django.views.generic import CreateView, DetailView, DeleteView
+from django.views.generic import CreateView, DetailView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
-from files.forms import ItemCreateForm
+from files.forms import ItemCreateForm, ItemUpdateForm
 
 
 class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -21,7 +21,6 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        # messages.success(self.request, 'Item Successfully Created', 'success')
         return super().form_valid(form)
 
 
@@ -51,4 +50,19 @@ class ItemDeleteView(DeleteView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(item=self.item, **kwargs)
+
+
+class ItemUpdateView(UpdateView):
+    model = Item
+    template_name = 'files/update_item.html'
+    form_class = ItemUpdateForm
+    context_object_name = 'item'
+    success_url = reverse_lazy('home:home')
+
+    def get_queryset(self):
+        return Item.objects.get(code=self.kwargs['code'])
+
+    def get_object(self, queryset=None):
+        obj = Item.objects.get(code__exact=self.get_queryset().code)
+        return obj
 
