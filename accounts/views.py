@@ -47,17 +47,17 @@ class UserProfileView(ListView):
     Show users profile and posts.
     Users can edit profile and delete/edit their post if it's their own.
     """
-    template_name = 'accounts/user-profile.html'
+    template_name = 'accounts/user_profile.html'
     model = Item
     context_object_name = 'items'
 
     def get_queryset(self):
-        return Item.objects.filter(user=self.kwargs['pk'])
+        return Item.objects.filter(user__exact=self.kwargs['pk'])
 
     def get(self, request, *args, **kwargs):
         self.items_user = User.objects.get(id=kwargs['pk'])
-        return super().get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs) if self.items_user == request.user else None
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(items_user=self.items_user, **kwargs)
+        return super().get_context_data(items_user=self.items_user.id, **kwargs)
 

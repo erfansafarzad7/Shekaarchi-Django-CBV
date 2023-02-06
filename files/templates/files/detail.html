@@ -7,6 +7,12 @@
             <p>{{ item.owner }}</p>
             <p>{{ item.area }}</p>
             <p>{{ item.all_price }}</p>
+
+                {% if request.user.id == item.user.id %}
+                    <a href="{% url 'files:delete_item' item.code %}"><button class="btn btn-danger">Delete</button></a>
+                    <p>edit btn</p>
+                {% endif %}
+
         {% else %}
             <h1>You Are Not Logged In</h1>
         {% endif %}

@@ -1,13 +1,13 @@
-from django.views.generic import DetailView
+from django.contrib.messages.views import SuccessMessageMixin
 from .models import Item
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
 from files.forms import ItemCreateForm
 
 
-class ItemCreateView(LoginRequiredMixin, CreateView):
+class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """
     Create a new item after validation.
     user will be auto set.
@@ -16,11 +16,12 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
     model = Item
     form_class = ItemCreateForm
     template_name = 'files/create.html'
+    success_message = 'Item Successfully Created'
     success_url = reverse_lazy('home:home')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        messages.success(self.request, 'Item Successfully Created', 'success')
+        # messages.success(self.request, 'Item Successfully Created', 'success')
         return super().form_valid(form)
 
 
@@ -30,4 +31,24 @@ class ItemDetailView(DetailView):
 
     def get_object(self, queryset=None):
         return Item.objects.get(code=self.kwargs['code'])
+
+
+class ItemDeleteView(DeleteView):
+    model = Item
+    template_name = 'files/delete_item.html'
+    context_object_name = 'item'
+    success_url = reverse_lazy('home:home')
+
+    def get_queryset(self):
+        return Item.objects.get(code=self.kwargs['code'])
+
+    def get_object(self, queryset=None):
+        self.item = self.get_queryset()
+        print(self.item.code)
+        if not self.item.user == self.request.user:
+            raise None
+        return self.item.delete()
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(item=self.item, **kwargs)
 
