@@ -43,10 +43,6 @@ class ItemDeleteView(DeleteView):
 
     def get_object(self, queryset=None):
         self.item = self.get_queryset()
-        print(self.item.code)
-        if not self.item.user == self.request.user:
-            raise None
-        return self.item.delete()
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(item=self.item, **kwargs)
@@ -64,5 +60,7 @@ class ItemUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         obj = Item.objects.get(code__exact=self.get_queryset().code)
+        if not obj.user == self.request.user:
+            raise None
         return obj
 
