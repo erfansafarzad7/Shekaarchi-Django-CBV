@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, UpdateView, ListView
 from files.models import Item
 from .models import User
 from .forms import UserCreationForm
@@ -60,4 +60,21 @@ class UserProfileView(ListView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(items_user=self.items_user.id, **kwargs)
+
+
+class UserEditView(UpdateView):
+    model = User
+    fields = ('username', 'email', 'phone_number')
+    template_name = 'accounts/edit_profile.html'
+    context_object_name = 'user'
+    success_url = reverse_lazy('home:home')
+
+    def get_queryset(self):
+        return User.objects.get(id=self.kwargs['pk'])
+
+    def get_object(self, queryset=None):
+        obj = User.objects.get(id=self.get_queryset().id)
+        if not obj.id == self.request.user.id:
+            raise None
+        return obj
 

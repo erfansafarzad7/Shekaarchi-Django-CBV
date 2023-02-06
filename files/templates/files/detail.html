@@ -10,7 +10,7 @@
 
                 {% if request.user.id == item.user.id %}
                     <a href="{% url 'files:delete_item' item.code %}"><button class="btn btn-danger">Delete</button></a>
-                    <a href="{% url 'files:update_item' item.code %}"><button class="btn btn-warning">Update</button></a>
+                    <a href="{% url 'files:edit_item' item.code %}"><button class="btn btn-warning">Update</button></a>
                 {% endif %}
 
         {% else %}

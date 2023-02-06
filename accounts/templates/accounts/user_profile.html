@@ -4,7 +4,9 @@
         {% if user.is_authenticated %}
 
             {% if request.user.id == items_user %}
-                <p>edit profile btn</p>
+                <a href="{% url 'accounts:edit_profile' request.user.id %}">
+                    <button class="btn btn-warning">Edit Profile</button>
+                </a>
                 <br/>
                 <hr/>
             {% endif %}
