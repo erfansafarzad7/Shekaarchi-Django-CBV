@@ -4,6 +4,11 @@ from accounts.models import User
 
 
 class Item(models.Model):
+    """
+    Item model.
+    item code is unique.
+    required fields : (user, code, type, address, area, all_price, owner, owner_info)
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item_user')
     code = models.BigIntegerField(unique=True)
     type = models.CharField(max_length=100, choices=[('land', 'land'), ('house', 'house')])

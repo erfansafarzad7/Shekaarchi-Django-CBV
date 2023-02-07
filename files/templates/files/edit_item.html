@@ -3,9 +3,16 @@
 
         <p>code : {{item.code}}</p>
 
-       <form action="" method="post">
+        {% if user.is_authenticated %}
+        <!--item edit form (login required)-->
+        <form action="" method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Update">
         </form>
+
+        {% else %}
+            <h1>You Are Not Logged In</h1>
+        {% endif %}
+
     {% endblock %}

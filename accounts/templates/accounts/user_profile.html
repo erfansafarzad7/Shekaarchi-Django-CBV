@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
     {% block content %}
 
+        <!--show username (login required)-->
         {% if user.is_authenticated %}
-
+            <h3>{{request.user.username}}</h3>
+            <!--if its own profile-->
             {% if request.user.id == items_user %}
                 <a href="{% url 'accounts:edit_profile' request.user.id %}">
                     <button class="btn btn-warning">Edit Profile</button>
@@ -11,6 +13,11 @@
                 <hr/>
             {% endif %}
 
+            <!--user items-->
+            <h3>
+                Items :
+                <br/>
+            </h3>
             {% for item in items %}
                 <a href="{% url 'files:item_detail' item.code %}">{{ item }}</a>
                 <br/>

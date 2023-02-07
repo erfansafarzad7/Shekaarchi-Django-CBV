@@ -2,6 +2,9 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class UserManager(BaseUserManager):
+    """
+    User/SuperUser create manager.
+    """
     def create_user(self, phone_number, username, email, password):
         if not phone_number:
             raise ValueError("Enter Your Phone Number..")

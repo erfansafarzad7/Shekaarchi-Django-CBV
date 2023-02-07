@@ -63,6 +63,9 @@ class UserProfileView(ListView):
 
 
 class UserEditView(UpdateView):
+    """
+    User can edit just own info.
+    """
     model = User
     fields = ('username', 'email', 'phone_number')
     template_name = 'accounts/edit_profile.html'
@@ -74,7 +77,5 @@ class UserEditView(UpdateView):
 
     def get_object(self, queryset=None):
         obj = User.objects.get(id=self.get_queryset().id)
-        if not obj.id == self.request.user.id:
-            raise None
-        return obj
+        return obj if obj.id == self.request.user.id else None
 

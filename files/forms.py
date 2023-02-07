@@ -4,6 +4,10 @@ from accounts.models import User
 
 
 class ItemCreateForm(forms.ModelForm):
+    """
+    Create item form.
+    user field will be set automatically.
+    """
 
     class Meta:
         model = Item
@@ -12,6 +16,10 @@ class ItemCreateForm(forms.ModelForm):
 
 
 class ItemUpdateForm(forms.ModelForm):
+    """
+    Update item form.
+    can't edit code and user.
+    """
 
     class Meta:
         model = Item

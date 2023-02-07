@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
     {% block content %}
-<h3>home  {{request.user.username}}</h3>
+
+        <!--all items-->
         {% for item in items %}
             <a href="{% url 'files:item_detail' item.code %}">{{item.code}}</a>
             <br/>

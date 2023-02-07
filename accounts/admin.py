@@ -11,6 +11,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'phone_number', 'is_admin', 'is_superuser')
     list_filter = ('is_admin', 'is_superuser')
 
+    # edit user
     fieldsets = (
         ('Info',
          {'fields': ('phone_number', 'email', 'username', 'password')}),
@@ -19,6 +20,7 @@ class UserAdmin(BaseUserAdmin):
          {'fields': ('is_active', 'is_admin', 'is_superuser', 'last_login', 'groups', 'user_permissions')}),
     )
 
+    # add user
     add_fieldsets = (
         ('Add User',
             {'fields': ('username', 'phone_number', 'email', 'password1', 'password2')}),

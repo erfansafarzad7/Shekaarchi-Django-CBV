@@ -4,6 +4,9 @@ from accounts.managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """
+    Custom user model.
+    """
     phone_number = models.CharField(max_length=11, unique=True)
     username = models.CharField(max_length=25, unique=True)
     email = models.EmailField(max_length=50, unique=True)

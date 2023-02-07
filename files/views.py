@@ -25,6 +25,9 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 
 class ItemDetailView(DetailView):
+    """
+    Show items detail.
+    """
     template_name = 'files/detail.html'
     context_object_name = 'item'
 
@@ -33,22 +36,25 @@ class ItemDetailView(DetailView):
 
 
 class ItemDeleteView(DeleteView):
+    """
+    Delete an Item.
+    just item owner can do.
+    """
     model = Item
     template_name = 'files/delete_item.html'
-    context_object_name = 'item'
-    success_url = reverse_lazy('home:home')
 
     def get_queryset(self):
         return Item.objects.get(code=self.kwargs['code'])
 
     def get_object(self, queryset=None):
-        self.item = self.get_queryset()
-
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(item=self.item, **kwargs)
+        self.get_queryset().delete() if self.get_queryset().user == self.request.user else None
 
 
 class ItemUpdateView(UpdateView):
+    """
+    Edit an Item.
+    just item owner can do.
+    """
     model = Item
     template_name = 'files/edit_item.html'
     form_class = ItemUpdateForm
@@ -60,7 +66,5 @@ class ItemUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         obj = Item.objects.get(code__exact=self.get_queryset().code)
-        if not obj.user == self.request.user:
-            raise None
-        return obj
+        return obj if obj.user == self.request.user else None
 

@@ -5,6 +5,10 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 
 class UserCreationForm(forms.ModelForm):
+    """
+    User creation form.
+    check passwords match and set password.
+    """
     password1 = forms.CharField(required=True, label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(required=True, label='Password2', widget=forms.PasswordInput)
 
@@ -27,6 +31,10 @@ class UserCreationForm(forms.ModelForm):
 
 
 class UserChangeForm(forms.ModelForm):
+    """
+    User edit form.
+    edit password link.
+    """
     password = ReadOnlyPasswordHashField(help_text=
                                          "You Can Change The Password Using <a href=\"../password/\">This Form</a>.")
 

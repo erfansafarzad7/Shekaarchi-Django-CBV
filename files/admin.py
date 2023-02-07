@@ -4,6 +4,9 @@ from .models import Item
 
 
 class AreaFilter(SimpleListFilter):
+    """
+    Custom area admin filter.
+    """
     title = 'Area'
     parameter_name = 'Area Filter'
 
@@ -26,7 +29,9 @@ class AreaFilter(SimpleListFilter):
 
 
 class AllPriceFilter(admin.SimpleListFilter):
-
+    """
+    Custom all price admin filter.
+    """
     title = 'All Price'
     parameter_name = 'All Price'
 

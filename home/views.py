@@ -27,11 +27,11 @@ class ItemSearchView(TemplateView):
         house_type = request.GET.get('house-type', '')
         self.results = None
 
-        # find the code
+        # find item by code
         if code:
             self.results = Item.objects.filter(Q(code__exact=code))
 
-        # filter by allprice or area and type
+        # filter by all price or area and type if entered
         if all_price or area:
             self.results = Item.objects.filter(Q(all_price__lte=all_price) | Q(area__lte=area))
             if (all_price or area) and type:
@@ -48,5 +48,7 @@ class ItemSearchView(TemplateView):
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        """Add context to the template"""
+        """
+        Add context to the template
+        """
         return super().get_context_data(results=self.results, **kwargs)
