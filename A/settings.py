@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'files.apps.FilesConfig',
 
     'ckeditor',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,12 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
     },
 }
+
+# ARVAN cloud storages
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = '38c2a080-5d2e-4390-9632-e13020c60d9e'
+AWS_SECRET_ACCESS_KEY = '7d34dd8668893b899c33f4bb05372336371aadfa8794475168546ae958e4900a'
+AWS_S3_ENDPOINT_URL = 'https://s3.ir-thr-at1.arvanstorage.com'
+AWS_STORAGE_BUCKET_NAME = 'django-shop-1'
+AWS_SERVICE_NAME = 's3'
+AWS_S3_FILE_OVERWRITE = False

@@ -9,6 +9,13 @@
             <p>area : {{ item.area }}</p>
             <p>all price : {{ item.all_price }}</p>
 
+            <!--item images-->
+            {% for img in item_images %}
+                <img src="{{img.image.url}}" width="200px" height="200px">
+            {% endfor %}
+
+
+
                 <!--delete/edit item if owner-->
                 {% if request.user.id == item.user.id %}
                     <a href="{% url 'files:delete_item' item.code %}"><button class="btn btn-danger">Delete</button></a>

@@ -3,6 +3,15 @@ from ckeditor.fields import RichTextField
 from accounts.models import User
 
 
+class Image(models.Model):
+    code = models.BigIntegerField(unique=False)
+    image = models.ImageField()
+    uploaded = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.code}"
+
+
 class Item(models.Model):
     """
     Item model.
@@ -10,9 +19,9 @@ class Item(models.Model):
     required fields : (user, code, type, address, area, all_price, owner, owner_info)
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item_user')
+    images = models.ManyToManyField(Image, related_name='item_images')
     code = models.BigIntegerField(unique=True)
     type = models.CharField(max_length=100, choices=[('land', 'land'), ('house', 'house')])
-    image = models.ImageField(null=True, blank=True)
     address = models.TextField(max_length=250)
     area = models.PositiveIntegerField()
     foundation = models.PositiveIntegerField(null=True, blank=True)
@@ -37,8 +46,8 @@ class Item(models.Model):
     points = models.BooleanField(default=False)
 
     # Item Options
-    house_type = models.CharField(max_length=100, choices=[('villa', 'villa'), ('apartment', 'apartment')], null=True, blank=True)
-
+    house_type = models.CharField(max_length=100, null=True, blank=True,
+                                  choices=[('villa', 'villa'), ('apartment', 'apartment')])
     mdf = models.BooleanField(default=False)
     cooler = models.BooleanField(default=False)
     heating = models.BooleanField(default=False)
@@ -52,4 +61,7 @@ class Item(models.Model):
 
     def __str__(self):
         return f"{self.code}"
+
+
+
 

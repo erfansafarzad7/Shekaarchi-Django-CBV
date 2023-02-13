@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
-from .models import Item
+from .models import Item, Image
 
 
 class AreaFilter(SimpleListFilter):
@@ -58,4 +58,11 @@ class ItemAdmin(admin.ModelAdmin):
     list_filter = (AreaFilter, AllPriceFilter,
                    'type', 'house_type',  'deed', 'exchange', 'residential', 'garden', 'commercial',
                    'rice_field', 'mechanized', 'traditional', 'inside_plan', 'created')
+
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    search_fields = ('code', )
+    list_display = ('code', 'uploaded')
+    list_filter = ('uploaded', )
 
