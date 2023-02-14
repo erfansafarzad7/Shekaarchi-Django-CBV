@@ -24,6 +24,7 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         form.instance.user = self.request.user
         item_code = form.instance.code
         images = self.request.FILES.getlist('img')
+        print(images)
         item_data = form.save()
 
         # Save the images of person.

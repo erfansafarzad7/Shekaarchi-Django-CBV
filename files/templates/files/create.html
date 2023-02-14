@@ -5,6 +5,9 @@
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Create  ">
+            <input type="file" name="img"><br>
+            <input type="file" name="img"><br>
+            <input type="file" name="img"><br>
+            <input type="submit" value="ایجاد">
         </form>
     {% endblock %}

@@ -9,7 +9,6 @@ class ItemCreateForm(forms.ModelForm):
     Create item form.
     user field will be set automatically.
     """
-    img = forms.ImageField(allow_empty_file=True)
 
     class Meta:
         model = Item
