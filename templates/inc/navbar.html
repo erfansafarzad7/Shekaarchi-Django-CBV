@@ -2,38 +2,38 @@
     <div class="container-fluid">
         <div class="navbar-nav">
 
-            <a class="navbar-brand" href="{% url 'home:home' %}">Home</a>
+            <a class="navbar-brand" href="{% url 'home:home' %}">صفحه اصلی</a>
 
                 {% if not request.user.is_authenticated %}
                 <div class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'accounts:login' %}">ورود</a>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:register' %}">Register</a>
+                    <a class="nav-link" href="{% url 'accounts:register' %}">ثبتنام</a>
                 </div>
                 {% else %}
                 <div class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
-                    <a class="nav-link" href="{% url 'accounts:user_profile' request.user.id %}">Profile</a>
+                    <a class="nav-link" href="{% url 'accounts:logout' %}">خروج</a>
+                    <a class="nav-link" href="{% url 'accounts:user_profile' request.user.id %}">پروفایل</a>
                 </div>
                 {% endif %}
-                <a class="nav-link" href="{% url 'files:create' %}">Create</a>
+                <a class="nav-link" href="{% url 'files:create' %}">فایل جدید</a>
 
 
             <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
                 <!-- code search field -->
                     <input class="form-control me-2" type="search"
-                           placeholder="code : 11228" aria-label="Search" name="code">
-                    <button class="btn btn-outline-success" type="submit">Search code</button>
+                           placeholder="کد" aria-label="Search" name="code">
+                    <button class="btn btn-outline-success" type="submit">جستوجوی کد</button>
                 </form>
                 <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
 
                 <!-- area search field and dropdown -->
-                <input class="form-control me-2" value="0" placeholder="area : 1000"
+                <input class="form-control me-2" value="0" placeholder="متراژ"
                        name="area" type="search" aria-label="Search" >
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Area</button>
+                            data-bs-toggle="dropdown" aria-expanded="false">متراژ</button>
                     <ul class="dropdown-menu">
                         <button class="btn btn-outline-success dropdown-item"
                                 type="submit" name="area" value="500">500</button>
@@ -47,11 +47,11 @@
                 </div>
 
                 <!-- all price search field and dropdown -->
-                <input class="form-control me-2" value="0" placeholder="all price : 1,000,000,000"
+                <input class="form-control me-2" value="0" placeholder="قیمت کل"
                         name="all-price" aria-label="Search" type="search">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">All Price</button>
+                            data-bs-toggle="dropdown" aria-expanded="false">قیمت کل</button>
                     <ul class="dropdown-menu">
                         <button class="btn btn-outline-success dropdown-item"
                                 type="submit" name="all-price" value="1000000000">1,000,000,000</button>
@@ -64,17 +64,36 @@
 
                     <select name="type">
                         <option value="">-</option>
-                        <option value="house">house</option>
-                        <option value="land">land</option>
+                        <option value="house">خانه</option>
+                        <option value="land">زمین</option>
                     </select>
 
                     <select name="house-type">
                         <option value="">-</option>
-                        <option value="villa">villa</option>
-                        <option value="apartment">apartment</option>
+                        <option value="villa">ویلا</option>
+                        <option value="apartment">آپارتمان</option>
                     </select>
 
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                    <select name="land-type">
+                        <option value="">-</option>
+                        <option value="rice_field">کشاورزی</option>
+                        <option value="garden">باغی</option>
+                        <option value="residential">مسکونی</option>
+                        <option value="commercial">تجاری</option>
+                        <option value="res_comm">مسکونی - تجاری</option>
+                    </select>
+
+                    <select name="rice-field-type">
+                        <option value="">-</option>
+                        <option value="traditional">سنتی</option>
+                        <option value="mechanized">مکانیزه</option>
+                    </select>
+
+                <button class="btn btn-outline-success" type="submit">جستجوی فایل</button>
+                    {% if not request.user.is_authenticated %}
+                        <button class="btn btn-outline-success" type="submit">جستجوی فایل های من</button>
+                    {% endif %}
+
             </form>
 
         </div>

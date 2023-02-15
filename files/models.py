@@ -1,5 +1,4 @@
 from django.db import models
-from ckeditor.fields import RichTextField
 from accounts.models import User
 
 
@@ -20,43 +19,53 @@ class Item(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item_user')
     images = models.ManyToManyField(Image, related_name='item_images')
-    code = models.BigIntegerField(unique=True)
-    type = models.CharField(max_length=100, choices=[('land', 'land'), ('house', 'house')])
-    address = models.TextField(max_length=250)
-    area = models.PositiveIntegerField()
-    foundation = models.PositiveIntegerField(null=True, blank=True)
-    floor = models.PositiveSmallIntegerField(null=True, blank=True)
-    bedroom = models.PositiveSmallIntegerField(null=True, blank=True)
-    year = models.PositiveIntegerField(null=True, blank=True)
-    all_price = models.BigIntegerField()
-    owner = models.CharField(max_length=30)
-    owner_info = models.TextField(max_length=200)
-    description = RichTextField(null=True, blank=True)
+    code = models.BigIntegerField(unique=True, verbose_name='کد')
 
-    # Item Details
-    deed = models.BooleanField(default=False)
-    exchange = models.BooleanField(default=False)
-    residential = models.BooleanField(default=False)
-    garden = models.BooleanField(default=False)
-    commercial = models.BooleanField(default=False)
-    rice_field = models.BooleanField(default=False)
-    mechanized = models.BooleanField(default=False)
-    traditional = models.BooleanField(default=False)
-    inside_plan = models.BooleanField(default=False)
-    points = models.BooleanField(default=False)
+    type = models.CharField(max_length=100, verbose_name='نوع', null=False, blank=False,
+                            choices=[('land', 'زمین'),
+                                     ('house', 'خانه')])
 
-    # Item Options
-    house_type = models.CharField(max_length=100, null=True, blank=True,
-                                  choices=[('villa', 'villa'), ('apartment', 'apartment')])
-    mdf = models.BooleanField(default=False)
-    cooler = models.BooleanField(default=False)
-    heating = models.BooleanField(default=False)
-    water_heater = models.BooleanField(default=False)
-    elevator = models.BooleanField(default=False)
-    video_intercom = models.BooleanField(default=False)
-    remote_door = models.BooleanField(default=False)
-    parking = models.BooleanField(default=False)
-    warehouse = models.BooleanField(default=False)
+    land_type = models.CharField(max_length=15, null=True, blank=True, verbose_name='نوع زمین',
+                                 choices=[('residential', 'مسکونی'),
+                                          ('commercial', 'تجاری'),
+                                          ('res_comm', 'مسکونی - تجاری'),
+                                          ('garden', 'باغی'),
+                                          ('rice_field', 'کشاورزی'), ])
+
+    house_type = models.CharField(max_length=15, null=True, blank=True,
+                                  choices=[('villa', 'ویلا'), ('apartment', 'اپارتمان')], verbose_name='نوع خانه')
+
+    rice_field_type = models.CharField(max_length=15, null=True, blank=True, verbose_name='نوع زمین کشاورزی',
+                                       choices=[('mechanized', 'مکانیزه'),
+                                                ('traditional', 'سنتی'), ])
+
+    # required fields
+    address = models.TextField(max_length=250, verbose_name='آدرس')
+    area = models.PositiveIntegerField(verbose_name='متراژ')
+    all_price = models.BigIntegerField(verbose_name='قیمت کل')
+    owner = models.CharField(max_length=30, verbose_name='نام مالک')
+    owner_info = models.TextField(max_length=200, verbose_name='مشخصات مالک')
+
+    deed = models.BooleanField(default=False, verbose_name='سند')
+    exchange = models.BooleanField(default=False, verbose_name='معاوضه')
+    inside_plan = models.BooleanField(default=False, verbose_name='داخل طرح')
+    points = models.BooleanField(default=False, verbose_name='امتیازات')
+
+    # house options
+    foundation = models.PositiveIntegerField(null=True, blank=True, verbose_name='زیربنا')
+    floor = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='طبقه')
+    bedroom = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='تعداد اتاق خواب')
+    year = models.PositiveIntegerField(null=True, blank=True, verbose_name='سال ساخت')
+    mdf = models.BooleanField(default=False, verbose_name='ام دی اف')
+    cooler = models.BooleanField(default=False, verbose_name='کولر')
+    water_heater = models.BooleanField(default=False, verbose_name='آبگرمکن')
+    elevator = models.BooleanField(default=False, verbose_name='اسانسور')
+    video_intercom = models.BooleanField(default=False, verbose_name='آیفون تصویری')
+    remote_door = models.BooleanField(default=False, verbose_name='درب ریموت دار')
+    parking = models.BooleanField(default=False, verbose_name='پارکینگ')
+    warehouse = models.BooleanField(default=False, verbose_name='بهار خواب')
+    description = models.TextField(null=True, blank=True, verbose_name='توضیحات')
+
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

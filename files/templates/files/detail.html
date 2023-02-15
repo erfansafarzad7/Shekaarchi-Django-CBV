@@ -1,13 +1,129 @@
 {% extends 'base.html' %}
     {% block content %}
 
-        <!--item info (login required)-->
-        {% if user.is_authenticated %}
             <a href="{% url 'accounts:user_profile' item.user.id %}">{{item.user}}</a>
-            <p>code : {{ item.code }}</p>
-            <p>owner : {{ item.owner }}</p>
-            <p>area : {{ item.area }}</p>
-            <p>all price : {{ item.all_price }}</p>
+            <p>کد : {{ item.code }}</p>
+            <p>متراژ : {{ item.area }}</p>
+            <p>قیمت کل : {{ item.all_price }}</p>
+
+            {% if request.user.id == item.user.id %}
+
+                <p>نوع :
+
+                    <!--type-->
+                    {% if item.type == 'house' %}
+                        خانه
+                    {% else %}
+                        زمین
+                    {% endif %}
+
+                    <!--land type-->
+                    {% if item.land_type == 'residential' %}
+                        مسکونی
+                    {% elif item.land_type == 'commercial' %}
+                        تجاری
+                    {% elif item.land_type == 'res_comm' %}
+                        maskoni tejari
+                    {% elif item.land_type == 'garden' %}
+                        باغی
+                    {% elif item.land_type == 'rice_field' %}
+                        کشاورزی
+                    {% else %}
+                    {% endif %}
+
+                    <!--house type-->
+                    {% if item.house_type == 'villa' %}
+                        ویلایی
+                    {% elif item.house_type == 'apartment' %}
+                        آپارتمانی
+                    {% else %}
+                    {% endif %}
+
+                    <!--rice field type-->
+                    {% if item.rice_field_type == 'mechanized' %}
+                        مکانیزه
+                    {% elif item.rice_field_type == 'traditional' %}
+                        سنتی
+                    {% else %}
+                    {% endif %} </p>
+
+                <p>نام مالک : {{ item.owner }}</p>
+                <p>مشخصات مالک : {{ item.owner_info }}</p>
+                <p>آدرس : {{ item.address }}</p>
+                <p>توضیحات : {{ item.description|default_if_none:"ندارد" }}</p>
+            {% endif %}
+
+            {% if item.type == 'house' %}
+                <p>زیربنا : {{ item.foundation|default_if_none:"ندارد" }}</p>
+                <p>طبقه : {{ item.floor|default_if_none:"ندارد" }}</p>
+                <p>اتاق خواب : {{ item.bedroom|default_if_none:"ندارد" }}</p>
+                <p>سال ساخت : {{ item.year|default_if_none:"ندارد" }}</p>
+            {% endif %}
+
+    <br/><hr/>
+
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="1"
+         {% if item.deed %} checked {%endif%} disabled>
+  <label class="form-check-label" for="1">سند</label>
+</div>
+
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="2"
+         {% if item.exchange %} checked {%endif%} disabled>
+  <label class="form-check-label" for="2">معاوضه</label>
+</div>
+
+{% if item.type == 'house' %}
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="15"
+             {% if item.elevator %} checked {%endif%} disabled>
+      <label class="form-check-label" for="15">آسانسور</label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="18"
+             {% if item.parking %} checked {%endif%} disabled>
+      <label class="form-check-label" for="18">پارکینگ</label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="11"
+             {% if item.mdf %} checked {%endif%} disabled>
+      <label class="form-check-label" for="11">ام دی اف</label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="12"
+             {% if item.cooler %} checked {%endif%} disabled>
+      <label class="form-check-label" for="12">کولر</label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="14"
+             {% if item.water_heater %} checked {%endif%} disabled>
+      <label class="form-check-label" for="14">آبگرمکن</label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="16"
+             {% if item.video_intercom %} checked {%endif%} disabled>
+      <label class="form-check-label" for="16">آیفون تصویری</label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="17"
+             {% if item.remote_door %} checked {%endif%} disabled>
+      <label class="form-check-label" for="17">درب ریموت دار</label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="19"
+             {% if item.warehouse %} checked {%endif%} disabled>
+      <label class="form-check-label" for="19">بهار خواب</label>
+    </div>
+
+{% endif %}
 
             <!--item images-->
             {% for img in item_images %}
@@ -15,15 +131,10 @@
             {% endfor %}
 
 
-
                 <!--delete/edit item if owner-->
                 {% if request.user.id == item.user.id %}
                     <a href="{% url 'files:delete_item' item.code %}"><button class="btn btn-danger">Delete</button></a>
                     <a href="{% url 'files:edit_item' item.code %}"><button class="btn btn-warning">Update</button></a>
                 {% endif %}
-
-        {% else %}
-            <h1>You Are Not Logged In</h1>
-        {% endif %}
 
     {% endblock %}
