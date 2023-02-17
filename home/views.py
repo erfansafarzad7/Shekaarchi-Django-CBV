@@ -27,6 +27,7 @@ class ItemSearchView(TemplateView):
         house_type = request.GET.get('house-type', '')
         land_type = request.GET.get('land-type', '')
         rice_field_type = request.GET.get('rice-field-type', '')
+        search_in = request.GET.get('search-in', '')
         self.results = None
 
         # find item by code
@@ -63,6 +64,10 @@ class ItemSearchView(TemplateView):
                     self.results = Item.objects.filter(
                         Q(land_type__exact='rice_field'),
                         Q(rice_field_type__exact=rice_field_type))
+
+        # search in user files
+        if search_in == 'my-files':
+            self.results = self.results.filter(user=self.request.user)
 
         return super().get(request, *args, **kwargs)
 

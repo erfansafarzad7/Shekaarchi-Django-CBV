@@ -89,10 +89,14 @@
                         <option value="mechanized">مکانیزه</option>
                     </select>
 
+                    <select name="search-in">
+                        <option value="all-files">همه فایل ها</option>
+                        {% if request.user.is_authenticated %}
+                            <option value="my-files">فایل های من</option>
+                        {% endif %}
+                    </select>
+
                 <button class="btn btn-outline-success" type="submit">جستجوی فایل</button>
-                    {% if not request.user.is_authenticated %}
-                        <button class="btn btn-outline-success" type="submit">جستجوی فایل های من</button>
-                    {% endif %}
 
             </form>
 
