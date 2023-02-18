@@ -25,6 +25,46 @@ class Bucket:
         else:
             return None
 
+    def delete_object(self, key):
+        for k in key:
+            self.conn.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=k)
+        return True
+
+    # def delete_objects(self, objects):
+    #     key = objects
+    #     logging.basicConfig(level=logging.INFO)
+    #     try:
+    #         s3 = boto3.resource(
+    #             's3',
+    #             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+    #             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+    #             endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+    #         )
+    #     except Exception as exc:
+    #         logging.error(exc)
+    #     else:
+    #         try:
+    #             bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+    #             for k in key:
+    #                 response = bucket.delete_objects(
+    #                     Delete={
+    #                         'Objects': [
+    #                             {
+    #                                 'Key': k,
+    #                                 'VersionId': ''
+    #                             },
+    #                         ],
+    #                         'Quiet': True | False
+    #                     },
+    #                     MFA='string',
+    #                     RequestPayer='requester',
+    #                     BypassGovernanceRetention=True | False,
+    #                     ExpectedBucketOwner='string'
+    #                 )
+    #                 logging.info(response)
+    #         except ClientError as e:
+    #             logging.error(e)
+
     # def upload_image(self, name, image):
     #     # filename = str(name) + '_picture.jpg'
     #     filename = name
@@ -52,3 +92,6 @@ class Bucket:
     #
     #         except ClientError as e:
     #             logging.error(e)
+
+
+bucket = Bucket()

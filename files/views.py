@@ -1,11 +1,12 @@
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
 from .models import Item, Image
-from django.views.generic import CreateView, DetailView, DeleteView, UpdateView
+from django.views.generic import CreateView, DetailView, DeleteView, UpdateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
 from .forms import ItemCreateForm, ItemUpdateForm
+from bucket import bucket
 
 
 class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -24,10 +25,9 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         form.instance.user = self.request.user
         item_code = form.instance.code
         images = self.request.FILES.getlist('img')
-        print(images)
         item_data = form.save()
 
-        # Save the images of person.
+        # Save the images
         if images:
             with transaction.atomic():
                 for image in images:
@@ -74,8 +74,23 @@ class ItemDeleteView(DeleteView):
 
     def get_object(self, queryset=None):
         img = Image.objects.filter(code__exact=self.get_queryset().code)
-        img.delete() if img.exists() else None
-        self.get_queryset().delete() if self.get_queryset().user == self.request.user else None
+        # if it's users item
+        if self.get_queryset().user == self.request.user:
+            # delete item
+            self.get_queryset().delete()
+
+            if img.exists():
+                images = []
+
+                # get all image names
+                for i in img:
+                    images.append(i.image.name)
+
+                # delete image from bucket
+                bucket.delete_object(key=images)
+                # delete image from model
+                img.delete()
+        return True
 
 
 class ItemUpdateView(UpdateView):
