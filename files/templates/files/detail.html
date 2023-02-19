@@ -67,11 +67,7 @@
 
     <br/><hr/>
 
-<div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" id="1"
-         {% if item.deed %} checked {%endif%} disabled>
-  <label class="form-check-label" for="1">سند</label>
-</div>
+<p>مدرک : {{ item.documents|default_if_none:"تعیین نشده" }}</p>
 
 <div class="form-check">
   <input class="form-check-input" type="checkbox" value="" id="2"

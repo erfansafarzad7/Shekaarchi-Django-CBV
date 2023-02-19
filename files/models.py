@@ -46,7 +46,10 @@ class Item(models.Model):
     owner = models.CharField(max_length=30, verbose_name='نام مالک')
     owner_info = models.TextField(max_length=200, verbose_name='مشخصات مالک')
 
-    deed = models.BooleanField(default=False, verbose_name='سند')
+    documents = models.CharField(max_length=15, null=True, blank=True, verbose_name='مدرک',
+                                 choices=[('deed', 'سند'),
+                                          ('nasaq', 'نسق'),
+                                          ('arrangement', 'قولنامه ای')])
     exchange = models.BooleanField(default=False, verbose_name='معاوضه')
     inside_plan = models.BooleanField(default=False, verbose_name='داخل طرح')
     points = models.BooleanField(default=False, verbose_name='امتیازات')
