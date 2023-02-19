@@ -27,7 +27,7 @@ class LogoutView(LoginRequiredMixin, LogoutView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            messages.success(request, "You Have Successfully logged Out!", 'warning')
+            messages.warning(request, "You Have Successfully logged Out!", 'warning')
         return super().dispatch(request, *args, **kwargs)
 
 

@@ -21,7 +21,7 @@ class ItemSearchView(TemplateView):
     template_name = 'home/search.html'
 
     def dispatch(self, request, *args, **kwargs):
-        messages.success(request, "I Fund This Results!", 'info')
+        messages.info(request, "I Fund This Results!", 'info')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):

@@ -70,7 +70,7 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'files/delete_item.html'
 
     def dispatch(self, request, *args, **kwargs):
-        messages.success(request, "You Have Successfully Deleted Item!", 'danger')
+        messages.error(request, "You Have Successfully Deleted Item!", 'danger')
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
