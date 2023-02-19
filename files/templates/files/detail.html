@@ -12,52 +12,57 @@
 
                     <!--type-->
                     {% if item.type == 'house' %}
+
                         خانه
+                        <!--house type-->
+                        {% if item.house_type == 'villa' %}
+                            ویلایی
+                        {% elif item.house_type == 'apartment' %}
+                            آپارتمانی
+                        {% else %}
+                        {% endif %}
+
+                    {{ item.area }} متری
+
                     {% else %}
+
                         زمین
-                    {% endif %}
+                        <!--land type-->
+                        {% if item.land_type == 'residential' %}
+                            مسکونی
+                        {% elif item.land_type == 'commercial' %}
+                            تجاری
+                        {% elif item.land_type == 'res_comm' %}
+                            مسکونی - تجاری
+                        {% elif item.land_type == 'garden' %}
+                            باغی
+                        {% elif item.land_type == 'rice_field' %}
+                            کشاورزی
+                            <!--rice field type-->
+                            {% if item.rice_field_type == 'mechanized' %}
+                                 مکانیزه
+                            {% elif item.rice_field_type == 'traditional' %}
+                                سنتی
+                            {% else %}
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
 
-                    <!--land type-->
-                    {% if item.land_type == 'residential' %}
-                        مسکونی
-                    {% elif item.land_type == 'commercial' %}
-                        تجاری
-                    {% elif item.land_type == 'res_comm' %}
-                        maskoni tejari
-                    {% elif item.land_type == 'garden' %}
-                        باغی
-                    {% elif item.land_type == 'rice_field' %}
-                        کشاورزی
-                    {% else %}
-                    {% endif %}
+                    {{ item.area }} متری
 
-                    <!--house type-->
-                    {% if item.house_type == 'villa' %}
-                        ویلایی
-                    {% elif item.house_type == 'apartment' %}
-                        آپارتمانی
-                    {% else %}
-                    {% endif %}
-
-                    <!--rice field type-->
-                    {% if item.rice_field_type == 'mechanized' %}
-                        مکانیزه
-                    {% elif item.rice_field_type == 'traditional' %}
-                        سنتی
-                    {% else %}
-                    {% endif %} </p>
+                    {% endif %}</p>
 
                 <p>نام مالک : {{ item.owner }}</p>
                 <p>مشخصات مالک : {{ item.owner_info }}</p>
                 <p>آدرس : {{ item.address }}</p>
-                <p>توضیحات : {{ item.description|default_if_none:"ندارد" }}</p>
+                <p>توضیحات : {{ item.description|default_if_none:"تعیین نشده" }}</p>
             {% endif %}
 
             {% if item.type == 'house' %}
-                <p>زیربنا : {{ item.foundation|default_if_none:"ندارد" }}</p>
-                <p>طبقه : {{ item.floor|default_if_none:"ندارد" }}</p>
-                <p>اتاق خواب : {{ item.bedroom|default_if_none:"ندارد" }}</p>
-                <p>سال ساخت : {{ item.year|default_if_none:"ندارد" }}</p>
+                <p>زیربنا : {{ item.foundation|default_if_none:"تعیین نشده" }}</p>
+                <p>طبقه : {{ item.floor|default_if_none:"تعیین نشده" }}</p>
+                <p>اتاق خواب : {{ item.bedroom|default_if_none:"تعیین نشده" }}</p>
+                <p>سال ساخت : {{ item.year|default_if_none:"تعیین نشده" }}</p>
             {% endif %}
 
     <br/><hr/>

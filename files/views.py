@@ -1,7 +1,7 @@
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
 from .models import Item, Image
-from django.views.generic import CreateView, DetailView, DeleteView, UpdateView, TemplateView
+from django.views.generic import CreateView, DetailView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -18,7 +18,7 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Item
     form_class = ItemCreateForm
     template_name = 'files/create.html'
-    success_message = 'Item Successfully Created'
+    success_message = "Item Successfully Created"
     success_url = reverse_lazy('home:home')
 
     def form_valid(self, form):
@@ -61,13 +61,17 @@ class ItemDetailView(DetailView):
         return super().get_context_data(item_images=self.item_images, **kwargs)
 
 
-class ItemDeleteView(DeleteView):
+class ItemDeleteView(LoginRequiredMixin, DeleteView):
     """
     Delete an Item and Images.
     just item owner can do.
     """
     model = Item
     template_name = 'files/delete_item.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, "You Have Successfully Deleted Item!", 'danger')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         return Item.objects.get(code=self.kwargs['code'])
@@ -93,7 +97,7 @@ class ItemDeleteView(DeleteView):
         return True
 
 
-class ItemUpdateView(UpdateView):
+class ItemUpdateView(SuccessMessageMixin, UpdateView):
     """
     Edit an Item.
     just item owner can do.
@@ -102,6 +106,7 @@ class ItemUpdateView(UpdateView):
     template_name = 'files/edit_item.html'
     form_class = ItemUpdateForm
     context_object_name = 'item'
+    success_message = "Item Successfully Edited!"
     success_url = reverse_lazy('home:home')
 
     def get_queryset(self):

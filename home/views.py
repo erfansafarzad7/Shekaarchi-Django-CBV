@@ -1,6 +1,7 @@
 from django.views.generic import ListView, TemplateView
 from files.models import Item
 from django.db.models import Q
+from django.contrib import messages
 
 
 class HomeView(ListView):
@@ -17,7 +18,11 @@ class ItemSearchView(TemplateView):
     Search between items.
     """
     model = Item
-    template_name = "home/search.html"
+    template_name = 'home/search.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, "I Fund This Results!", 'info')
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         code = int(request.GET.get('code', 0))

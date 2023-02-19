@@ -5,5 +5,6 @@
         {% for item in items %}
             <a href="{% url 'files:item_detail' item.code %}">{{item.code}}</a>
             <br/>
+            <br/>
         {% endfor %}
     {% endblock %}
