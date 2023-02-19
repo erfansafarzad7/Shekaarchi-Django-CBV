@@ -97,7 +97,7 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
         return True
 
 
-class ItemUpdateView(SuccessMessageMixin, UpdateView):
+class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     Edit an Item.
     just item owner can do.

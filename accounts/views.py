@@ -7,6 +7,7 @@ from django.views.generic import CreateView, UpdateView, ListView
 from files.models import Item
 from .models import User
 from .forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class LoginView(SuccessMessageMixin, LoginView):
@@ -18,7 +19,7 @@ class LoginView(SuccessMessageMixin, LoginView):
     next_page = reverse_lazy('home:home')
 
 
-class LogoutView(LogoutView):
+class LogoutView(LoginRequiredMixin, LogoutView):
     """
     Logout view.
     """
@@ -46,7 +47,7 @@ class RegisterView(SuccessMessageMixin, CreateView):
         return super(RegisterView, self).form_valid(form)
 
 
-class UserProfileView(ListView):
+class UserProfileView(LoginRequiredMixin, ListView):
     """
     Show users profile and posts.
     Users can edit profile and delete/edit post if it's their own.
@@ -66,7 +67,7 @@ class UserProfileView(ListView):
         return super().get_context_data(items_user=self.items_user.id, **kwargs)
 
 
-class UserEditProfileView(SuccessMessageMixin, UpdateView):
+class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     User can edit just own info.
     """
