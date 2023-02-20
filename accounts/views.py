@@ -8,6 +8,7 @@ from files.models import Item
 from .models import User
 from .forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 
 
 class LoginView(SuccessMessageMixin, LoginView):
@@ -60,7 +61,7 @@ class UserProfileView(LoginRequiredMixin, ListView):
         return Item.objects.filter(user__exact=self.kwargs['pk'])
 
     def get(self, request, *args, **kwargs):
-        self.items_user = User.objects.get(id=kwargs['pk'])
+        self.items_user = get_object_or_404(User, id=kwargs['pk'])
         return super().get(request, *args, **kwargs) if self.items_user == request.user else None
 
     def get_context_data(self, **kwargs):
@@ -79,7 +80,7 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('home:home')
 
     def get_queryset(self):
-        return User.objects.get(id=self.kwargs['pk'])
+        return get_object_or_404(User, id=self.kwargs['pk'])
 
     def get_object(self, queryset=None):
         obj = User.objects.get(id=self.get_queryset().id)

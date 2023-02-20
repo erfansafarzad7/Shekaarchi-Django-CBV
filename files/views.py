@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from .forms import ItemCreateForm, ItemUpdateForm
 from bucket import bucket
+from django.shortcuts import get_object_or_404
 
 
 class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -52,7 +53,7 @@ class ItemDetailView(DetailView):
         return super().get(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        return Item.objects.get(code__exact=self.kwargs['code'])
+        return get_object_or_404(Item, code__exact=self.kwargs['code'])
 
     def get_context_data(self, **kwargs):
         """
@@ -74,7 +75,7 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Item.objects.get(code=self.kwargs['code'])
+        return get_object_or_404(Item, code=self.kwargs['code'])
 
     def get_object(self, queryset=None):
         img = Image.objects.filter(code__exact=self.get_queryset().code)
@@ -110,7 +111,7 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('home:home')
 
     def get_queryset(self):
-        return Item.objects.get(code=self.kwargs['code'])
+        return get_object_or_404(Item, code=self.kwargs['code'])
 
     def get_object(self, queryset=None):
         obj = Item.objects.get(code__exact=self.get_queryset().code)
