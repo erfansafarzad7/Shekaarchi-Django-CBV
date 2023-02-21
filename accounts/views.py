@@ -58,7 +58,7 @@ class UserProfileView(LoginRequiredMixin, ListView):
     context_object_name = 'items'
 
     def get_queryset(self):
-        return Item.objects.filter(user__exact=self.kwargs['pk'])
+        return Item.objects.filter(user__exact=self.kwargs['pk']).order_by('-created')
 
     def get(self, request, *args, **kwargs):
         self.items_user = get_object_or_404(User, id=kwargs['pk'])

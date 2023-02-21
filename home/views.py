@@ -11,9 +11,10 @@ class HomeView(ListView):
     template_name = 'home/home.html'
     queryset = Item.objects.all()
     context_object_name = 'items'
+    ordering = ('-created', )
 
 
-class ItemSearchView(TemplateView):
+class ItemSearchView(ListView):
     """
     Search between items.
     """
@@ -80,4 +81,4 @@ class ItemSearchView(TemplateView):
         """
         Add context to the template
         """
-        return super().get_context_data(results=self.results, **kwargs)
+        return super().get_context_data(results=self.results.order_by('-created'), **kwargs)
