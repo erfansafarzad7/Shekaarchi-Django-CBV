@@ -56,6 +56,7 @@ class UserProfileView(LoginRequiredMixin, ListView):
     template_name = 'accounts/user_profile.html'
     model = Item
     context_object_name = 'items'
+    paginate_by = 10
 
     def get_queryset(self):
         return Item.objects.filter(user__exact=self.kwargs['pk']).order_by('-created')

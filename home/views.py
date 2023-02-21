@@ -12,6 +12,7 @@ class HomeView(ListView):
     queryset = Item.objects.all()
     context_object_name = 'items'
     ordering = ('-created', )
+    paginate_by = 10
 
 
 class ItemSearchView(ListView):
@@ -20,6 +21,7 @@ class ItemSearchView(ListView):
     """
     model = Item
     template_name = 'home/search.html'
+    paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
         messages.info(request, "I Fund This Results!", 'info')
