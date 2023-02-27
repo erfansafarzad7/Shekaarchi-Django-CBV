@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+    {% block content %}
+
+        <!--verify form-->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="btn btn-success" type="submit" value="Register">
+        </form>
+        <a class="btn btn-info" href="{% url 'accounts:verify' %}"><button>re send</button></a>
+    {% endblock %}

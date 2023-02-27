@@ -42,3 +42,11 @@ class UserChangeForm(forms.ModelForm):
         model = User
         fields = ('username', 'phone_number', 'email', 'password', 'last_login')
 
+
+class VerifyForm(forms.ModelForm):
+    """
+    Verify otp code.
+    """
+    class Meta:
+        model = Otp
+        fields = ('code', )

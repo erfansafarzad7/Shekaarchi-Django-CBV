@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserCreationForm, UserChangeForm
-from .models import User
+from .models import User, Otp
 
 
 class UserAdmin(BaseUserAdmin):
@@ -31,5 +31,11 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ('groups', 'user_permissions')
 
 
-admin.site.register(User, UserAdmin)
+@admin.register(Otp)
+class OtpAdmin(admin.ModelAdmin):
+    search_fields = ('phone', )
+    list_display = ('phone', 'code', 'created')
+    list_filter = ('phone', 'created')
 
+
+admin.site.register(User, UserAdmin)
