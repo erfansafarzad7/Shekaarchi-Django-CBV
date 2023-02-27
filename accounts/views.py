@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import UpdateView, ListView, FormView
 from files.models import Item
 from .models import User, Otp
 from .forms import UserCreationForm, VerifyForm
