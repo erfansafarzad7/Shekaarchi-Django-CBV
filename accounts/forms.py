@@ -36,7 +36,7 @@ class UserChangeForm(forms.ModelForm):
         fields = ('username', 'phone', 'email', 'password', 'last_login')
 
 
-class VerifyForm(forms.ModelForm):
+class SMSVerifyForm(forms.ModelForm):
     """
     Verify otp code.
     """
