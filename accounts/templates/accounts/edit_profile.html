@@ -6,6 +6,7 @@
         <form action="" method="post">
             {% csrf_token %}
             {{ form.as_p }}
+            {{user.phone}}<a class="btn btn-warning" href="{% url 'accounts:edit_phone' %}">Edit</a>
             <input type="submit" value="Update">
         </form>
         {% else %}

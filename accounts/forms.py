@@ -43,3 +43,11 @@ class VerifyForm(forms.ModelForm):
     class Meta:
         model = Otp
         fields = ('code', )
+
+
+class EditPhoneForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('phone', )
+
