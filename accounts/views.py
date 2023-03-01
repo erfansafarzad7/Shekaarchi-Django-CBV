@@ -119,10 +119,13 @@ class EditPhoneView(LoginRequiredMixin, SuccessMessageMixin, FormView):
     success_url = reverse_lazy('accounts:sms_verify')
 
     def get(self, request, *args, **kwargs):
-        messages.info(request, "Enter New Phone Number", 'info')
+        messages.info(self.request, "Enter New Phone Number", 'info')
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
+        """
+        Get new phone and send to sms verification view.
+        """
         new_phone = form.cleaned_data.get('phone')
         self.request.session['user_change_phone'] = {
             'user_id': self.request.user.id,
@@ -155,11 +158,13 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
 
         # send code with sms
         text = f" shekaarchi.ir \n ur code is : {rnd_code} \n لغو پیامک:۱۱ "
-        # send_sms(user_phone, text)
-        print(user_phone, text)
+        send_sms(user_phone, text)
         return super(SMSVerifyView, self).get(self, request, *args, **kwargs)
 
     def form_valid(self, form):
+        """
+        Register new user or change phone number after sms verification.
+        """
         try:
             entered_otp = form.cleaned_data.get('code')
             user_session = self.request.session
