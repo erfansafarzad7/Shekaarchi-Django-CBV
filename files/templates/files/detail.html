@@ -6,8 +6,6 @@
             <p>متراژ : {{ item.area }}</p>
             <p>قیمت کل : {{ item.all_price }}</p>
 
-            {% if request.user.id == item.user.id %}
-
                 <p>نوع :
 
                     <!--type-->
@@ -50,8 +48,21 @@
 
                     {{ item.area }} متری
 
+                    {% if item.documents == 'deed'%}
+                        سند دار
+                    {% endif %}
+
                     {% endif %}</p>
 
+            <p>
+                {% if item.documents == 'nasaq'%}
+                    نسق دار
+                {% elif item.documents == 'arrangement'%}
+                    قولنامه ای
+                {% endif %}
+            </p>
+
+            {% if request.user.id == item.user.id %}
                 <p>نام مالک : {{ item.owner }}</p>
                 <p>مشخصات مالک : {{ item.owner_info }}</p>
                 <p>آدرس : {{ item.address }}</p>
@@ -65,9 +76,10 @@
                 <p>سال ساخت : {{ item.year|default_if_none:"تعیین نشده" }}</p>
             {% endif %}
 
+
+
     <br/><hr/>
 
-<p>مدرک : {{ item.documents|default_if_none:"تعیین نشده" }}</p>
 
 <div class="form-check">
   <input class="form-check-input" type="checkbox" value="" id="2"

@@ -1,4 +1,4 @@
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView
 from files.models import Item
 from django.db.models import Q
 from django.contrib import messages
@@ -28,54 +28,40 @@ class ItemSearchView(ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        code = int(request.GET.get('code', 0))
-        all_price = int(request.GET.get('all-price', 0))
-        area = int(request.GET.get('area', 0))
-        type = request.GET.get('type', '')
-        house_type = request.GET.get('house-type', '')
-        land_type = request.GET.get('land-type', '')
-        rice_field_type = request.GET.get('rice-field-type', '')
-        search_in = request.GET.get('search-in', '')
-        self.results = None
-
         # find item by code
+        code = int(request.GET.get('code', 0))
         if code:
-            self.results = Item.objects.filter(Q(code__exact=code))
+            self.results = self.results.filter(Q(code__exact=code))
 
-        # filter by all price or area and type if entered
-        if all_price or area:
-            self.results = Item.objects.filter(
-                Q(all_price__lte=all_price) | Q(area__lte=area))
+        # filter items by query parameters
+        self.results = Item.objects.all()
+        for qp in self.request.GET.items():
 
-            if (all_price or area) and type:
-                self.results = Item.objects.filter(
-                    Q(all_price__lte=all_price) | Q(area__lte=area),
-                    Q(type__exact=type))
+            # qp[0] is field
+            # qp[1] is fields value
+            if qp[0] == 'area' and qp[1] != '0':
+                self.results = self.results.filter(area__lte=int(qp[1]))
+            if qp[0] == 'all_price' and qp[1] != '0':
+                self.results = self.results.filter(all_price__lte=int(qp[1]))
 
-            if all_price and area and type:
-                self.results = Item.objects.filter(
-                    Q(all_price__lte=all_price),
-                    Q(area__lte=area),
-                    Q(type__exact=type))
+            if qp[0] == 'type' and qp[1]:
+                self.results = self.results.filter(type__exact=qp[1])
 
-        # filter by type and house/land type and rice field type
-        if type or house_type or land_type or rice_field_type:
-            self.results = Item.objects.filter(
-                Q(type__exact=type) | Q(house_type__exact=house_type) | Q(land_type__exact=land_type))
+            if qp[0] == 'house_type' and qp[1]:
+                self.results = self.results.filter(house_type__exact=qp[1])
 
-            if type and (house_type or land_type):
-                self.results = Item.objects.filter(
-                    Q(type__exact=type),
-                    Q(house_type__exact=house_type) | Q(land_type__exact=land_type))
+            if qp[0] == 'documents' and qp[1]:
+                self.results = self.results.filter(documents__exact=qp[1])
 
-                if land_type == 'rice_field' and rice_field_type:
-                    self.results = Item.objects.filter(
-                        Q(land_type__exact='rice_field'),
-                        Q(rice_field_type__exact=rice_field_type))
+            if qp[0] == 'land_type' and qp[1]:
+                self.results = self.results.filter(land_type__exact=qp[1])
 
-        # search in user files
-        if search_in == 'my-files':
-            self.results = self.results.filter(user=self.request.user)
+            if qp[0] == 'rice_field_type' and qp[1]:
+                self.results = self.results.filter(rice_field_type__exact=qp[1])
+
+            if qp[0] == 'search_in' and qp[1]:
+                if qp[1] == 'my_files':
+                    self.results = self.results.filter(user__exact=self.request.user)
 
         return super().get(request, *args, **kwargs)
 

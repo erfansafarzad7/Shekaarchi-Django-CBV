@@ -48,17 +48,17 @@
 
                 <!-- all price search field and dropdown -->
                 <input class="form-control me-2" value="0" placeholder="قیمت کل"
-                        name="all-price" aria-label="Search" type="search">
+                        name="all_price" aria-label="Search" type="search">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false">قیمت کل</button>
                     <ul class="dropdown-menu">
                         <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="all-price" value="1000000000">1,000,000,000</button>
+                                type="submit" name="all_price" value="1000000000">1,000,000,000</button>
                         <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="all-price" value="2000000000">2,000,000,000</button>
+                                type="submit" name="all_price" value="2000000000">2,000,000,000</button>
                         <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="all-price" value="3000000000">3,000,000,000</button>
+                                type="submit" name="all_price" value="3000000000">3,000,000,000</button>
                     </ul>
                 </div>
 
@@ -68,13 +68,20 @@
                         <option value="land">زمین</option>
                     </select>
 
-                    <select name="house-type">
+                    <select name="house_type">
                         <option value="">-</option>
-                        <option value="villa">ویلا</option>
-                        <option value="apartment">آپارتمان</option>
+                        <option value="villa"> ویلایی</option>
+                        <option value="apartment">آپارتمانی</option>
                     </select>
 
-                    <select name="land-type">
+                    <select name="documents">
+                        <option value="">-</option>
+                        <option value="deed">سند دار</option>
+                        <option value="nasaq">نسق</option>
+                        <option value="arrangement">آپارتمانی</option>
+                    </select>
+
+                    <select name="land_type">
                         <option value="">-</option>
                         <option value="rice_field">کشاورزی</option>
                         <option value="garden">باغی</option>
@@ -83,16 +90,16 @@
                         <option value="res_comm">مسکونی - تجاری</option>
                     </select>
 
-                    <select name="rice-field-type">
+                    <select name="rice_field_type">
                         <option value="">-</option>
                         <option value="traditional">سنتی</option>
                         <option value="mechanized">مکانیزه</option>
                     </select>
 
-                    <select name="search-in">
-                        <option value="all-files">همه فایل ها</option>
+                    <select name="search_in">
+                        <option value="all_files">همه فایل ها</option>
                         {% if request.user.is_authenticated %}
-                            <option value="my-files">فایل های من</option>
+                            <option value="my_files">فایل های من</option>
                         {% endif %}
                     </select>
 
