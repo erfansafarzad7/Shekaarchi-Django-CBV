@@ -13,6 +13,7 @@ from utils import send_sms
 from random import randint
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
+from .custom_auth import MyBackend
 
 
 class LoginView(SuccessMessageMixin, LoginView):
@@ -22,6 +23,34 @@ class LoginView(SuccessMessageMixin, LoginView):
     template_name = 'accounts/login.html'
     success_message = "You Have Successfully logged In!"
     next_page = reverse_lazy('home:home')
+
+
+class OtpLoginView(SuccessMessageMixin, FormView):
+    """
+    Login with otp.
+    """
+    template_name = 'accounts/get_phone.html'
+    form_class = GetPhoneForm
+    success_message = "Enter Otp"
+    success_url = reverse_lazy('accounts:sms_verify')
+
+    def get(self, request, *args, **kwargs):
+        messages.info(self.request, "Enter Phone Number", 'info')
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        Get phone and send to sms verification view.
+        """
+        phone = form.cleaned_data.get('phone')
+        self.request.session['login_with_otp'] = {
+            'entered_phone': phone
+        }
+        self.request.session['user_info'] = {
+            'phone': phone
+        }
+
+        return super(OtpLoginView, self).form_valid(form)
 
 
 class LogoutView(LoginRequiredMixin, LogoutView):
@@ -198,7 +227,21 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
                         otp.delete()
                         del user_session
                         return super(SMSVerifyView, self).form_valid(form)
-            
+
+                # for user login with otp
+                if 'login_with_otp' in user_session:
+                    user_session = self.request.session['login_with_otp']
+                    user = User.objects.get(phone__exact=user_session['entered_phone'])
+
+                    # custom auth
+                    auth = MyBackend()
+                    auth_user = auth.custom_auth(phone=user.phone, otp_code=otp.code)
+
+                    login(self.request, auth_user)
+                    otp.delete()
+                    del user_session
+                    return super(SMSVerifyView, self).form_valid(form)
+
         except ObjectDoesNotExist:
             messages.warning(self.request, "There Is A Problem!", 'warning')
             return redirect('accounts:sms_verify')
