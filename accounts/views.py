@@ -13,7 +13,7 @@ from utils import send_sms
 from random import randint
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
-from .custom_auth import MyBackend
+from .custom_auth import authenticate
 
 
 class LoginView(SuccessMessageMixin, LoginView):
@@ -234,8 +234,7 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
                     user = User.objects.get(phone__exact=user_session['entered_phone'])
 
                     # custom auth
-                    auth = MyBackend()
-                    auth_user = auth.custom_auth(phone=user.phone, otp_code=otp.code)
+                    auth_user = authenticate.custom_auth(phone=user.phone, otp_code=otp.code)
 
                     login(self.request, auth_user)
                     otp.delete()
