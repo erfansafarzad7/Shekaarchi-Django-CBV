@@ -45,9 +45,6 @@ class SMSVerifyForm(forms.ModelForm):
         fields = ('code', )
 
 
-class EditPhoneForm(forms.ModelForm):
-
-    class Meta:
-        model = User
-        fields = ('phone', )
+class GetPhoneForm(forms.Form):
+    phone = forms.CharField()
 

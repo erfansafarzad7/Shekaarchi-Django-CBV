@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.views.generic import UpdateView, ListView, FormView
 from files.models import Item
 from .models import User, Otp
-from .forms import UserCreationForm, SMSVerifyForm, EditPhoneForm
+from .forms import UserCreationForm, SMSVerifyForm, GetPhoneForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from utils import send_sms
@@ -37,7 +37,7 @@ class LogoutView(LoginRequiredMixin, LogoutView):
 
 class RegisterView(SuccessMessageMixin, FormView):
     """
-    Register Form for new user.
+    Register form for new user and send to sms verification view..
     """
     template_name = 'accounts/register.html'
     form_class = UserCreationForm
@@ -60,10 +60,7 @@ class RegisterView(SuccessMessageMixin, FormView):
         }
 
         self.request.session['user_info'] = {
-            'user_id': self.request.user.id or None,
-            'username': username,
-            'email': email,
-            'phone': phone
+            'phone': phone,
         }
 
         return super(RegisterView, self).form_valid(form)
@@ -94,9 +91,9 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     User can edit just own info.
     """
+    template_name = 'accounts/edit_profile.html'
     model = User
     fields = ('username',)
-    template_name = 'accounts/edit_profile.html'
     context_object_name = 'user'
     success_message = "Your Profile Successfully Edited!"
     success_url = reverse_lazy('home:home')
@@ -113,8 +110,8 @@ class EditPhoneView(LoginRequiredMixin, SuccessMessageMixin, FormView):
     """
     New Phone Form View.
     """
-    form_class = EditPhoneForm
-    template_name = 'accounts/edit_phone.html'
+    template_name = 'accounts/get_phone.html'
+    form_class = GetPhoneForm
     success_message = "Enter Otp"
     success_url = reverse_lazy('accounts:sms_verify')
 
@@ -131,6 +128,10 @@ class EditPhoneView(LoginRequiredMixin, SuccessMessageMixin, FormView):
             'user_id': self.request.user.id,
             'phone': new_phone
         }
+        self.request.session['user_info'] = {
+            'phone': new_phone
+        }
+
         return super(EditPhoneView, self).form_valid(form)
 
 
@@ -149,8 +150,9 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
 
         # add timer
 
-        user_session = self.request.session['user_info']
-        user_phone = user_session['phone']
+        user_phone = None
+        if 'user_info' in self.request.session:
+            user_phone = self.request.session['user_info']['phone']
 
         # create otp code
         rnd_code = randint(1000, 9999)
@@ -170,7 +172,7 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
             user_session = self.request.session
             otp = Otp.objects.get(code__exact=entered_otp)
 
-            if otp.code == entered_otp:
+            if entered_otp == otp.code:
                 # for user change phone
                 if 'user_change_phone' in user_session:
                     user_session = self.request.session['user_change_phone']
@@ -185,7 +187,6 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
                 # for user register
                 if 'user_register_info' in user_session:
                     user_session = self.request.session['user_register_info']
-                    print(user_session)
                     if user_session['phone'] == otp.phone:
                         User.objects.create_user(phone=user_session['phone'],
                                                  email=user_session['email'],
@@ -199,6 +200,6 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
                         return super(SMSVerifyView, self).form_valid(form)
             
         except ObjectDoesNotExist:
-            messages.warning(self.request, "Otp is wrong!", 'warning')
+            messages.warning(self.request, "There Is A Problem!", 'warning')
             return redirect('accounts:sms_verify')
 

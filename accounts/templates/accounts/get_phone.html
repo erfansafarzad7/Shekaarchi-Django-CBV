@@ -4,8 +4,7 @@
         <!--verify form-->
         <form method="post">
             {% csrf_token %}
-            {{ form.phone }}--enter new phone
+            {{ form.phone }}  enter your phone
             <input class="btn btn-success" type="submit" value="Verify">
         </form>
-        <a class="btn btn-info" href="#"><button>re send</button></a>
     {% endblock %}
