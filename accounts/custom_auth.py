@@ -17,3 +17,6 @@ class MyBackend(BaseBackend):
             if user and (check_pass or (otp_obj.phone == phone)):
                 return user
             return None
+
+
+authenticate = MyBackend()
