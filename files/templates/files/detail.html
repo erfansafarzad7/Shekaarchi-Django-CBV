@@ -143,12 +143,16 @@
             {% if item_images %}
                 {% for img in item_images %}
                     <img src="{{img.image.url}}" width="200px" height="200px">
+                        {% if request.user.id == item.user.id %}
+                            <a class="btn btn-danger" href="{% url 'files:delete_image' img.code img.image.name %}" >Delete</a>
+                        {% endif %}
                 {% endfor %}
             {% else %}
                 <img src="{% static 'img/default.jpg' %}" width="200px" height="200px">
             {% endif %}
 
 
+                <hr>
                 <!--delete/edit item if owner-->
                 {% if request.user.id == item.user.id %}
                     <a href="{% url 'files:delete_item' item.code %}"><button class="btn btn-danger">Delete</button></a>

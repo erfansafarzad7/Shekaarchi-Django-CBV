@@ -116,3 +116,32 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_object(self, queryset=None):
         obj = Item.objects.get(code__exact=self.get_queryset().code)
         return obj if obj.user == self.request.user else None
+
+
+class DeleteImageView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    """
+    Delete an Images.
+    just item owner can do.
+    """
+    model = Image
+    template_name = 'files/delete_image.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.error(request, "You Have Successfully Deleted Item!", 'danger')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Image.objects.filter(code__exact=self.kwargs['code'])
+
+    def get_object(self, queryset=None):
+        img = self.get_queryset()
+        for i in img:
+            img_user = Item.objects.get(code__exact=i.code).user
+            if img_user == self.request.user:
+                if self.kwargs['name'] == i.image.name:
+                    # delete image from bucket
+                    bucket.delete_object(key=i.image.name)
+                    # delete image from model
+                    i.delete()
+        return True
+

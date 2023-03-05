@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+    {% block content %}
+
+        <!-- item deleted information -->
+        <br>
+        <a href="{% url 'accounts:user_profile' request.user.id %}"><button class="btn btn-danger">Back to Profile</button></a>
+    {% endblock %}
