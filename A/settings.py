@@ -141,12 +141,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'full',
-    },
-}
-
 # ARVAN cloud storages
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = '38c2a080-5d2e-4390-9632-e13020c60d9e'

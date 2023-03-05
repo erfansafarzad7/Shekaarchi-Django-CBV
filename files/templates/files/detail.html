@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
     {% block content %}
 
             <a href="{% url 'accounts:user_profile' item.user.id %}">{{item.user}}</a>
@@ -139,9 +140,13 @@
 {% endif %}
 
             <!--item images-->
-            {% for img in item_images %}
-                <img src="{{img.image.url}}" width="200px" height="200px">
-            {% endfor %}
+            {% if item_images %}
+                {% for img in item_images %}
+                    <img src="{{img.image.url}}" width="200px" height="200px">
+                {% endfor %}
+            {% else %}
+                <img src="{% static 'img/default.jpg' %}" width="200px" height="200px">
+            {% endif %}
 
 
                 <!--delete/edit item if owner-->
