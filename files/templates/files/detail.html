@@ -21,8 +21,6 @@
                         {% else %}
                         {% endif %}
 
-                    {{ item.area }} متری
-
                     {% else %}
 
                         زمین
@@ -46,22 +44,20 @@
                             {% endif %}
                         {% else %}
                         {% endif %}
+                    {% endif %}
 
                     {{ item.area }} متری
 
                     {% if item.documents == 'deed'%}
                         سند دار
+                    {% elif item.documents == 'nasaq'%}
+                        نسق دار
+                    {% elif item.documents == 'arrangement'%}
+                        قولنامه ای
                     {% endif %}
 
-                    {% endif %}</p>
+                    </p>
 
-            <p>
-                {% if item.documents == 'nasaq'%}
-                    نسق دار
-                {% elif item.documents == 'arrangement'%}
-                    قولنامه ای
-                {% endif %}
-            </p>
 
             {% if request.user.id == item.user.id %}
                 <p>نام مالک : {{ item.owner }}</p>

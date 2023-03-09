@@ -30,11 +30,12 @@ class ItemSearchView(ListView):
     def get(self, request, *args, **kwargs):
         # find item by code
         code = int(request.GET.get('code', 0))
+        self.results = Item.objects.all()
+
         if code:
             self.results = self.results.filter(Q(code__exact=code))
 
         # filter items by query parameters
-        self.results = Item.objects.all()
         for qp in self.request.GET.items():
 
             # qp[0] is field

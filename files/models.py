@@ -47,7 +47,7 @@ class Item(models.Model):
     owner_info = models.TextField(max_length=200, verbose_name='مشخصات مالک')
 
     documents = models.CharField(max_length=15, null=True, blank=True, verbose_name='مدرک',
-                                 choices=[('deed', 'سند'),
+                                 choices=[('deed', 'سند دار'),
                                           ('nasaq', 'نسق'),
                                           ('arrangement', 'قولنامه ای')])
     exchange = models.BooleanField(default=False, verbose_name='معاوضه')
