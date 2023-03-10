@@ -3,5 +3,5 @@
 
         <!-- item deleted information -->
         <br>
-        <a href="{% url 'accounts:user_profile' request.user.id %}"><button class="btn btn-danger">Back to Profile</button></a>
+        <a href="{% url 'files:edit_item' item.code %}"><button class="btn btn-danger">Back to Edit</button></a>
     {% endblock %}
