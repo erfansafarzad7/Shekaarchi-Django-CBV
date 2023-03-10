@@ -5,10 +5,28 @@
 
         {% if user.is_authenticated %}
         <!--item edit form (login required)-->
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
+
+            <!--item images-->
+            {% if item_images %}
+
+                {% for img in item_images %}
+                    <img src="{{img.image.url}}" width="200px" height="200px">
+                    <a class="btn btn-danger" href="{% url 'files:delete_image' img.code img.image.name %}" >Delete</a>
+                {% endfor %}
+
+            {% endif %}
+
+            {% for i in range %}
+                {% if i != 5 %}
+                    <br><input type="file" name="img">
+                {% endif %}
+            {% endfor %}
+
             <input type="submit" value="Update">
+
         </form>
 
         {% else %}

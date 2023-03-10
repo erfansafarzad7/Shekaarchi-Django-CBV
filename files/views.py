@@ -28,8 +28,13 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         images = self.request.FILES.getlist('img')
         item_data = form.save()
 
+        # image limit
+        i = 0
+        for img in images:
+            i += 1
+
         # Save the images
-        if images:
+        if images and i <= 5:
             with transaction.atomic():
                 for image in images:
                     img = Image.objects.create(code=item_code, image=image)
@@ -110,12 +115,49 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "Item Successfully Edited!"
     success_url = reverse_lazy('home:home')
 
+    def get(self, request, *args, **kwargs):
+        self.item_images = None
+        item_code = self.kwargs['code']
+        if item_code:
+            self.item_images = Image.objects.filter(code__exact=item_code)
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        images = self.request.FILES.getlist('img')
+        item_code = self.kwargs['code']
+        item_images = Image.objects.filter(code__exact=item_code)
+
+        # image limit
+        i = 0
+        for img in item_images:
+            i += 1
+
+        # Save the images
+        if images and i <= 5:
+            with transaction.atomic():
+                for image in images:
+                    img = Image.objects.create(code=item_code, image=image)
+                    img.save()
+        return super().form_valid(form)
+
     def get_queryset(self):
         return get_object_or_404(Item, code=self.kwargs['code'])
 
     def get_object(self, queryset=None):
         obj = Item.objects.get(code__exact=self.get_queryset().code)
         return obj if obj.user == self.request.user else None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # image limit
+        i = 0
+        for img in self.item_images:
+            i += 1
+
+        context["item_images"] = self.item_images
+        context["range"] = list(range(i, 6))
+        return context
 
 
 class DeleteImageView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -144,4 +186,9 @@ class DeleteImageView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
                     # delete image from model
                     i.delete()
         return True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["item"] = Item.objects.get(code__exact=self.kwargs['code'])
+        return context
 
