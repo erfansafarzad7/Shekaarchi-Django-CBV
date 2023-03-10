@@ -51,12 +51,36 @@ class AllPriceFilter(admin.SimpleListFilter):
             return queryset.filter(all_price__lte=self.value())
 
 
+@admin.action(description='Mark as published')
+def make_published(modeladmin, request, queryset):
+    queryset.update(publish=True)
+
+
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     search_fields = ('code', )
-    list_display = ('code', 'type', 'area', 'foundation', 'all_price', 'created')
-    list_filter = (AreaFilter, AllPriceFilter,
-                   'type', 'house_type',  'documents', 'exchange', 'land_type', 'rice_field_type',  'inside_plan', 'created')
+    actions = (make_published, )
+    list_display = ('code',
+                    'type',
+                    'area',
+                    'foundation',
+                    'all_price',
+                    'publish',
+                    'public',
+                    'created')
+
+    list_filter = (AreaFilter,
+                   AllPriceFilter,
+                   'publish',
+                   'public',
+                   'type',
+                   'house_type',
+                   'documents',
+                   'exchange',
+                   'land_type',
+                   'rice_field_type',
+                   'inside_plan',
+                   'created')
 
 
 @admin.register(Image)

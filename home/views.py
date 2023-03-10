@@ -9,7 +9,7 @@ class HomeView(ListView):
     Home page (Show items).
     """
     template_name = 'home/home.html'
-    queryset = Item.objects.all()
+    queryset = Item.objects.all().filter(publish=True, public=True)
     context_object_name = 'items'
     ordering = ('-created', )
     paginate_by = 10
@@ -30,10 +30,11 @@ class ItemSearchView(ListView):
     def get(self, request, *args, **kwargs):
         # find item by code
         code = int(request.GET.get('code', 0))
-        self.results = Item.objects.all()
+        search_in = False if request.GET.get('search_in', '') == 'profile' else True
+        self.results = Item.objects.all().filter(publish=True, public=True)
 
         if code:
-            self.results = self.results.filter(Q(code__exact=code))
+            self.results = Item.objects.filter(Q(code__exact=code), Q(public=search_in) | Q(publish=False))
 
         # filter items by query parameters
         for qp in self.request.GET.items():

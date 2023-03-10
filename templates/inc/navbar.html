@@ -24,6 +24,10 @@
                 <!-- code search field -->
                     <input class="form-control me-2" type="search"
                            placeholder="کد" aria-label="Search" name="code">
+                    <select name="search_in">
+                        <option value="all">همه</option>
+                        <option value="profile">پروفایل</option>
+                    </select>
                     <button class="btn btn-outline-success" type="submit">جستوجوی کد</button>
                 </form>
                 <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">

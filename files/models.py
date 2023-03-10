@@ -20,6 +20,8 @@ class Item(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item_user')
     images = models.ManyToManyField(Image, related_name='item_images')
     code = models.BigIntegerField(unique=True, verbose_name='کد')
+    publish = models.BooleanField(default=False, verbose_name='انتشار')
+    public = models.BooleanField(default=True, verbose_name='نمایش عمومی')
 
     type = models.CharField(max_length=100, verbose_name='نوع', null=False, blank=False,
                             choices=[('land', 'زمین'),
