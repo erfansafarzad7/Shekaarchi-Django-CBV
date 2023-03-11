@@ -1,39 +1,50 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <div class="navbar-nav">
+<nav class="navbar bg-body-tertiary sticky-top">
+  <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home:home' %}">صفحه اصلی</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+
+      <div class="offcanvas-body">
 
             <a class="navbar-brand" href="{% url 'home:home' %}">صفحه اصلی</a>
 
-                {% if not request.user.is_authenticated %}
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:login' %}">ورود</a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:register' %}">ثبتنام</a>
-                </div>
-                {% else %}
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:logout' %}">خروج</a>
-                    <a class="nav-link" href="{% url 'accounts:user_profile' request.user.id %}">پروفایل</a>
-                </div>
-                {% endif %}
-                <a class="nav-link" href="{% url 'files:create' %}">فایل جدید</a>
+            {% if not request.user.is_authenticated %}
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'accounts:login' %}">ورود</a>
+            </div>
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'accounts:register' %}">ثبتنام</a>
+            </div>
+            {% else %}
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'accounts:logout' %}">خروج</a>
+                <a class="nav-link" href="{% url 'accounts:user_profile' request.user.id %}">پروفایل</a>
+            </div>
+            {% endif %}
+
+            <a class="nav-link" href="{% url 'files:create' %}">فایل جدید</a>
 
 
+            <!-- code search field -->
             <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
-                <!-- code search field -->
-                    <input class="form-control me-2" type="search"
-                           placeholder="کد" aria-label="Search" name="code">
-                    <select name="search_in">
-                        <option value="all">همه</option>
-                        <option value="profile">پروفایل</option>
-                    </select>
-                    <button class="btn btn-outline-success" type="submit">جستوجوی کد</button>
-                </form>
-                <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
+                <input class="form-control me-2" type="search"
+                       placeholder="کد" aria-label="Search" name="code">
+                <select name="search_in">
+                    <option value="all">همه</option>
+                    <option value="profile">پروفایل</option>
+                </select>
+                <button class="btn btn-outline-success" type="submit">جستوجوی کد</button>
+            </form>
 
-                <!-- area search field and dropdown -->
-                <input class="form-control me-2" value="0" placeholder="متراژ"
+            <!-- area search field and dropdown -->
+            <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
+                <input class="form-control me-2" placeholder="متراژ"
                        name="area" type="search" aria-label="Search" >
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -51,7 +62,7 @@
                 </div>
 
                 <!-- all price search field and dropdown -->
-                <input class="form-control me-2" value="0" placeholder="قیمت کل"
+                <input class="form-control me-2" placeholder="قیمت کل"
                         name="all_price" aria-label="Search" type="search">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -65,6 +76,16 @@
                                 type="submit" name="all_price" value="3000000000">3,000,000,000</button>
                     </ul>
                 </div>
+
+                    <input class="form-control me-2" type="search"
+                       placeholder="شهر/محل" aria-label="Search" name="city">
+
+                    <select name="subject">
+                        <option value="">-</option>
+                        <option value="sell">فروش</option>
+                        <option value="mortgage">رهن</option>
+                        <option value="rent">اجاره</option>
+                    </select>
 
                     <select name="type">
                         <option value="">-</option>
