@@ -23,9 +23,14 @@ class Item(models.Model):
     publish = models.BooleanField(default=False, verbose_name='انتشار')
     public = models.BooleanField(default=True, verbose_name='نمایش عمومی')
 
-    type = models.CharField(max_length=100, verbose_name='نوع', null=False, blank=False,
+    subject = models.CharField(max_length=10, null=False, blank=False, verbose_name='موضوع',
+                               choices=[('sell', 'فروش'),
+                                        ('mortgage', 'رهن'),
+                                        ('rent', 'اجاره'), ])
+
+    type = models.CharField(max_length=10, verbose_name='نوع', null=False, blank=False,
                             choices=[('land', 'زمین'),
-                                     ('house', 'خانه')])
+                                     ('house', 'خانه'), ])
 
     land_type = models.CharField(max_length=15, null=True, blank=True, verbose_name='نوع زمین',
                                  choices=[('residential', 'مسکونی'),
@@ -43,8 +48,10 @@ class Item(models.Model):
 
     # required fields
     address = models.TextField(max_length=250, verbose_name='آدرس')
+    city = models.CharField(max_length=20, verbose_name='شهر/محل', null=True, blank=True)
     area = models.PositiveIntegerField(verbose_name='متراژ')
     all_price = models.BigIntegerField(verbose_name='قیمت کل')
+    rent_price = models.BigIntegerField(verbose_name='بیعانه', null=True, blank=True)
     owner = models.CharField(max_length=30, verbose_name='نام مالک')
     owner_info = models.TextField(max_length=200, verbose_name='مشخصات مالک')
 

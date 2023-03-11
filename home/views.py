@@ -39,12 +39,15 @@ class ItemSearchView(ListView):
         # filter items by query parameters
         for qp in self.request.GET.items():
 
-            # qp[0] is field
-            # qp[1] is fields value
-            if qp[0] == 'area' and qp[1] != '0':
-                self.results = self.results.filter(area__lte=int(qp[1]))
-            if qp[0] == 'all_price' and qp[1] != '0':
-                self.results = self.results.filter(all_price__lte=int(qp[1]))
+            # qp[0] is query parameter(field)
+            # qp[1] is query parameters value
+            if qp[0] == 'area' and qp[1]:
+                self.results = self.results.filter(area__lte=int(qp[1]) or 0)
+            if qp[0] == 'all_price' and qp[1]:
+                self.results = self.results.filter(all_price__lte=int(qp[1]) or 0)
+
+            if qp[0] == 'subject' and qp[1]:
+                self.results = self.results.filter(subject__exact=qp[1])
 
             if qp[0] == 'type' and qp[1]:
                 self.results = self.results.filter(type__exact=qp[1])
@@ -60,6 +63,11 @@ class ItemSearchView(ListView):
 
             if qp[0] == 'rice_field_type' and qp[1]:
                 self.results = self.results.filter(rice_field_type__exact=qp[1])
+
+            if qp[0] == 'city' and qp[1]:
+                self.results = self.results.filter(Q(city__startswith=qp[1]) |
+                                                   Q(city__endswith=qp[1]) |
+                                                   Q(city__contains=qp[1]))
 
             if qp[0] == 'search_in' and qp[1]:
                 if qp[1] == 'my_files':

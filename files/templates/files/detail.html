@@ -7,10 +7,18 @@
             <p>متراژ : {{ item.area }}</p>
             <p>قیمت کل : {{ item.all_price }}</p>
 
-                <p>نوع :
+                <p>عنوان :
 
                     <!--type-->
                     {% if item.type == 'house' %}
+
+                        {% if item.subject == 'sell' %}
+                            فروش
+                        {% elif item.subject == 'mortgage' %}
+                            رهن
+                        {% elif item.subject == 'rent' %}
+                            اجاره
+                        {% endif %}
 
                         خانه
                         <!--house type-->
@@ -56,17 +64,19 @@
                         قولنامه ای
                     {% endif %}
 
+                    در {{ item.city }}
                     </p>
 
 
             {% if request.user.id == item.user.id %}
                 <p>نام مالک : {{ item.owner }}</p>
                 <p>مشخصات مالک : {{ item.owner_info }}</p>
-                <p>آدرس : {{ item.address }}</p>
+                <p>آدرس  کامل : {{ item.address }}</p>
                 <p>توضیحات : {{ item.description|default_if_none:"تعیین نشده" }}</p>
             {% endif %}
 
             {% if item.type == 'house' %}
+                <p>بیعانه : {{ item.rent_price|default_if_none:"تعیین نشده" }}</p>
                 <p>زیربنا : {{ item.foundation|default_if_none:"تعیین نشده" }}</p>
                 <p>طبقه : {{ item.floor|default_if_none:"تعیین نشده" }}</p>
                 <p>اتاق خواب : {{ item.bedroom|default_if_none:"تعیین نشده" }}</p>

@@ -71,6 +71,7 @@ class ItemAdmin(admin.ModelAdmin):
 
     list_filter = (AreaFilter,
                    AllPriceFilter,
+                   'subject',
                    'publish',
                    'public',
                    'type',
@@ -80,6 +81,7 @@ class ItemAdmin(admin.ModelAdmin):
                    'land_type',
                    'rice_field_type',
                    'inside_plan',
+                   'city',
                    'created')
 
 
