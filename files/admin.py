@@ -62,11 +62,13 @@ class ItemAdmin(admin.ModelAdmin):
     actions = (make_published, )
     list_display = ('code',
                     'type',
+                    'subject',
                     'area',
                     'foundation',
                     'all_price',
                     'publish',
                     'public',
+                    'city',
                     'created')
 
     list_filter = (AreaFilter,
