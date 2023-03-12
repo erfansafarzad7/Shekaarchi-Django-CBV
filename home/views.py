@@ -65,9 +65,7 @@ class ItemSearchView(ListView):
                 self.results = self.results.filter(rice_field_type__exact=qp[1])
 
             if qp[0] == 'city' and qp[1]:
-                self.results = self.results.filter(Q(city__startswith=qp[1]) |
-                                                   Q(city__endswith=qp[1]) |
-                                                   Q(city__contains=qp[1]))
+                self.results = self.results.filter(Q(city__contains=qp[1]))
 
             if qp[0] == 'search_in' and qp[1]:
                 if qp[1] == 'my_files':
