@@ -14,6 +14,7 @@ from random import randint
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from .custom_auth import authenticate
+import datetime
 
 
 class LoginView(SuccessMessageMixin, LoginView):
@@ -43,11 +44,20 @@ class OtpLoginView(SuccessMessageMixin, FormView):
         Get phone and send to sms verification view.
         """
         phone = form.cleaned_data.get('phone')
+        now = datetime.datetime.now()
+
+        # create random code for otp
+        rnd_code = randint(1000, 9999)
+
         self.request.session['login_with_otp'] = {
             'entered_phone': phone
         }
         self.request.session['user_info'] = {
-            'phone': phone
+            'phone': phone,
+            'rnd_code': rnd_code
+        }
+        self.request.session['request_timer'] = {
+            'now': str(now)
         }
 
         return super(OtpLoginView, self).form_valid(form)
@@ -79,6 +89,10 @@ class RegisterView(SuccessMessageMixin, FormView):
         """
         cd = form.cleaned_data
         phone, email, username, password = cd.get('phone'), cd.get('email'), cd.get('username'), cd.get('password')
+        now = datetime.datetime.now()
+
+        # create random code for otp
+        rnd_code = randint(1000, 9999)
 
         # user register session
         self.request.session['user_register_info'] = {
@@ -90,6 +104,10 @@ class RegisterView(SuccessMessageMixin, FormView):
 
         self.request.session['user_info'] = {
             'phone': phone,
+            'rnd_code': rnd_code
+        }
+        self.request.session['request_timer'] = {
+            'now': str(now)
         }
 
         return super(RegisterView, self).form_valid(form)
@@ -153,12 +171,21 @@ class EditPhoneView(LoginRequiredMixin, SuccessMessageMixin, FormView):
         Get new phone and send to sms verification view.
         """
         new_phone = form.cleaned_data.get('phone')
+        now = datetime.datetime.now()
+
+        # create random code for otp
+        rnd_code = randint(1000, 9999)
+
         self.request.session['user_change_phone'] = {
             'user_id': self.request.user.id,
             'phone': new_phone
         }
         self.request.session['user_info'] = {
-            'phone': new_phone
+            'phone': new_phone,
+            'rnd_code': rnd_code
+        }
+        self.request.session['request_timer'] = {
+            'now': str(now)
         }
 
         return super(EditPhoneView, self).form_valid(form)
@@ -176,20 +203,26 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
         """
         Create otp and send sms.
         """
-
-        # add timer
-
+        now = datetime.datetime.now()
+        delay = now + datetime.timedelta(minutes=2)
+        session = self.request.session
+        session['request_timer']['delay'] = str(delay)
+        user_info = session['user_info']
+        rnd_code = user_info['rnd_code']
+        session_timer = session['request_timer']
         user_phone = None
-        if 'user_info' in self.request.session:
-            user_phone = self.request.session['user_info']['phone']
 
-        # create otp code
-        rnd_code = randint(1000, 9999)
-        Otp.objects.create(phone=user_phone, code=rnd_code)
+        if 'user_info' in session:
+            user_phone = user_info['phone']
 
-        # send code with sms
-        text = f" shekaarchi.ir \n ur code is : {rnd_code} \n لغو پیامک:۱۱ "
-        send_sms(user_phone, text)
+        otp = Otp.objects.filter(code__exact=rnd_code).exists()
+
+        if not otp and session_timer['now'] < session_timer['delay']:
+            Otp.objects.create(phone=user_phone, code=rnd_code)
+            # send code with sms
+            text = f" shekaarchi.ir \n ur code is : {rnd_code} \n لغو پیامک:۱۱ "
+            send_sms(user_phone, text)
+
         return super(SMSVerifyView, self).get(self, request, *args, **kwargs)
 
     def form_valid(self, form):
