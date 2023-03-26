@@ -120,18 +120,32 @@ class UserProfileView(LoginRequiredMixin, ListView):
     """
     template_name = 'accounts/user_profile.html'
     model = Item
-    context_object_name = 'items'
+    # context_object_name = 'items'
     paginate_by = 10
 
-    def get_queryset(self):
-        return Item.objects.filter(user__exact=self.kwargs['pk']).order_by('-created')
+    # def get_queryset(self):
+    #     return Item.objects.filter(user__exact=self.kwargs['pk']).order_by('-created')
 
     def get(self, request, *args, **kwargs):
         self.items_user = get_object_or_404(User, id=kwargs['pk'])
-        return super().get(request, *args, **kwargs) if self.items_user == request.user else None
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(items_user=self.items_user.id, **kwargs)
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.id == self.items_user.id:
+            context["items"] = Item.objects\
+                .filter(user__exact=self.kwargs['pk'])\
+                .order_by('-created')
+        else:
+            context["items"] = Item.objects \
+                .filter(user__exact=self.kwargs['pk']) \
+                .exclude(publish__exact=False) \
+                .order_by('-created')
+
+        context['items_user'] = self.items_user
+
+        return context
 
 
 class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

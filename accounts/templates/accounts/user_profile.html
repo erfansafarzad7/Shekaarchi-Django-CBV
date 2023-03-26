@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+{% block title %} پروفایل کاربر {% endblock %}
     {% block content %}
 
         <!--show username (login required)-->
         {% if user.is_authenticated %}
-            <h3>{{request.user.username}}</h3>
+            <h3>{{items_user.username}}</h3>
             <!--if its own profile-->
-            {% if request.user.id == items_user %}
+            {% if request.user.id == items_user.id %}
                 <a href="{% url 'accounts:edit_profile' request.user.id %}">
                     <button class="btn btn-warning">Edit Profile</button>
                 </a>
