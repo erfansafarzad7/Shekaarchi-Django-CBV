@@ -11,7 +11,7 @@ class ItemCreateForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = '__all__'
-        exclude = ('user', 'images', 'publish', 'public')
+        exclude = ('user', 'images', 'publish')
 
 
 class ItemUpdateForm(forms.ModelForm):

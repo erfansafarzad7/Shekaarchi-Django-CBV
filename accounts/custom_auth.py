@@ -4,7 +4,7 @@ from .models import User, Otp
 
 class MyBackend(BaseBackend):
 
-    def custom_auth(self, phone=None, password=None, otp_code=None):
+    def authenticate(self, phone=None, password=None, otp_code=None):
         """
         Get users info and authenticate with password or otp.
         return a user if exists.
@@ -19,4 +19,4 @@ class MyBackend(BaseBackend):
             return None
 
 
-authenticate = MyBackend()
+auth = MyBackend()

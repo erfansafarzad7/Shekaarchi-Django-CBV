@@ -2,6 +2,9 @@
     {% block content %}
 
         <!--verify form-->
+
+        <h4>otp was send to {{ e_phone }}</h4>
+
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}

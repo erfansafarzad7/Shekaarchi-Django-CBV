@@ -13,7 +13,7 @@ from utils import send_sms
 from random import randint
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
-from .custom_auth import authenticate
+from .custom_auth import auth as c_auth
 import datetime
 
 
@@ -267,7 +267,7 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
                     user = User.objects.get(phone__exact=user_session['entered_phone'])
 
                     # custom auth
-                    auth_user = authenticate.custom_auth(phone=user.phone, otp_code=otp.code)
+                    auth_user = c_auth.authenticate(phone=user.phone, otp_code=otp.code)
 
                     login(self.request, auth_user)
                     otp.delete()
@@ -277,4 +277,9 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
         except ObjectDoesNotExist:
             messages.warning(self.request, "There Is A Problem!", 'warning')
             return redirect('accounts:sms_verify')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["e_phone"] = self.request.session['user_info']['phone']
+        return context
 

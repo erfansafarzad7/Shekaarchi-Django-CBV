@@ -28,17 +28,15 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         images = self.request.FILES.getlist('img')
         item_data = form.save()
 
-        # image limit
+        # create image and limits
         i = 0
-        for img in images:
-            i += 1
-
-        # Save the images
-        if images and i <= 5:
+        if images:
             with transaction.atomic():
-                for image in images:
-                    img = Image.objects.create(code=item_code, image=image)
-                    img.save()
+                for img in images:
+                    if i <= 5 and img.size < 600000:
+                        image = Image.objects.create(code=item_code, image=img)
+                        image.save()
+                        i += 1
 
         return super().form_valid(form)
 
@@ -132,12 +130,14 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         for img in item_images:
             i += 1
 
-        # Save the images
-        if images and i <= 5:
+        if images:
             with transaction.atomic():
-                for image in images:
-                    img = Image.objects.create(code=item_code, image=image)
-                    img.save()
+                for img in images:
+                    if i <= 5 and img.size < 600000:
+                        image = Image.objects.create(code=item_code, image=img)
+                        image.save()
+                        i += 1
+
         return super().form_valid(form)
 
     def get_queryset(self):
