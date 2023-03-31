@@ -141,7 +141,7 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return super().form_valid(form)
 
     def get_queryset(self):
-        return get_object_or_404(Item, code=self.kwargs['code'])
+        return get_object_or_404(Item, code__exact=self.kwargs['code'])
 
     def get_object(self, queryset=None):
         obj = Item.objects.get(code__exact=self.get_queryset().code)

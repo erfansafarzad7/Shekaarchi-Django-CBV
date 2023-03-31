@@ -12,7 +12,15 @@ class HomeView(ListView):
     queryset = Item.objects.all().filter(publish=True, public=True)
     context_object_name = 'items'
     ordering = ('-created', )
-    paginate_by = 10
+    paginate_by = 12
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        i=0
+        for item in self.queryset:
+            i+=1
+        context["allItems"] = i
+        return context
 
 
 class ItemSearchView(ListView):
@@ -21,20 +29,20 @@ class ItemSearchView(ListView):
     """
     model = Item
     template_name = 'home/search.html'
-    paginate_by = 10
+    paginate_by = 12
 
     def dispatch(self, request, *args, **kwargs):
-        messages.info(request, "I Fund This Results!", 'info')
+        messages.info(request, "Searched!", 'info')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         # find item by code
-        code = int(request.GET.get('code', 0))
+        code = request.GET.get('code', '')
         search_in = False if request.GET.get('search_in', '') == 'profile' else True
         self.results = Item.objects.all().filter(publish=True, public=True)
 
-        if code:
-            self.results = Item.objects.filter(Q(code__exact=code), Q(public=search_in) | Q(publish=False))
+        if code > '0':
+            self.results = Item.objects.filter(Q(code__exact=code), Q(public=search_in) | Q(publish=True))
 
         # filter items by query parameters
         for qp in self.request.GET.items():
@@ -74,7 +82,10 @@ class ItemSearchView(ListView):
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        """
-        Add context to the template
-        """
-        return super().get_context_data(results=self.results.order_by('-created'), **kwargs)
+        context = super().get_context_data(**kwargs)
+        context['results'] = self.results.order_by('-created')
+        i=0
+        for item in self.results:
+            i+=1
+        context["allItems"] = i
+        return context

@@ -18,13 +18,12 @@ class Item(models.Model):
     required fields : (user, code, type, address, area, all_price, owner, owner_info)
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item_user')
-    images = models.ManyToManyField(Image, related_name='item_images')
     code = models.BigIntegerField(unique=True, verbose_name='کد')
     publish = models.BooleanField(default=False, verbose_name='انتشار')
     public = models.BooleanField(default=True, verbose_name='نمایش عمومی')
 
     subject = models.CharField(max_length=10, null=False, blank=False, verbose_name='موضوع',
-                               choices=[('sell', 'فروش'),
+                               choices=[('sale', 'فروش'),
                                         ('mortgage', 'رهن'),
                                         ('rent', 'اجاره'), ])
 

@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'files.apps.FilesConfig',
 
-    'ckeditor',
+    'fontawesomefree',
     'storages',
 ]
 

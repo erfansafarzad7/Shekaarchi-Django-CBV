@@ -120,7 +120,7 @@ class UserProfileView(LoginRequiredMixin, ListView):
     """
     template_name = 'accounts/user_profile.html'
     model = Item
-    paginate_by = 10
+    paginate_by = 12
 
     def get(self, request, *args, **kwargs):
         self.items_user = get_object_or_404(User, id=kwargs['pk'])
