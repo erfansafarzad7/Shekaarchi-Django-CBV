@@ -119,7 +119,6 @@ class UserProfileView(LoginRequiredMixin, ListView):
     """
     template_name = 'accounts/user_profile.html'
     model = Item
-    paginate_by = 12
 
     def get(self, request, *args, **kwargs):
         self.items_user = get_object_or_404(User, id=kwargs['pk'])
@@ -128,16 +127,28 @@ class UserProfileView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if self.request.user.id == self.items_user.id:
-            context["items"] = Item.objects\
-                .filter(user__exact=self.kwargs['pk'])\
-                .order_by('-created')
-        else:
-            context["items"] = Item.objects \
-                .filter(user__exact=self.kwargs['pk']) \
-                .exclude(publish__exact=False) \
-                .order_by('-created')
+        all_items = Item.objects.filter(user_id__exact=self.kwargs['pk'])
+        publish_items = all_items.filter(publish=True)
+        public_items = publish_items.filter(public=True)
 
+        if self.request.user.id == self.items_user.id:
+            context["items"] = all_items.order_by('-created')
+        else:
+            context["items"] = all_items.exclude(publish__exact=False).order_by('-created')
+
+        a, psh, pc = 0, 0, 0
+        for item in all_items:
+            a += 1
+
+        for item in publish_items:
+            psh += 1
+
+        for item in public_items:
+            pc += 1
+
+        context['all_user_items'] = a
+        context['publish_items'] = psh
+        context['public_items'] = pc
         context['items_user'] = self.items_user
 
         return context
@@ -160,6 +171,35 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_object(self, queryset=None):
         obj = User.objects.get(id=self.get_queryset().id)
         return obj if obj.id == self.request.user.id else None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        all_items = Item.objects.filter(user_id__exact=self.kwargs['pk'])
+        publish_items = all_items.filter(publish=True)
+        public_items = publish_items.filter(public=True)
+
+        if self.request.user.id == self.get_queryset().id:
+            context["items"] = all_items
+        else:
+            context["items"] = all_items.exclude(publish__exact=False)
+
+        a, psh, pc = 0, 0, 0
+        for item in all_items:
+            a += 1
+
+        for item in publish_items:
+            psh += 1
+
+        for item in public_items:
+            pc += 1
+
+        context['all_user_items'] = a
+        context['publish_items'] = psh
+        context['public_items'] = pc
+        context['items_user'] = self.get_queryset()
+
+        return context
 
 
 class EditPhoneView(LoginRequiredMixin, SuccessMessageMixin, FormView):

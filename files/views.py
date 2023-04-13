@@ -43,6 +43,31 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        all_items = Item.objects \
+            .filter(user__exact=self.request.user) \
+            .order_by('-created')
+        publish_items = all_items.filter(publish=True)
+        public_items = publish_items.filter(public=True)
+
+        a, psh, pc = 0, 0, 0
+        for item in all_items:
+            a += 1
+
+        for item in publish_items:
+            psh += 1
+
+        for item in public_items:
+            pc += 1
+
+        context['all_user_items'] = a
+        context['publish_items'] = psh
+        context['public_items'] = pc
+
+        return context
+
 
 class ItemDetailView(DetailView):
     """
@@ -62,10 +87,18 @@ class ItemDetailView(DetailView):
         return get_object_or_404(Item, code__exact=self.kwargs['code'])
 
     def get_context_data(self, **kwargs):
-        """
-        Add context to the template
-        """
-        return super().get_context_data(item_images=self.item_images, **kwargs)
+        context = super().get_context_data(**kwargs)
+        context['item_images'] = self.item_images
+        context['price_per_meter'] = round(self.get_object().all_price / self.get_object().area)
+        all_items = Item.objects\
+                .filter(user_id__exact=self.get_object().user.id)\
+                .filter(publish=True)
+        a = 0
+        for item in all_items:
+            a += 1
+
+        context['all_user_items'] = a
+        return context
 
 
 class ItemDeleteView(LoginRequiredMixin, DeleteView):
