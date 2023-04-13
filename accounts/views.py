@@ -97,7 +97,6 @@ class RegisterView(SuccessMessageMixin, FormView):
         # user register session
         self.request.session['user_register_info'] = {
             'phone': phone,
-            'email': email,
             'username': username,
             'password': password,
         }
@@ -150,7 +149,7 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     template_name = 'accounts/edit_profile.html'
     model = User
-    fields = ('username',)
+    fields = ('username', 'address')
     context_object_name = 'user'
     success_message = "Your Profile Successfully Edited!"
     success_url = reverse_lazy('home:home')

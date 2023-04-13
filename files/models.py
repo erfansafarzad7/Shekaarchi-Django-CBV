@@ -18,6 +18,7 @@ class Item(models.Model):
     required fields : (user, code, type, address, area, all_price, owner, owner_info)
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item_user')
+    images = models.ManyToManyField(Image, related_name='item_images')
     code = models.BigIntegerField(unique=True, verbose_name='کد')
     publish = models.BooleanField(default=False, verbose_name='انتشار')
     public = models.BooleanField(default=True, verbose_name='نمایش عمومی')
@@ -29,7 +30,8 @@ class Item(models.Model):
 
     type = models.CharField(max_length=10, verbose_name='نوع', null=False, blank=False,
                             choices=[('land', 'زمین'),
-                                     ('house', 'خانه'), ])
+                                     ('house', 'خانه'),
+                                     ('shop', 'مغازه'), ])
 
     land_type = models.CharField(max_length=15, null=True, blank=True, verbose_name='نوع زمین',
                                  choices=[('residential', 'مسکونی'),
@@ -47,10 +49,12 @@ class Item(models.Model):
 
     # required fields
     address = models.TextField(max_length=250, verbose_name='آدرس')
+    state = models.CharField(max_length=20, verbose_name='استان', null=True, blank=True)
     city = models.CharField(max_length=20, verbose_name='شهر/محل', null=True, blank=True)
     area = models.PositiveIntegerField(verbose_name='متراژ')
     all_price = models.BigIntegerField(verbose_name='قیمت کل')
-    rent_price = models.BigIntegerField(verbose_name='بیعانه', null=True, blank=True)
+    rent = models.BigIntegerField(verbose_name='اجاره ', null=True, blank=True)
+    all_rent_price = models.BigIntegerField(verbose_name='ودیعه', null=True, blank=True)
     owner = models.CharField(max_length=30, verbose_name='نام مالک')
     owner_info = models.TextField(max_length=200, verbose_name='مشخصات مالک')
 
@@ -61,6 +65,7 @@ class Item(models.Model):
     exchange = models.BooleanField(default=False, verbose_name='معاوضه')
     inside_plan = models.BooleanField(default=False, verbose_name='داخل طرح')
     points = models.BooleanField(default=False, verbose_name='امتیازات')
+    production_license = models.BooleanField(default=False, verbose_name='پروانه ساخت')
 
     # house options
     foundation = models.PositiveIntegerField(null=True, blank=True, verbose_name='زیربنا')

@@ -17,7 +17,7 @@ class HomeView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         i=0
-        for item in self.queryset:
+        for item in self.get_queryset():
             i+=1
         context["allItems"] = i
         return context
@@ -29,7 +29,6 @@ class ItemSearchView(ListView):
     """
     model = Item
     template_name = 'home/search.html'
-    paginate_by = 12
 
     def dispatch(self, request, *args, **kwargs):
         messages.info(request, "Searched!", 'info')
@@ -41,7 +40,7 @@ class ItemSearchView(ListView):
         search_in = False if request.GET.get('search_in', '') == 'profile' else True
         self.results = Item.objects.all().filter(publish=True, public=True)
 
-        if code > '0':
+        if code > '0' and not isinstance(code, str):
             self.results = Item.objects.filter(Q(code__exact=code), Q(public=search_in) | Q(publish=True))
 
         # filter items by query parameters
@@ -53,6 +52,10 @@ class ItemSearchView(ListView):
                 self.results = self.results.filter(area__lte=int(qp[1]) or 0)
             if qp[0] == 'all_price' and qp[1]:
                 self.results = self.results.filter(all_price__lte=int(qp[1]) or 0)
+            if qp[0] == 'all_rent_price' and qp[1]:
+                self.results = self.results.filter(subject='rent').filter(all_rent_price__lte=int(qp[1]) or 0)
+            if qp[0] == 'rent' and qp[1]:
+                self.results = self.results.filter(subject='rent').filter(rent__lte=int(qp[1]) or 0)
 
             if qp[0] == 'subject' and qp[1]:
                 self.results = self.results.filter(subject__exact=qp[1])
@@ -71,6 +74,9 @@ class ItemSearchView(ListView):
 
             if qp[0] == 'rice_field_type' and qp[1]:
                 self.results = self.results.filter(rice_field_type__exact=qp[1])
+
+            if qp[0] == 'state' and qp[1]:
+                self.results = self.results.filter(Q(state__contains=qp[1]))
 
             if qp[0] == 'city' and qp[1]:
                 self.results = self.results.filter(Q(city__contains=qp[1]))
