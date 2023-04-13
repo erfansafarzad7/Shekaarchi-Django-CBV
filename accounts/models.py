@@ -7,16 +7,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     Custom user model.
     """
-    phone = models.CharField(max_length=11, unique=True)
-    username = models.CharField(max_length=25, unique=True)
-    email = models.EmailField(max_length=50, unique=True)
+    phone = models.CharField(max_length=11, unique=True, verbose_name='شماره تماس ')
+    username = models.CharField(max_length=25, unique=True, verbose_name='نام املاک ')
+    avatar = models.ImageField(verbose_name='آواتار', null=True, blank=True)
+    address = models.CharField(max_length=100, verbose_name='آدرس ', null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'phone'
-    REQUIRED_FIELDS = ('username', 'email')
+    REQUIRED_FIELDS = ('username',)
 
     def __str__(self):
         return f'{self.username}'

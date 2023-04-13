@@ -1,6 +1,5 @@
 from django import forms
 from .models import User, Otp
-from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 
@@ -9,11 +8,11 @@ class UserCreationForm(forms.ModelForm):
     User creation form.
     check passwords match and set password.
     """
-    password = forms.CharField(required=True, label='Password', widget=forms.PasswordInput)
+    password = forms.CharField(min_length=6, max_length=20, required=True, label='Password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ('username', 'phone', 'email')
+        fields = ('username', 'phone')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -33,7 +32,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'phone', 'email', 'password', 'last_login')
+        fields = '__all__'
 
 
 class SMSVerifyForm(forms.ModelForm):

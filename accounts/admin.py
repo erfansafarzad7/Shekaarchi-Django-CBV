@@ -14,7 +14,7 @@ class UserAdmin(BaseUserAdmin):
     # edit user
     fieldsets = (
         ('Info',
-         {'fields': ('phone', 'email', 'username', 'password')}),
+         {'fields': ('phone',  'username', 'password')}),
 
         ('Permissions',
          {'fields': ('is_active', 'is_admin', 'is_superuser', 'last_login', 'groups', 'user_permissions')}),
@@ -23,10 +23,10 @@ class UserAdmin(BaseUserAdmin):
     # add user
     add_fieldsets = (
         ('Add User',
-            {'fields': ('username', 'phone', 'email', 'password')}),
+            {'fields': ('username', 'phone', 'password')}),
     )
 
-    search_fields = ('email', 'username', 'phone')
+    search_fields = ('username', 'phone')
     ordering = ('username', )
     filter_horizontal = ('groups', 'user_permissions')
 
