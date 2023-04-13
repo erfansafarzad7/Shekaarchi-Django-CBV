@@ -88,7 +88,7 @@ class RegisterView(SuccessMessageMixin, FormView):
         Create user register info session.
         """
         cd = form.cleaned_data
-        phone, email, username, password = cd.get('phone'), cd.get('email'), cd.get('username'), cd.get('password')
+        phone, username, password = cd.get('phone'), cd.get('username'), cd.get('password')
         now = datetime.datetime.now()
 
         # create random code for otp
