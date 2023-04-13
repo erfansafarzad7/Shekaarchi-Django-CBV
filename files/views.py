@@ -19,7 +19,7 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Item
     form_class = ItemCreateForm
     template_name = 'files/create.html'
-    success_message = "Item Successfully Created"
+    success_message = "فایل با موفقیت ساخته شد ! (پس از بررسی منتشر خواهد شد)"
     success_url = reverse_lazy('home:home')
 
     def form_valid(self, form):
@@ -74,7 +74,7 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'files/delete_item.html'
 
     def dispatch(self, request, *args, **kwargs):
-        messages.error(request, "You Have Successfully Deleted Item!", 'danger')
+        messages.error(request, "فایل مورد نظر با موفقیت حذف شد !", 'danger')
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -110,7 +110,7 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'files/edit_item.html'
     form_class = ItemUpdateForm
     context_object_name = 'item'
-    success_message = "Item Successfully Edited!"
+    success_message = "فایل مورد نظر با موفقیت ویرایش شد ! (پس از بررسی منتشر خواهد شد)"
     success_url = reverse_lazy('home:home')
 
     def get(self, request, *args, **kwargs):
@@ -169,7 +169,7 @@ class DeleteImageView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     template_name = 'files/delete_image.html'
 
     def dispatch(self, request, *args, **kwargs):
-        messages.error(request, "You Have Successfully Deleted Item!", 'danger')
+        messages.error(request, "تصویر مورد نظر با موفقیت حذف شد !", 'danger')
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):

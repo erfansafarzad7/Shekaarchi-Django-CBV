@@ -22,7 +22,7 @@ class LoginView(SuccessMessageMixin, LoginView):
     Login and send success message.
     """
     template_name = 'accounts/login.html'
-    success_message = "You Have Successfully logged In!"
+    success_message = "با موفقیت وارد شدید !"
     next_page = reverse_lazy('home:home')
 
 
@@ -32,11 +32,11 @@ class OtpLoginView(SuccessMessageMixin, FormView):
     """
     template_name = 'accounts/get_phone.html'
     form_class = GetPhoneForm
-    success_message = "Enter Otp"
+    success_message = "کد یکبار مصرف را وارد کنید !"
     success_url = reverse_lazy('accounts:sms_verify')
 
     def get(self, request, *args, **kwargs):
-        messages.info(self.request, "Enter Phone Number", 'info')
+        messages.info(self.request, "شماره تلفن خود را وارد کنید !", 'info')
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -70,7 +70,7 @@ class LogoutView(LoginRequiredMixin, LogoutView):
     next_page = reverse_lazy('home:home')
 
     def dispatch(self, request, *args, **kwargs):
-        messages.warning(request, "You Have Successfully logged Out!", 'warning')
+        messages.warning(request, "با موفقیت خارج شدید !", 'warning')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -80,7 +80,7 @@ class RegisterView(SuccessMessageMixin, FormView):
     """
     template_name = 'accounts/register.html'
     form_class = UserCreationForm
-    success_message = "Enter Otp On SMS!"
+    success_message = "کد یکبار مصرف را وارد کنید !"
     success_url = reverse_lazy('accounts:sms_verify')
 
     def form_valid(self, form):
@@ -151,7 +151,7 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
     fields = ('username', 'address')
     context_object_name = 'user'
-    success_message = "Your Profile Successfully Edited!"
+    success_message = "تغییرات با موفقیت ثبت شد !"
     success_url = reverse_lazy('home:home')
 
     def get_queryset(self):
@@ -168,7 +168,7 @@ class EditPhoneView(LoginRequiredMixin, SuccessMessageMixin, FormView):
     """
     template_name = 'accounts/get_phone.html'
     form_class = GetPhoneForm
-    success_message = "Enter Otp"
+    success_message = "کد یکبار مصرف را وارد کنید !"
     success_url = reverse_lazy('accounts:sms_verify')
 
     def get(self, request, *args, **kwargs):
@@ -229,7 +229,7 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
         if not otp and session_timer['now'] < session_timer['delay']:
             Otp.objects.create(phone=user_phone, code=rnd_code)
             # send code with sms
-            text = f" shekaarchi.ir \n ur code is : {rnd_code} \n لغو پیامک:۱۱ "
+            text = f" shekaarchi.ir \n کد یکبار مصرف شما : {rnd_code} \n لغو پیامک:۱۱ "
             send_sms(user_phone, text)
 
         return super(SMSVerifyView, self).get(self, request, *args, **kwargs)
@@ -284,7 +284,7 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
                     return super(SMSVerifyView, self).form_valid(form)
 
         except ObjectDoesNotExist:
-            messages.warning(self.request, "There Is A Problem!", 'warning')
+            messages.warning(self.request, "کد اشتباه است !", 'warning')
             return redirect('accounts:sms_verify')
 
     def get_context_data(self, **kwargs):

@@ -31,7 +31,7 @@ class ItemSearchView(ListView):
     template_name = 'home/search.html'
 
     def dispatch(self, request, *args, **kwargs):
-        messages.info(request, "Searched!", 'info')
+        messages.info(request, "جستوجو انجام شد !", 'info')
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
