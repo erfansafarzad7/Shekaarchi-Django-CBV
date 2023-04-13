@@ -10,6 +10,13 @@ class Image(models.Model):
     def __str__(self):
         return f"{self.code}"
 
+    def delete(self, *args, **kwargs):
+        """
+        Delete must be overridden because the inherited delete method does not call `self.file.delete()`.
+        """
+        self.image.delete()
+        super(Image, self).delete(*args, **kwargs)
+
 
 class Item(models.Model):
     """

@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
 from .forms import ItemCreateForm, ItemUpdateForm
-from bucket import bucket
 from django.shortcuts import get_object_or_404
 
 
@@ -38,6 +37,10 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
                         image.save()
                         i += 1
 
+            self.request.session['add_image'] = {
+                'code': item_code
+            }
+
         return super().form_valid(form)
 
 
@@ -49,10 +52,10 @@ class ItemDetailView(DetailView):
     context_object_name = 'item'
 
     def get(self, request, *args, **kwargs):
-        self.item_images = None
         item_code = self.kwargs['code']
+        self.item_images = None
         if item_code:
-            self.item_images = Image.objects.filter(code__exact=item_code)
+            self.item_images = self.get_object().images
         return super().get(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
@@ -88,15 +91,6 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
             self.get_queryset().delete()
 
             if img.exists():
-                images = []
-
-                # get all image names
-                for i in img:
-                    images.append(i.image.name)
-
-                # delete image from bucket
-                bucket.delete_object(key=images)
-                # delete image from model
                 img.delete()
         return True
 
@@ -117,7 +111,8 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         self.item_images = None
         item_code = self.kwargs['code']
         if item_code:
-            self.item_images = Image.objects.filter(code__exact=item_code)
+            # self.item_images = Image.objects.filter(code__exact=item_code)
+            self.item_images = self.get_queryset().images.all()
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -127,8 +122,9 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
         # image limit
         i = 0
-        for img in item_images:
-            i += 1
+        if item_images:
+            for img in item_images:
+                i += 1
 
         if images:
             with transaction.atomic():
@@ -137,7 +133,9 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                         image = Image.objects.create(code=item_code, image=img)
                         image.save()
                         i += 1
-
+            self.request.session['add_image'] = {
+                'code': item_code
+            }
         return super().form_valid(form)
 
     def get_queryset(self):
@@ -149,13 +147,15 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        item_images = self.get_queryset().images.all()
 
         # image limit
         i = 0
-        for img in self.item_images:
-            i += 1
+        if item_images:
+            for img in item_images:
+                i += 1
 
-        context["item_images"] = self.item_images
+        context["item_images"] = item_images
         context["range"] = list(range(i, 6))
         return context
 
@@ -181,9 +181,6 @@ class DeleteImageView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
             img_user = Item.objects.get(code__exact=i.code).user
             if img_user == self.request.user:
                 if self.kwargs['name'] == i.image.name:
-                    # delete image from bucket
-                    bucket.delete_object(key=i.image.name)
-                    # delete image from model
                     i.delete()
         return True
 

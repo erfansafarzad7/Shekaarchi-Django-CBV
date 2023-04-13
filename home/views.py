@@ -1,5 +1,5 @@
 from django.views.generic import ListView
-from files.models import Item
+from files.models import Item, Image
 from django.db.models import Q
 from django.contrib import messages
 
@@ -13,6 +13,16 @@ class HomeView(ListView):
     context_object_name = 'items'
     ordering = ('-created', )
     paginate_by = 12
+
+    def get(self, request, *args, **kwargs):
+        if 'add_image' in request.session:
+            session = request.session['add_image']
+            item = Item.objects.get(code__exact=session['code'])
+            image = Image.objects.filter(code__exact=session['code'])
+            for img in image:
+                item.images.add(img)
+            del request.session['add_image']
+        return super(HomeView, self).get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
