@@ -148,6 +148,12 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             self.item_images = self.get_queryset().images.all()
         return super().get(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        item = self.get_queryset()
+        item.publish = False
+        item.save()
+        return super(ItemUpdateView, self).post(self, request, *args, **kwargs)
+
     def form_valid(self, form):
         images = self.request.FILES.getlist('img')
         item_code = self.kwargs['code']
