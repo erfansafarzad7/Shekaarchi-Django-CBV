@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c7!cz%wah4o4kp#gtx60-37&qv12+4$!(7*d+8sg(eeu8rqw(r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['shekaarchi.ir', ]
 CSRF_TRUSTED_ORIGINS = ['https://shekaarchi.ir', ]
@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'files.apps.FilesConfig',
 
     'fontawesomefree',
-    'storages',
+    'minio_storage',
+
 ]
 
 MIDDLEWARE = [
@@ -87,7 +88,7 @@ DATABASES = {
         'NAME': 'shekaarchidb',
         'USER': 'postgres',
         'PASSWORD': 'nu_8W7~Ynx',
-        'HOST': 'shekaarchi-db',
+        'HOST': 'shekaarchi-database',
         'PORT': '5432',
     }
 }
@@ -129,7 +130,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static/')
+    os.path.join(BASE_DIR, 'static')
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
@@ -143,11 +144,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-# ARVAN cloud storages
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_ACCESS_KEY_ID = '38c2a080-5d2e-4390-9632-e13020c60d9e'
-AWS_SECRET_ACCESS_KEY = '7d34dd8668893b899c33f4bb05372336371aadfa8794475168546ae958e4900a'
-AWS_S3_ENDPOINT_URL = 'https://s3.ir-thr-at1.arvanstorage.com'
-AWS_STORAGE_BUCKET_NAME = 'django-shop-1'
-AWS_SERVICE_NAME = 's3'
-AWS_S3_FILE_OVERWRITE = False
+
+# FANDOGH storages
+DEFAULT_FILE_STORAGE = "minio_storage.storage.MinioMediaStorage"
+STATICFILES_STORAGE = "minio_storage.storage.MinioStaticStorage"
+MINIO_STORAGE_ENDPOINT = "shekaarchi-minio-erfansafarzad7.fandogh.cloud:443"
+MINIO_STORAGE_ACCESS_KEY = '(Z#7Ip3Onl3!7'
+MINIO_STORAGE_SECRET_KEY = 'Y)i1YkIKeG(r7'
+MINIO_STORAGE_USE_HTTPS = True
+MINIO_STORAGE_MEDIA_BUCKET_NAME = 'media'
+MINIO_STORAGE_STATIC_BUCKET_NAME = 'static'
+MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
+MINIO_STORAGE_AUTO_CREATE_STATIC_BUCKET = True
+
