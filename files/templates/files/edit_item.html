@@ -1,36 +1,644 @@
 {% extends 'base.html' %}
+{% load static %}
+
+    {% block title %} ویرایش فایل  - شکارچی {% endblock %}
+    {% block style %}
+        <link rel="stylesheet" href="{% static 'css/custom/ad-post.css' %}" />
+    {% endblock %}
+
+        {% block scripts %}
+        <script>
+        function ToRial(str, e) {
+
+            str = str.replace(/\,/g, '');
+            var objRegex = new RegExp('(-?[0-9]+)([0-9]{3})');
+
+            while (objRegex.test(str)) {
+                str = str.replace(objRegex, '$1,$2');
+            }
+            var span = document.getElementById(e);
+            span.innerHTML = str
+            return str;
+        }
+
+
+
+var subject = null
+function Subject(value) {
+  subject = value
+  if (value == "rent" | value == "mortgage"){
+    if(value == "mortgage"){
+      $(".all_rent_price").removeClass("d-none");
+      $(".reent").addClass("d-none");
+    }else if (value == "rent"){
+      $(".all_rent_price").removeClass("d-none"),
+      $(".reent").removeClass("d-none");
+    }
+    $(".all_price").addClass("d-none"),
+    $(".land_type").addClass("d-none"),
+    $(".rice_field_type").addClass("d-none");
+  }else{
+    $(".all_rent_price").addClass("d-none"),
+    $(".reent").addClass("d-none"),
+    $(".all_price").removeClass("d-none");
+  };
+}
+
+
+
+
+function Type(value) {
+  if (value == "house" | value == "shop"){
+    if (subject != 'rent' | subject != 'mortgage'){
+      $(".all_rent_price").removeClass("d-none"),
+      $(".all_price").addClass("d-none");
+    }else{
+      $(".all_rent_price").addClass("d-none"),
+      $(".all_price").removeClass("d-none");
+    }
+    if (subject == 'mortgage'){
+      $(".reent").addClass("d-none");
+    }else{
+      $(".reent").removeClass("d-none");
+    }
+    if (value == "house"){
+      $(".house_type").removeClass("d-none");
+      }else{
+      $(".house_type").addClass("d-none");
+      }
+
+    $(".options").removeClass("d-none"),
+    $(".land_type").addClass("d-none"),
+    $(".rice_field_type").addClass("d-none"),
+    $(".production_license").addClass("d-none"),
+    $(".inside_plan").addClass("d-none"),
+    $(".points").addClass("d-none");
+  }else{
+    $(".reent").addClass("d-none"),
+    $(".house_type").addClass("d-none"),
+    $(".rice_field_type").addClass("d-none"),
+    $(".options").addClass("d-none"),
+    $(".all_price").removeClass("d-none"),
+    $(".land_type").removeClass("d-none"),
+    $(".production_license").removeClass("d-none"),
+    $(".inside_plan").removeClass("d-none"),
+    $(".points").removeClass("d-none");
+  };
+}
+
+
+
+function HouseType(value) {
+  if (value == "apartment"){
+  $(".floor").removeClass("d-none");
+  }else{
+    $(".floor").addClass("d-none");
+  }
+}
+
+function LandType(value) {
+  if (value == "rice_field"){
+    $(".rice_field_type").removeClass("d-none"),
+    $(".production_license").addClass("d-none");
+  }else{
+    $(".rice_field_type").addClass("d-none"),
+    $(".production_license").removeClass("d-none");
+  };
+  if (value == "garden" | value == "rice_field"){
+    $(".inside_plan").removeClass("d-none");
+  }else{
+    $(".inside_plan").addClass("d-none");
+  }
+}
+
+
+        </script>
+        {% endblock %}
+
+    {% block banner %}
+    <section class="single-banner">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="single-content">
+              <h2>فایل جدید </h2>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+<!-- href -->
+                  <a href="{% url 'home:home' %}">صفحه اصلی</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  ایجاد فایل
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endblock %}
+
+
     {% block content %}
+    <!--create item form-->
+    <!--item edit form (login required)-->
+    {% if user.is_authenticated %}
 
-        <p>code : {{item.code}}</p>
+    <section class="dash-header-part">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-md-12 col-lg-12">
+                <div class="dash-focus dash-rev">
+                  <h2>{{item.code}}</h2>
+                  <p>کد </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        {% if user.is_authenticated %}
-        <!--item edit form (login required)-->
-        <form action="" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
 
-            <!--item images-->
-            {% if item_images %}
+    <section class="adpost-part">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 m-auto">
+            <form class="adpost-form" action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+              <div class="adpost-card">
+                <div class="adpost-title"><h3>اطلاعات فایل</h3></div>
+                <div class="row">
+                  <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <ul class="form-check-list">
+                        <li>
+                           <input
+                           type="checkbox"
+                           name="public"
+                           id="id_public"
+                           {% if item.public %}checked{%else%}{%endif%}
+                           class="form-check"/>
+                           <label for="id_public" class="form-label">
+                            عمومی (قابل نمایش برای همه) </label>
+                        </li>
+                       </ul>
+                    </div>
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="form-group"><label class="form-label">تصاویر </label>
+                        </br>
+                        {% if item_images %}
+                        {% for img in item_images.all %}
+                        </br>
+                        <img src="{{img.image.url}}" width="200px" height="200px">
+                        <a class="btn btn-danger" href="{% url 'files:delete_image' img.code %}" >حذف</a>
+                        {% endfor %}
+                        {% endif %}
 
-                {% for img in item_images %}
-                    <img src="{{img.image.url}}" width="200px" height="200px">
-                    <a class="btn btn-danger" href="{% url 'files:delete_image' img.code img.image.name %}" >Delete</a>
-                {% endfor %}
+                        {% for i in range %}
+                        {% if i != 5 %}
+                        <input type="file" class="form-control" accept=".jpeg, .jpg, .png" name="img" />
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 subject">
+                    <div class="form-group">
+                      <label class="form-label">موضوع </label>
+                      <select onchange="Subject(this.value)" class="form-control custom-select " name="subject" required id="subjectval">
+                          <option value="sale" {% if item.subject == 'sale' %} selected {% endif %}> فروش</option>
+                          <option value="mortgage" {% if item.subject == 'mortgage' %} selected {% endif %}> رهن</option>
+                          <option value="rent" {% if item.subject == 'rent' %} selected {% endif %}> اجاره</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 type">
+                    <div class="form-group">
+                      <label class="form-label">نوع ملک </label>
+                      <select onchange="Type(this.value)" class="form-control custom-select" name="type" required id="id_type">
+                          <option value="land" {% if item.type == 'land' %} selected {% endif %}> زمین </option>
+                          <option value="house" {% if item.type == 'house' %} selected {% endif %}> خانه </option>
+                          <option value="shop" {% if item.type == 'shop' %} selected {% endif %}> مغازه </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 land_type ">
+                    <div class="form-group">
+                      <label class="form-label">نوع زمین </label>
+                        <select  onchange="LandType(this.value)" class="form-control custom-select" name="land_type" id="id_land_type">
+                            <option value="" selected>انتخاب کنید</option>
+                            <option value="residential" {% if item.land_type == 'residential' %} selected {% endif %}> مسکونی </option>
+                            <option value="commercial" {% if item.land_type == 'commercial' %} selected {% endif %}> تجاری </option>
+                            <option value="res_comm" {% if item.land_type == 'res_comm' %} selected {% endif %}> مسکونی - تجاری </option>
+                            <option value="garden" {% if item.land_type == 'garden' %} selected {% endif %}> باغی </option>
+                            <option value="rice_field" {% if item.land_type == 'rice_field' %} selected {% endif %}> شالیزار </option>
+                        </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 house_type ">
+                    <div class="form-group">
+                      <label class="form-label">نوع خانه </label>
+                        <select onchange="HouseType(this.value)" class="form-control custom-select" name="house_type" id="id_house_type">
+                            <option value="" selected>انتخاب کنید</option>
+                            <option value="villa" {% if item.house_type == 'villa' %} selected {% endif %}> ویلایی </option>
+                            <option value="apartment" {% if item.house_type == 'apartment' %} selected {% endif %}> آپارتمانی </option>
+                        </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 rice_field_type">
+                    <div class="form-group">
+                      <label class="form-label">نوع زمین کشاورزی </label>
+                        <select class="form-control custom-select" name="rice_field_type" id="id_rice_field_type">
+                            <option value="" selected>انتخاب کنید</option>
+                            <option value="mechanized" {% if item.id_rice_field_type == 'mechanized' %} selected {% endif %}> مکانیزه </option>
+                            <option value="traditional" {% if item.id_rice_field_type == 'traditional' %} selected {% endif %}> سنتی </option>
+                        </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <div class="form-group">
+                      <label class="form-label">مدارک </label>
+                      <select class="form-control custom-select" name="documents" id="id_documents">
+                          <option value="" selected>انتخاب کنید</option>
+                          <option value="deed" {% if item.documents == 'deed' %} selected {% endif %}> سند </option>
+                          <option value="nasaq" {% if item.documents == 'nasaq' %} selected {% endif %}> نسق </option>
+                          <option value="arrangement" {% if item.documents == 'arrangement' %} selected {% endif %}> قولنامه / فروشنامه </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 all_price ">
+                    <div class="form-group">
+                      <label class="form-label">قیمت </label
+                      ><input
+                            onkeyup="ToRial(this.value, 'pr');"
+                            name="all_price"
+                              min="-9223372036854775808"
+                              max="9223372036854775807"
+                              id="id_all_price"
+                            value="{{item.all_price|default_if_none:''}}"
+                        type="number"
+                        class="form-control"
+                        placeholder="قیمت کل (به تومان)"
+                      /><span id="pr"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-label">متراژ </label
+                      ><input onkeyup="ToRial(this.value, 'ar');"
+                            name="area"
+                              min="0"
+                              required
+                              id="id_area"
+                              value="{{item.area}}"
+                        type="number"
+                        class="form-control"
+                        placeholder=" متراژ به متر مربع "
+                      /><span id="ar"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-label">استان </label
+                      ><input name="state" maxlength="20" id="id_state"
+                              value="{{item.state|default_if_none:''}}"
+                        type="text"
+                        class="form-control"
+                        placeholder=" استان مورد نظر "
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-label">محل </label
+                      ><input name="city" maxlength="20" id="id_city"
+                              value="{{item.city|default_if_none:''}}"
+                        type="text"
+                        class="form-control"
+                        placeholder=" محل/شهر مورد نظر "
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-4 reent">
+                    <div class="form-group reent">
+                      <label class="form-label">کرایه </label
+                      ><input onkeyup="ToRial(this.value, 'rnt');"
+                            name="rent" min="-9223372036854775808" max="9223372036854775807" id="id_rent"
+                              value="{{item.rent|default_if_none:''}}"
+                        type="number"
+                        class="form-control"
+                        placeholder=" کرایه در ماه (به تومان) "
+                      /><span id="rnt"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 all_rent_price">
+                    <div class="form-group">
+                      <label class="form-label">ودیعه </label
+                      ><input onkeyup="ToRial(this.value, 'arpr');"
+                            name="all_rent_price" min="-9223372036854775808" max="9223372036854775807" id="id_all_rent_price"
+                              value="{{item.all_rent_price|default_if_none:''}}"
+                        type="number"
+                        class="form-control"
+                        placeholder=" ودیعه یا پیش پرداخت (به تومان) "
+                      /><span id="arpr"></span>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 foundation">
+                    <div class="form-group">
+                      <label class="form-label">زیربنا </label
+                      ><input name="foundation" min="0" id="id_foundation"
+                              value="{{item.foundation|default_if_none:''}}"
+                        type="number"
+                        class="form-control"
+                        placeholder=" زیربنا (به متر مربع) "
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-4 floor">
+                    <div class="form-group">
+                      <label class="form-label">طبقه </label
+                      ><input name="floor" min="0" id="id_floor"
+                              value="{{item.floor|default_if_none:''}}"
+                        type="number"
+                        class="form-control"
+                        placeholder=" 0"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-4 bedroom">
+                    <div class="form-group">
+                      <label class="form-label">تعداد خواب </label
+                      ><input name="bedroom" min="0" id="id_bedroom"
+                              value="{{item.bedroom|default_if_none:''}}"
+                        type="number"
+                        class="form-control"
+                        placeholder="  مثال : 2"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-4 year">
+                    <div class="form-group">
+                      <label class="form-label">سال ساخت </label
+                      ><input name="year" min="0" id="id_year"
+                              value="{{item.year|default_if_none:''}}"
+                        type="number"
+                        class="form-control"
+                        placeholder=" مثال : 1402 "
+                      />
+                    </div>
+                  </div>
 
-            {% endif %}
+                  <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <ul class="form-check-list">
+                        <li><label class="form-label">دیگر توضیحات </label></li>
+                        <li>
+                          <input name="exchange" id="id_exchange"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.exchange %}checked{%else%}{%endif%}
+                          /><label for="id_exchange" class="form-check-text"
+                            >معاوضه</label
+                          >
+                        </li>
+                        <li class="points ">
+                          <input name="points" id="id_points"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.points %}checked{%else%}{%endif%}
+                          /><label for="id_points" class="form-check-text"
+                            > امتیازات
+                          </label>
+                        </li>
+                        <li class=" inside_plan">
+                          <input name="inside_plan" id="id_inside_plan"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.inside_plan %}checked{%else%}{%endif%}
+                          /><label for="id_inside_plan" class="form-check-text"
+                            >داخل طرح هادی
+                          </label>
+                        </li>
+                        <li class="production_license">
+                          <input name="production_license" id="id_production_license"
+                            type="checkbox"
+                            class="form-check production_license "
+                                 {% if item.production_license %}checked{%else%}{%endif%}
+                          /><label for="id_production_license" class="form-check-text"
+                            >پروانه ساخت
+                          </label>
+                        </li>
 
-            {% for i in range %}
-                {% if i != 5 %}
-                    <br><input type="file" accept=".jpeg, .jpg, .png" name="img">
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 options">
+                    <div class="form-group">
+                      <ul class="form-check-list">
+                        <li><label class="form-label"> امکانات </label></li>
+                        <li>
+                            <input name="parking" id="id_parking"
+                              type="checkbox"
+                              class="form-check"
+                                   {% if item.parking %}checked{%else%}{%endif%}
+                            /><label for="id_parking" class="form-check-text"
+                              > پارکینگ </label
+                            >
+                        </li>
+                        <li>
+                          <input name="elevator" id="id_elevator"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.elevator %}checked{%else%}{%endif%}
+                          /><label for="id_elevator" class="form-check-text"
+                            >آسانسور  </label
+                          >
+                        </li>
+                        <li>
+                          <input name="mdf" id="id_mdf"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.mdf %}checked{%else%}{%endif%}
+                          /><label for="id_mdf" class="form-check-text"
+                            >کابینت  </label
+                          >
+                        </li>
+                        <li>
+                          <input name="cooler" id="id_cooler"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.cooler %}checked{%else%}{%endif%}
+                          /><label for="id_cooler" class="form-check-text"
+                            >کولر  </label
+                          >
+                        </li>
+                        <li>
+                          <input name="water_heater" id="id_water_heater"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.water_heater %}checked{%else%}{%endif%}
+                          /><label for="id_water_heater" class="form-check-text"
+                            >آب گرمکن  </label
+                          >
+                        </li>
+                        <li>
+                          <input name="video_intercom" id="id_video_intercom"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.video_intercom %}checked{%else%}{%endif%}
+                          /><label for="id_video_intercom" class="form-check-text"
+                            >آیفون تصویری  </label
+                          >
+                        </li>
+                        <li>
+                          <input name="remote_door" id="id_remote_door"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.remote_door %}checked{%else%}{%endif%}
+                          /><label for="id_remote_door" class="form-check-text"
+                            >درب ریموت دار  </label
+                          >
+                        </li>
+                        <li>
+                          <input name="warehouse" id="id_warehouse"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.warehouse %}checked{%else%}{%endif%}
+                          /><label for="id_warehouse" class="form-check-text"
+                            > بهارخواب </label
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12">
+                    <div class="form-group">
+                      <label class="form-label">توضیحات </label
+                      ><textarea
+                      name="description" id="id_description"
+                        class="form-control"
+                        placeholder="توضیحات تکمیلی خود را بنویسید..."
+                      >{{item.description|default_if_none:''}}</textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+                {% if item.user.id == request.user.id %}
+              <div class="adpost-card">
+                <div class="adpost-title"><h3>اطلاعات مالک (محفوظ نزد شما و غیرقابل نمایش برای دیگران)</h3></div>
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-label">نام مالک </label
+                      ><input  name="owner" maxlength="30" required id="id_owner"
+                               value="{{item.owner|default_if_none:''}}"
+                        type="text"
+                        class="form-control"
+                        placeholder="اقا/خانوم... "
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-label">مشخصات مالک </label
+                      ><input name="owner_info" cols="40" rows="10" maxlength="200" required id="id_owner_info"
+                              value="{{item.owner_info|default_if_none:''}}"
+                        type="text"
+                        class="form-control"
+                        placeholder="شماره تلفن مالک و ..."
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-label">آدرس فایل </label
+                      ><input name="address" cols="40" rows="10" maxlength="250" required id="id_address"
+                              value="{{item.address|default_if_none:''}}"
+                        type="text"
+                        class="form-control"
+                        placeholder="مثال : ایران-گیلان-خیابان-کوچه"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
                 {% endif %}
-            {% endfor %}
 
-            <input type="submit" value="Update">
+              <!-- <div class="adpost-card">
+                <div class="adpost-title"><h3>اطلاعات پلن</h3></div>
+                <ul class="adpost-plan-list">
+                  <li>
+                    <div class="adpost-plan-content">
+                      <h6>پلن رایگان - <span>ارسال 5 لیست آگهی</span></h6>
+                      <p>
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت
+                        چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن
+                        ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده
+                        از طراحان گرافیک است. .
+                      </p>
+                    </div>
+                    <div class="adpost-plan-meta">
+                      <h3>رایگان</h3>
+                      <button class="btn btn-outline">
+                        <span>انتخاب </span>
+                      </button>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="adpost-plan-content">
+                      <h6>پلن استاندارد - <span>ارسال 10 لیست آگهی</span></h6>
+                      <p>
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت
+                        چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن
+                        ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده
+                        از طراحان گرافیک است. .
+                      </p>
+                    </div>
+                    <div class="adpost-plan-meta">
+                      <h3>23000 تومان</h3>
+                      <button class="btn btn-outline">
+                        <span>انتخاب </span>
+                      </button>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="adpost-plan-content">
+                      <h6>پلن اورجینال - <span>لیست تبلیغات نامحدود</span></h6>
+                      <p>
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت
+                        چاپ و با استفاده از طراحان گرافیک است. لورم ایپسوم متن
+                        ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده
+                        از طراحان گرافیک است. .
+                      </p>
+                    </div>
+                    <div class="adpost-plan-meta">
+                      <h3>43000 تومان</h3>
+                      <button class="btn btn-outline">
+                        <span>انتخاب </span>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div> -->
 
-        </form>
+                <button class="btn btn-inline" type="submit">
+                  <i class="fas fa-check-circle"></i
+                  ><span>تکمیل ویرایش</span>
+                </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
         {% else %}
-            <h1>You Are Not Logged In</h1>
+            <h1>اول وارد شو !</h1>
         {% endif %}
 
-    {% endblock %}
+{% endblock %}

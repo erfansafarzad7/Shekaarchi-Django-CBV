@@ -1,10 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
+
+        {% block style %}
+            <link rel="stylesheet" href="{% static 'css/custom/user-form.css' %}" />
+        {% endblock %}
+
     {% block content %}
 
+    <section class="user-form-part h-auto">
         <!--verify form-->
         <form method="post">
             {% csrf_token %}
-            {{ form.phone }}  enter your phone
-            <input class="btn btn-success" type="submit" value="Verify">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <input name="phone" required id="id_phone"
+                      type="text"
+                      class="form-control"
+                      placeholder="شماره خود را وارد کنید"
+                    /><small class="form-alert"
+                      >مثال : 09123456789</small
+                    >
+                  </div>
+                </div>
+              </div>
+            <input class="btn btn-success" type="submit" value="تـایید">
         </form>
+    </section>
     {% endblock %}

@@ -1,14 +1,36 @@
 {% extends 'base.html' %}
+{% load static %}
+    {% block title %} تایید کد - شکارچی {% endblock %}
+        {% block style %}
+            <link rel="stylesheet" href="{% static 'css/custom/user-form.css' %}" />
+        {% endblock %}
+
     {% block content %}
+        <h4>کد چهار رقمی به شماره {{ e_phone }} ارسال شد !</h4>
+        </br>
+        <section class="user-form-part h-auto">
+            <!--verify form-->
+            <form method="post">
+                {% csrf_token %}
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <input type="number" name="code" min="0" required id="id_code"
+                          class="form-control"
+                          placeholder="کد ارسال شده را وارد کنید"
+                        /><small class="form-alert"
+                          >مثال : 1234</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                <input class="btn btn-success" type="submit" value="تـایید">
+                <a class="btn btn-info" href="{% url 'accounts:sms_verify' %}">ارسال دوباره</a>
+            </form>
+        </section>
 
         <!--verify form-->
 
-        <h4>otp was send to {{ e_phone }}</h4>
 
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input class="btn btn-success" type="submit" value="Register">
-        </form>
-        <a class="btn btn-info" href="{% url 'accounts:sms_verify' %}">re send</a>
+
     {% endblock %}

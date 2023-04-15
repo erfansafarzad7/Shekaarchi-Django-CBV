@@ -1,15 +1,164 @@
 {% extends 'base.html' %}
+{% load static %}
+
+    {% block title %} ویرایش پروفایل - شکارچی {% endblock %}
+    {% block style %}
+        <link rel="stylesheet" href="{% static 'css/custom/setting.css' %}" />
+    {% endblock %}
+
+{% block banner %}
+    <section class="single-banner">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="single-content">
+              <h2>پروفایل {{items_user}}</h2>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="{% url 'home:home' %}">صفحه اصلی</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                   ویرایش پروفایل
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endblock %}
+
+
     {% block content %}
 
-        <!--edit profile form (login required)-->
-        {% if user.is_authenticated %}
-        <form action="" method="post">
+    <section class="dash-header-part">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4 col-md-3 col-lg-2">
+              <div class="dash-avatar">
+  <!-- href   src -->
+                <a href="#"><img src="
+                  {% if request.user.avatar %}
+                    {{request.user.avatar.url}}
+                  {% else %}
+                  {% static 'images/defaults/avatar-default.jpg' %}
+                  {% endif %}" alt="avatar" /></a>
+              </div>
+            </div>
+            <div class="col-sm-8 col-md-9 col-lg-3">
+              <div class="dash-intro">
+  <!-- href   var -->
+                <h4><a href="#">{{request.user.username}}</a></h4>
+              </div>
+              <ul class="dash-meta">
+                <li>
+                  <i class="fas fa-phone-alt"></i><span>{{request.user.phone}}</span>
+                </li>
+                <li>
+                  <i class="fas fa-map-marker-alt"></i
+                  ><span>{{request.user.address|default_if_none:'آدرس تعیین نشده'}} </span>
+                </li>
+              </ul>
+            </div>
+            <div class="col-lg-7">
+              <div class="row">
+                <div class="col-md-4 col-lg-4">
+                  <div class="dash-focus dash-list">
+                    <h2>{{all_user_items}}</h2>
+                    <p>کل فایل های شما </p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-lg-4">
+                  <div class="dash-focus dash-book">
+                    <h2>{{publish_items}}</h2>
+                    <p>منتشر شده </p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-lg-4">
+                  <div class="dash-focus dash-rev">
+                    <h2>{{public_items}}</h2>
+                    <p>عمومی ها</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="dash-menu-list col-md-12">
+              <ul  class="col-md-12 col-sm-12">
+                <li><a href="{% url 'accounts:user_profile' request.user.id %}">پروفایل</a></li>
+                <li><a class="active " href="#">تنظیمات </a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="setting-part" >
+      <div class="container">
+        <form class="setting-form" method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            {{user.phone}}<a class="btn btn-warning" href="{% url 'accounts:edit_phone' %}">Edit</a>
-            <input type="submit" value="Update">
+          <div class="row">
+            <!-- <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-label">تصویر پروفایل</label
+                ><input type="file" class="form-control" />
+              </div>
+            </div> -->
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-label">آدرس </label
+                ><input
+                  value="{{user.address|default_if_none:''}}"
+                  name="address"
+                  maxlength="100"
+                  id="id_address"
+                  type="text"
+                  class="form-control"
+                  placeholder=" مثال : استان - شهر - خیابان - کوچه"
+                />
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-label">نام املاک  </label
+                ><input
+                  name="username"
+                  value="{{user.username}}"
+                  maxlength="25"
+                  required
+                  id="id_username"
+                  type="text"
+                  class="form-control"
+                  placeholder="مثال : املاک شکارچی" />
+              </div>
+            </div>
+             <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-label">شماره تماس </label
+                ><input
+                      disabled
+                  value="{{user.phone}}"
+                  type="text"
+                  class="form-control"/>
+              </div>
+                <a class="btn btn-warning" href="{% url 'accounts:edit_phone' %}"> ویرایش شماره </a>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group text-center mt-5">
+                <button class="btn btn-inline" type="submit">
+                  <i class="fas fa-user-check"></i
+                  ><span>بروز رسانی اطلاعات</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </form>
-        {% else %}
-            <h1>You Are Not Logged In</h1>
-        {% endif %}
+      </div>
+    </div>
+
     {% endblock %}

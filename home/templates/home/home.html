@@ -1,30 +1,285 @@
 {% extends 'base.html' %}
+{% load static %}
+    {% block title %} صفحه اصلی - شکارچی {% endblock %}
+
+  {% block banner %}
+    <section class="banner-part">
+      <div class="container">
+        <div class="banner-content">
+        </br>
+          <h1>
+<!--            از اینجا میتوانید برای مدیریت و اشتراک گذاری فایل های املاکتان استفاده کنید...-->
+<!--              اینجا جاییه که راحت بتونی فایلهاتو مدیریت کنی-->
+              سایتی برای اشتراک گذاری و مدیریت فایل # رایگان # برای املاکیان
+          </h1>
+            <h1></h1>
+        </br>
+          <p>
+              # برای راحتی کار شما #
+          </p>
+        </div>
+      </div>
+    </section>
+  {% endblock %}
+
+        {% block scripts %}
+            <script>
+                let price = document.getElementsByClassName("price")
+                window.onload = function WindowLoad(event) {
+                  for (var i = 0; i < price.length; i++) {
+                    price[i].innerHTML = price[i].innerHTML.split('').reverse().join('').replace(/(.{3})/g,'$1,').replace(/,$/,'').split('').reverse().join('')
+                }}
+            </script>
+        {% endblock %}
+
     {% block content %}
 
-        <!--all items-->
-        {% for item in items %}
-            <a href="{% url 'files:item_detail' item.code %}">{{item.code}}</a>
-            <br/>
-            <br/>
-        {% endfor %}
-
-        <!--pagination-->
-        {% if is_paginated %}
-            <div class="pagination">
-                <span class="page-links">
-                    {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-                    <span class="page-current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">next</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
+    <section class="ad-list-part">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="product-filter">
+              <div class="product-page-number">
+                <p>صفحه {{ page_obj.number }} از {{page_obj.paginator.num_pages}} </p>
+              </div>
+              <ul class="product-card-type">
+                <li class="grid-verti active">
+                  <i class="fas fa-grip-vertical"></i>
+                </li>
+                <li class="grid-hori">
+                  <i class="fas fa-grip-horizontal"></i>
+                </li>
+              </ul>
             </div>
+          </div>
+        </div>
+
+        <div class="row">
+          {% for item in items %}
+          <div class="col-sm-6 col-md-4 col-lg-3 card-grid">
+            <div class="product-card">
+              <div class="product-head">
+                <div
+                  class="product-img"
+                    style=
+                    "background: url(
+                    {% if item.images.all.first %}
+                    {{item.images.all.first.image.url}}
+                    {% else %}
+                    {% static 'images/defaults/item-default.jpg' %}
+                    {% endif %}
+                    ) no-repeat center;
+                    background-size: cover;">
+                    <span class="flat-badge
+                  {% if item.subject == 'sale' %}
+                    sale
+                  {% elif item.subject == 'mortgage' %}
+                    booking
+                  {% else %}
+                    rent
+                  {% endif%}
+                  ">
+                  {% if item.subject == 'sale' %}
+                    فروش
+                  {% elif item.subject == 'mortgage' %}
+                    رهن
+                  {% else %}
+                    اجاره
+                  {% endif%}
+                </span>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-tag">
+                  <i class="fas fa-tags"></i>
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">
+                      {% if item.type == 'house' %}
+                        خانه
+                    {% elif item.type == 'land' %}
+                        زمین
+                    {% else %}
+                        مغازه
+                    {% endif %}
+                    </a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                    {% if item.house_type == 'villa'%}
+                        ویلایی
+                    {% elif item.house_type == 'apartment' %}
+                        آپارتمانی
+                    {% else %}
+                    {% endif %}
+
+                    {% if item.land_type == 'residential' %}
+                            مسکونی
+                        {% elif item.land_type == 'commercial' %}
+                            تجاری
+                        {% elif item.land_type == 'res_comm' %}
+                            مسکونی - تجاری
+                        {% elif item.land_type == 'garden' %}
+                            باغی
+                        {% elif item.land_type == 'rice_field' %}
+                            کشاورزی
+                            <!--rice field type-->
+                            {% if item.rice_field_type == 'mechanized' %}
+                                   مکانیزه
+                            {% elif item.rice_field_type == 'traditional' %}
+                                 سنتی
+                            {% else %}
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
+                    </li>
+                  </ol>
+                </div>
+                <div class="product-title">
+
+                  <h5>
+                      <a href="{% url 'files:item_detail' item.code %}">کد : {{item.code}}</a>
+                  </h5>
+                  <h5>
+                    <a href="{% url 'files:item_detail' item.code %}">
+
+                    <!--type-->
+                    {% if item.type == 'house' %}
+
+                        خانه
+                        <!--house type-->
+                        {% if item.house_type == 'villa' %}
+                            ویلایی
+                        {% elif item.house_type == 'apartment' %}
+                            آپارتمانی
+                        {% else %}
+                        {% endif %}
+
+                    {% elif item.type == 'land' %}
+
+                        زمین
+                        <!--land type-->
+                        {% if item.land_type == 'residential' %}
+                            مسکونی
+                        {% elif item.land_type == 'commercial' %}
+                            تجاری
+                        {% elif item.land_type == 'res_comm' %}
+                            مسکونی - تجاری
+                        {% elif item.land_type == 'garden' %}
+                            باغی
+                        {% elif item.land_type == 'rice_field' %}
+                            کشاورزی
+                            <!--rice field type-->
+                            {% if item.rice_field_type == 'mechanized' %}
+                                 مکانیزه
+                            {% elif item.rice_field_type == 'traditional' %}
+                                سنتی
+                            {% else %}
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
+                    {% else %}
+                        مغازه
+                    {% endif %}
+
+                    {{ item.area }} متری
+
+                    {% if item.documents == 'deed'%}
+                        سند دار
+                    {% endif %}
+
+                    {% if item.city != None %}
+                    در {{ item.city }}
+                    {% endif %}
+
+                    </a>
+                  </h5>
+                  <ul class="product-location">
+                    <li>
+                      <i class="fas fa-user"></i>
+                      <p><a href="{% url 'accounts:user_profile' item.user.id %}">{{item.user.username}}</a></p>
+                    </li>
+                    <li>
+                      <i class="fas fa-clock"></i>
+                          <p>from : {{item.created|timesince}}</p>
+                    </li>
+                  </ul>
+                </div>
+                <div class="product-details">
+                  <div class="product-price">
+                      {% if item.subject == 'mortgage' and item.all_rent_price != None %}
+                        <h5 class="price">{{item.all_rent_price}}</h5><span>ودیعه</span>
+                      {% elif item.subject == 'rent' and item.rent != None %}
+                        <span> هر ماه </span><h5 class="price">{{item.rent}}</h5>
+                      {% elif item.subject == 'sale' %}
+                        {% if item.all_price != None %}
+                        <h5 class="price">{{item.all_price}}</h5><span>تومان</span>
+                        {% else %}
+                        <h5>
+                          توافقی
+                        </h5>
+                        {% endif %}
+                      {% endif %}
+
+                      {% if item.subject == 'mortgage' and item.all_rent_price == None %}
+                      <h5>توافقی</h5>
+                      {% elif item.subject == 'rent' and item.rent == None %}
+                      <h5>توافقی</h5>
+                      {% endif %}
+                    <span></span>
+                  </div>
+                  <ul class="product-widget">
+                    <li>
+                      <a href="#" class="tooltip"
+                        ><i class="fas fa-compress"></i
+                        ><span class="tooltext top">مقایسه کردن </span></a
+                      >
+                    </li>
+                    <li>
+                      <button class="tooltip">
+                        <i class="far fa-heart"></i
+                        ><span class="tooltext top">نشانک </span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="pagination">
+
+              {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                  <i class="fas fa-long-arrow-alt-right"></i></a>
+              </li>
+              {% endif %}
+
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                {{ page_obj.paginator.num_pages }}</a></li>
+
+              <li class="page-item">صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</li>
+
+              <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+
+              {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                  <i class="fas fa-long-arrow-alt-left"></i>
+                </a>
+              </li>
+              {% endif %}
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
         {% endif %}
 
     {% endblock %}

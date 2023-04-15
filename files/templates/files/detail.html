@@ -1,24 +1,166 @@
 {% extends 'base.html' %}
 {% load static %}
+  {% block title %} جزئیات فایل - شکارچی {% endblock %}
+        {% block style %}
+            <link rel="stylesheet" href="{% static 'css/custom/grid-details.css' %}" />
+        {% endblock %}
+        {% block scripts %}
+            <script src="{% static 'js/vendor/jquery-ui.min.js' %}"></script>
+            <script src="{% static 'js/custom/price-range.js' %}"></script>
+            <script>
+            // custom function copy to clipboard
+            function copyInClipboard() {
+              var copyText = document.getElementsByClassName(".share");
+              navigator.clipboard.writeText("https://shekaarchi.ir/files/{{item.code}}/");
+              alert(" کپی شد : " + "https://shekaarchi.ir/files/{{item.code}}/");
+            }
+
+            function formatNumber(num) {
+              return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+            }
+
+
+
+             let price = document.getElementsByClassName("price")
+             let pricepm = document.getElementsByClassName("price-pm")
+             window.onload = function WindowLoad(event) {
+               for (var i = 0; i < price.length; i++) {
+                 price[i].innerHTML = price[i].innerHTML.split('').reverse().join('').replace(/(.{3})/g,'$1,').replace(/,$/,'').split('').reverse().join('')
+             }
+               for (var i = 0; i < pricepm.length; i++) {
+                 pricepm[i].innerHTML = pricepm[i].innerHTML.split('').reverse().join('').replace(/(.{3})/g,'$1,').replace(/,$/,'').split('').reverse().join('')
+             }}
+
+            </script>
+        {% endblock %}
+
+  {% block banner %}
+    <section class="single-banner">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="single-content">
+              <h2>جزئیات فایل</h2>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="{% url 'home:home' %}">صفحه اصلی</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                   جزئیات فایل
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                   کد : {{item.code}}
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endblock %}
+
     {% block content %}
+    <section class="ad-details-part">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 m-auto">
+            <div class="row">
+              {% if item.subject == 'sale' %}
+              <div class="col-md-6 col-lg-6">
+                {% if item.all_price != None %}
+                <span> قیمت هر متر : <span class="price-pm">{{price_per_meter}}</span> تومان </span>
+                <div class="ad-details-price">
+                  <h2 class="price">{{item.all_price}}</h2><span>تومان</span>
+                  {% else %}
+                  <div class="ad-details-price">
+                  <h2>توافقی</h2>
+                  {% endif %}
+                  <i class="flaticon-bargain"></i>
+                </div>
+              </div>
+              {% else %}
+              <div class="col-md-6 col-lg-6">
+                <div class="ad-details-price">
+                  {% if item.all_rent_price != None %}
+                  <h2 class="price">{{item.all_rent_price}}</h2><span>تومان</span>
+                  {% else %}
+                 <h2> (ودیعه تعیین نشده)</h2>
+                  {% endif %}
+                  <i class="flaticon-bargain"></i>
+                </div>
+              </div>
+              {% endif %}
+              <div class="col-md-6 col-lg-6">
+                <div class="ad-details-number">
+                  <h2>
+                   {{item.user.phone}}<span>شماره تماس </span>
+                  </h2>
+                  <i class="fas fa-phone-alt"></i>
+                </div>
+              </div>
+            </div>
+            <div class="ad-details-card">
+              <div class="ad-details-breadcrumb">
+                <ol class="breadcrumb">
+                  <li><span class="flat-badge
+                    {% if item.subject == 'sale' %}
+                    sale
+                  {% elif item.subject == 'mortgage' %}
+                    booking
+                  {% else %}
+                    rent
+                  {% endif%}
+                    ">{% if item.subject == 'sale' %}
+                    فروش
+                  {% elif item.subject == 'mortgage' %}
+                    رهن
+                  {% else %}
+                    اجاره
+                  {% endif%}</span></li>
+                  <li class="breadcrumb-item"><a href="#">
+                  {% if item.type == 'house' %}
+                      خانه
+                  {% elif item.type == 'land' %}
+                  زمین
+                  {% else %}
+                  مغازه
+                  {% endif %} </a></li>
+                  <li class="breadcrumb-item active" aria-current="page">
+                    {% if item.house_type == 'villa'%}
+                        ویلایی
+                    {% elif item.house_type == 'apartment' %}
+                        آپارتمانی
+                    {% endif %}
 
-            <a href="{% url 'accounts:user_profile' item.user.id %}">{{item.user}}</a>
-            <p>کد : {{ item.code }}</p>
-            <p>متراژ : {{ item.area }}</p>
-            <p>قیمت کل : {{ item.all_price }}</p>
-
-                <p>عنوان :
-
+                    {% if item.land_type == 'residential' %}
+                            مسکونی
+                        {% elif item.land_type == 'commercial' %}
+                            تجاری
+                        {% elif item.land_type == 'res_comm' %}
+                            مسکونی - تجاری
+                        {% elif item.land_type == 'garden' %}
+                            باغی
+                        {% elif item.land_type == 'rice_field' %}
+                            کشاورزی
+                            <!--rice field type-->
+                            {% if item.rice_field_type == 'mechanized' %}
+                                 مکانیزه
+                            {% elif item.rice_field_type == 'traditional' %}
+                                سنتی
+                            {% else %}
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
+                  </li>
+                </ol>
+              </div>
+              <div class="ad-details-heading">
+                <h2>
+                  <a href="#">کد : {{item.code}}</a>
+                    </br>
+                  <a href="#">
                     <!--type-->
                     {% if item.type == 'house' %}
-
-                        {% if item.subject == 'sale' %}
-                            فروش
-                        {% elif item.subject == 'mortgage' %}
-                            رهن
-                        {% elif item.subject == 'rent' %}
-                            اجاره
-                        {% endif %}
 
                         خانه
                         <!--house type-->
@@ -29,7 +171,7 @@
                         {% else %}
                         {% endif %}
 
-                    {% else %}
+                    {% elif item.type == 'land' %}
 
                         زمین
                         <!--land type-->
@@ -52,114 +194,373 @@
                             {% endif %}
                         {% else %}
                         {% endif %}
+                    {% else %}
+                        مغازه
                     {% endif %}
 
                     {{ item.area }} متری
 
                     {% if item.documents == 'deed'%}
                         سند دار
-                    {% elif item.documents == 'nasaq'%}
-                        نسق دار
-                    {% elif item.documents == 'arrangement'%}
-                        قولنامه ای
                     {% endif %}
 
+                    {% if item.city != None %}
                     در {{ item.city }}
-                    </p>
+                    {% endif %}
 
-
-            {% if request.user.id == item.user.id %}
-                <p>نام مالک : {{ item.owner }}</p>
-                <p>مشخصات مالک : {{ item.owner_info }}</p>
-                <p>آدرس  کامل : {{ item.address }}</p>
-                <p>توضیحات : {{ item.description|default_if_none:"تعیین نشده" }}</p>
-            {% endif %}
-
-            {% if item.type == 'house' %}
-                <p>بیعانه : {{ item.rent_price|default_if_none:"تعیین نشده" }}</p>
-                <p>زیربنا : {{ item.foundation|default_if_none:"تعیین نشده" }}</p>
-                <p>طبقه : {{ item.floor|default_if_none:"تعیین نشده" }}</p>
-                <p>اتاق خواب : {{ item.bedroom|default_if_none:"تعیین نشده" }}</p>
-                <p>سال ساخت : {{ item.year|default_if_none:"تعیین نشده" }}</p>
-            {% endif %}
-
-
-
-    <br/><hr/>
-
-
-<div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" id="2"
-         {% if item.exchange %} checked {%endif%} disabled>
-  <label class="form-check-label" for="2">معاوضه</label>
-</div>
-
-{% if item.type == 'house' %}
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="15"
-             {% if item.elevator %} checked {%endif%} disabled>
-      <label class="form-check-label" for="15">آسانسور</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="18"
-             {% if item.parking %} checked {%endif%} disabled>
-      <label class="form-check-label" for="18">پارکینگ</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="11"
-             {% if item.mdf %} checked {%endif%} disabled>
-      <label class="form-check-label" for="11">ام دی اف</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="12"
-             {% if item.cooler %} checked {%endif%} disabled>
-      <label class="form-check-label" for="12">کولر</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="14"
-             {% if item.water_heater %} checked {%endif%} disabled>
-      <label class="form-check-label" for="14">آبگرمکن</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="16"
-             {% if item.video_intercom %} checked {%endif%} disabled>
-      <label class="form-check-label" for="16">آیفون تصویری</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="17"
-             {% if item.remote_door %} checked {%endif%} disabled>
-      <label class="form-check-label" for="17">درب ریموت دار</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="19"
-             {% if item.warehouse %} checked {%endif%} disabled>
-      <label class="form-check-label" for="19">بهار خواب</label>
-    </div>
-
-{% endif %}
-
+                  </a>
+                </h2>
+              </div>
             <!--item images-->
-            {% if item_images %}
-                {% for img in item_images %}
-                    <img src="{{img.image.url}}" width="200px" height="200px">
+              <div class="ad-details-slider slider-arrow">
+                {% if item_images %}
+                {% for img in item_images.all %}
+                <div><img src="{{img.image.url}}" alt="details"/></div>
                 {% endfor %}
-            {% else %}
-                <img src="{% static 'img/default.jpg' %}" width="200px" height="200px">
-            {% endif %}
+                {% else %}
+                <div><img height="400px" src="{% static 'images/defaults/item-default.jpg' %}" alt="details"/></div>
+                {% endif %}
+            </div>
+              <div class="ad-thumb-slider" >
+                  {% if item_images %}
+                  {% for img in item_images.all %}
+                  <div><img src="{{img.image.url}}" alt="details" /></div>
+                  {% endfor %}
+                  {% else %}
+                  {% endif %}
+                </div>
+              <div class="ad-details-action">
+                <ul>
+                  <li>
+                    <button type="button">
+                      <i class="fas fa-heart"></i><span>نشانک </span>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button">
+                      <i class="fas fa-exclamation-triangle"></i
+                      ><span>گزارش </span>
+                    </button>
+                  </li>
+                  <li>
+                    <button class="share" type="button" onclick="copyInClipboard()">
+                      <i class="fas fa-share-alt"></i><span>اشتراک </span>
+                    </button>
+                  </li>
 
-
-                <hr>
                 <!--delete/edit item if owner-->
                 {% if request.user.id == item.user.id %}
-                    <a href="{% url 'files:delete_item' item.code %}"><button class="btn btn-danger">Delete</button></a>
-                    <a href="{% url 'files:edit_item' item.code %}"><button class="btn btn-warning">Update</button></a>
-                {% endif %}
+                  <li>
+                    <button type="button"><a href="{% url 'files:delete_item' item.code %}">
+                      <i class="fas fa-trash"></i><span>حذف </span></a>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button"><a href="{% url 'files:edit_item' item.code %}">
+                      <i class="fas fa-edit"></i><span>ویرایش </span></a>
+                    </button>
+                  </li>
+                  {% endif %}
+
+                </ul>
+              </div>
+            </div>
+              {% if item.description %}
+            <div class="ad-details-card">
+              <div class="ad-details-title"><h5>توضیحات</h5></div>
+              <div class="ad-details-descrip">
+                <p style="white-space: pre-line;">
+                {{item.description}}
+                </p>
+              </div>
+            </div>
+              {% endif %}
+            <div class="ad-details-card">
+              <div class="ad-details-title"><h5>مشخصات</h5></div>
+              <div class="ad-details-specific">
+                <ul>
+                  {% if item.subject == 'sale' %}
+                  <li>
+                    <h6>قیمت کل :</h6>
+                      {% if item.all_price != None %}
+                    <p class="price">{{item.all_price}}</p>
+                    {% else %}
+                    <p>
+                      توافقی
+                    </p>
+                    {% endif %}
+                  </li>
+                  {% endif %}
+                  {% if item.subject == 'rent' %}
+                    <li>
+                      <h6>اجاره ماهیانه :</h6>
+                       {% if item.rent != None %}
+                      <p class="price">{{item.rent}}</p>
+                      {% else %}
+                      <p>
+                        توافقی
+                      </p>
+                      {% endif %}
+                    </li>
+                    <li>
+                      <h6> ودیعه:</h6>
+                       {% if item.all_rent_price != None %}
+                      <p class="price">{{item.all_rent_price}}</p>
+                      {% else %}
+                      <p>
+                        توافقی
+                      </p>
+                      {% endif %}
+                    </li>
+                  {% endif %}
+                  {% if item.subject == 'mortgage' %}
+                      <h6> ودیعه:</h6>
+                       {% if item.all_rent_price != None %}
+                      <p class="price">{{item.all_rent_price}}</p>
+                      {% else %}
+                      <p>
+                        توافقی
+                      </p>
+                      {% endif %}
+                  {% endif %}
+
+                  <li>
+                    <h6> متراژ :</h6>
+                    <p class="price">{{item.area}}</p>
+                  </li>
+                  <li>
+                    <h6>استان :</h6>
+                    <p>{{ item.state|default_if_none:"تعیین نشده" }}</p>
+                  </li>
+                  <li>
+                    <h6>شهر/محل :</h6>
+                    <p>{{ item.city|default_if_none:"تعیین نشده" }}</p>
+                  </li>
+                  <li>
+                    <h6>  مدارک :</h6>
+                    <p>{% if item.documents == 'deed' %}
+                            سند دار
+                        {% elif item.documents == 'nasaq' %}
+                            نسق
+                        {% elif item.documents == 'arrangement' %}
+                           قولنامه / فروشنامه
+                        {% else %}
+                            تعیین نشده
+                        {% endif %}
+                    </p>
+                  </li>
+                  <li>
+                    <h6>  معاوضه :</h6>
+                    <p>{% if item.exchange %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  {% if item.type == 'land' %}
+                  <li>
+                    <h6>  امتیازات :</h6>
+                    <p>{{ item.points|yesno:"پای زمین,ندارد" }}</p>
+                  </li>
+                  {% if item.land_type == 'garden' or item.land_type == 'rice_field' %}
+                  <li>
+                    <h6>  داخل طرح هادی :</h6>
+                    <p>{% if item.inside_plan %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  {% else %}
+                  <li>
+                    <h6>  پروانه ساخت :</h6>
+                    <p>{% if item.production_license %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  {% endif %}
+                  {% endif %}
+
+                  {% if item.type == 'house' %}
+                  <li>
+                    <h6>زیربنا :</h6>
+                    <p>{{ item.foundation|default_if_none:"تعیین نشده" }}</p>
+                  </li>
+                  <li>
+                    <h6> طبقه:</h6>
+                    <p>{{ item.floor|default_if_none:"تعیین نشده" }}</p>
+                  </li>
+                  <li>
+                    <h6> اتاق خواب:</h6>
+                    <p>{{ item.bedroom|default_if_none:"تعیین نشده" }}</p>
+                  </li>
+                  <li>
+                    <h6> سال ساخت:</h6>
+                    <p>{{ item.year|default_if_none:"تعیین نشده" }}</p>
+                  </li>
+                  <li>
+                    <h6>  آسانسور:</h6>
+                    <p>{% if item.elevator %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  <li>
+                    <h6>  پارکینگ:</h6>
+                    <p>{% if item.parking %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  <li>
+                    <h6>  کابینت:</h6>
+                    <p>{% if item.mdf %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  <li>
+                    <h6>  کولر:</h6>
+                    <p>{% if item.cooler %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  <li>
+                    <h6>  آبگرمکن:</h6>
+                    <p>{% if item.water_heater %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  <li>
+                    <h6>  آیفون تصویری:</h6>
+                    <p>{% if item.video_intercom %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  <li>
+                    <h6>  درب ریموت دار:</h6>
+                    <p>{% if item.remote_door %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  <li>
+                    <h6>بهار خواب:</h6>
+                    <p>{% if item.warehouse %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  {% endif %}
+
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                <div class="ad-details-card">
+                  <div class="ad-details-title"><h5>اطلاعات املاک</h5></div>
+                  <div class="ad-details-profile">
+                    <div class="author-img">
+                      <a href="#"
+                        ><img alt="avatar" src="
+                            {% if request.user.avatar %}
+                              {{request.user.avatar.url}}
+                            {% else %}
+                            {% static 'images/defaults/avatar-default.jpg' %}
+                            {% endif %}"/></a>
+                    </div>
+                    <div class="author-intro">
+                      <h4><a href="{% url 'accounts:user_profile' item.user.id %}"> {{item.user.username}}</a></h4>
+                    </div>
+                    <ul class="author-list">
+                      <li>
+                        <h6>مجموع فایل ها</h6>
+                        <p>{{all_user_items}}</p>
+                      </li>
+                    </ul>
+                    <div class="author-details">
+                      <h6>عضو شده: {{item.user.created|date}}</h6>
+                      <h6>آدرس: {{ item.user.address|default_if_none:" ندارد" }}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {% if request.user.id == item.user.id %}
+              <div class="col-md-6 col-lg-6">
+                <div class="ad-details-card">
+                  <div class="ad-details-title"><h5> مشخصات اصلی فایل</h5></div>
+                  <div class="ad-details-safety">
+                    <ul>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        <p><span>نام مالک : </span> {{item.owner}}</p>
+                      </li>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        <p><span>مشخصات مالک : </span>{{item.owner_info}}</p>
+                      </li>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        <p><span>آدرس فایل : </span>{{item.address}}</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
+<!--              <div class="col-md-6 col-lg-6">-->
+<!--                <div class="ad-details-card">-->
+<!--                  <div class="ad-details-title"><h5>نکات ایمنی</h5></div>-->
+<!--                  <div class="ad-details-safety">-->
+<!--                    <ul>-->
+<!--                      <li>-->
+<!--                        <i class="fas fa-dot-circle"></i>-->
+<!--                        <p>قبل از خرید مورد را بررسی کنید</p>-->
+<!--                      </li>-->
+<!--                      <li>-->
+<!--                        <i class="fas fa-dot-circle"></i>-->
+<!--                        <p>فقط پس از جمع آوری کالا پرداخت کنید</p>-->
+<!--                      </li>-->
+<!--                      <li>-->
+<!--                        <i class="fas fa-dot-circle"></i>-->
+<!--                        <p>مراقب پیشنهادهای غیرواقعی باشید</p>-->
+<!--                      </li>-->
+<!--                    </ul>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     {% endblock %}

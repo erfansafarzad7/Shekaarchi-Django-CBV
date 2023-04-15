@@ -1,11 +1,101 @@
 {% extends 'base.html' %}
+{% load static %}
+    {% block title %} ورود - شکارچی {% endblock %}
+        {% block style %}
+            <link rel="stylesheet" href="{% static 'css/custom/user-form.css' %}" />
+        {% endblock %}
+
     {% block content %}
 
-        <!--login form-->
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Login">
-            <a class="btn btn-info" href="{% url 'accounts:otp_login' %}">Login with sms</a>
-        </form>
+    <section class="user-form-part h-auto">
+      <div class="user-form-banner">
+        <div class="user-form-content">
+<!--                 add logo                     -->
+          <a href="#"><img src="{% static 'images/logo.png' %}" alt="logo" /></a>
+          <h1>
+            از همینجا...
+          </h1>
+          <p>میتونی فایل های خوبو شکار کنی!</p>
+          <p> فایل هاتو به صورت آنلاین مدیریت کنی!</p>
+          <p> و اونا رو اشتراگذاری کنی!</p>
+        </div>
+      </div>
+      <div class="user-form-category">
+        <div class="user-form-header">
+<!--                 add logo                     -->
+          <a href="#"><img src="{% static 'images/logo.png' %}" alt="logo" /></a
+          >
+        </div>
+        <div class="user-form-category-btn">
+          <ul class="nav nav-tabs">
+            <li>
+              <a href="#login-tab" class="nav-link active" data-toggle="tab"
+                >ورود</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="tab-pane active" id="login-tab">
+          <div class="user-form-title">
+            <h2>خوش اومدی!</h2>
+            <p>اگه رمزت یادت نیست میتونی از (ورود با رمز یکبار مصرف) استفاده کنی!</p>
+          </div>
+
+          <form method="post">
+          {% csrf_token %}
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <input
+                          name="username"
+                          id="id_username"
+                          maxlength="11"
+                    type="text"
+                    class="form-control"
+                    placeholder="شماره تلفن"
+                  /><small class="form-alert"
+                    >مثال : 09123456789</small
+                  >
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <input
+                          name="password"
+                    type="password"
+                    class="form-control"
+                    id="pass id_password"
+                    placeholder="رمز عبور"
+                  /><button type="button" class="form-icon">
+                    <i class="eye fas fa-eye"></i></button
+                  ><small class="form-alert">رمز ورود باید بیشتر از 6 حرف باشد</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group text-right">
+                  <a href="{% url 'accounts:otp_login' %}" class="form-forgot">ورود با رمز یکبار مصرف !</a>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <button type="submit" class="btn btn-inline">
+                    <i class="fas fa-unlock"></i
+                    ><span>ورود</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="user-form-direction">
+            <p>
+              حساب نداری؟
+              روی <a href="{% url 'accounts:register' %}">( ثبت نام )</a> کلیک کن
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     {% endblock %}

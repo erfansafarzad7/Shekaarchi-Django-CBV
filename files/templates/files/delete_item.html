@@ -2,6 +2,7 @@
     {% block content %}
 
         <!-- item deleted information -->
+        <h4>فایل مورد نظر با موفقیت حذف شد !</h4>
         <br>
-        <a href="{% url 'accounts:user_profile' request.user.id %}"><button class="btn btn-danger">Back to Profile</button></a>
+        <a href="{% url 'accounts:user_profile' request.user.id %}"><button class="btn btn-danger">بازگشت به پروفایل</button></a>
     {% endblock %}

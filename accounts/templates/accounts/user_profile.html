@@ -1,50 +1,346 @@
 {% extends 'base.html' %}
-{% block title %} پروفایل کاربر {% endblock %}
+{% load static %}
+
+    {% block title %} پروفایل کاربر  - شکارچی {% endblock %}
+    {% block style %}
+        <link rel="stylesheet" href="{% static 'css/custom/profile.css' %}" />
+    {% endblock %}
+
+        {% block scripts %}
+            <script>
+                let price = document.getElementsByClassName("price")
+                window.onload = function WindowLoad(event) {
+                  for (var i = 0; i < price.length; i++) {
+                    price[i].innerHTML = price[i].innerHTML.split('').reverse().join('').replace(/(.{3})/g,'$1,').replace(/,$/,'').split('').reverse().join('')
+                }}
+            </script>
+        {% endblock %}
+
+  {% block banner %}
+    <section class="single-banner">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="single-content">
+              <h2>پروفایل {{items_user}}</h2>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="{% url 'home:home' %}">صفحه اصلی</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                   پروفایل
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endblock %}
+
     {% block content %}
-
-        <!--show username (login required)-->
+        <!-- (login required)-->
         {% if user.is_authenticated %}
-            <h3>{{items_user.username}}</h3>
-            <!--if its own profile-->
-            {% if request.user.id == items_user.id %}
-                <a href="{% url 'accounts:edit_profile' request.user.id %}">
-                    <button class="btn btn-warning">Edit Profile</button>
-                </a>
-                <br/>
-                <hr/>
-            {% endif %}
+    <section class="dash-header-part">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4 col-md-3 col-lg-2">
+              <div class="dash-avatar">
+  <!-- href   src -->
+                <a href="#"><img src="
+                  {% if request.user.avatar %}
+                    {{request.user.avatar.url}}
+                  {% else %}
+                  {% static 'images/defaults/avatar-default.jpg' %}
+                  {% endif %}" alt="avatar" /></a>
+              </div>
+            </div>
+            <div class="col-sm-8 col-md-9 col-lg-3">
+              <div class="dash-intro">
+  <!-- href   var -->
+                <h4><a href="#">{{items_user.username}}</a></h4>
+              </div>
+              <ul class="dash-meta">
+                <li>
+                  <i class="fas fa-phone-alt"></i><span>{{items_user.phone}}</span>
+                </li>
+                <li>
+                  <i class="fas fa-map-marker-alt"></i
+                  ><span>{{items_user.address|default_if_none:'آدرس تعیین نشده'}} </span>
+                </li>
+              </ul>
+            </div>
+            <div class="col-lg-7">
+              <div class="row">
+                {% if request.user == items_user %}
+                <div class="col-md-4 col-lg-4">
+                  <div class="dash-focus dash-list">
+                    <h2>{{all_user_items}}</h2>
+                    <p>کل فایل های شما </p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-lg-4">
+                  <div class="dash-focus dash-book">
+                    <h2>{{publish_items}}</h2>
+                    <p>منتشر شده </p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-lg-4">
+                  <div class="dash-focus dash-rev">
+                    <h2>{{public_items}}</h2>
+                    <p>عمومی ها</p>
+                  </div>
+                </div>
+                {% else %}
+                <div class="col-md-12 col-lg-12">
+                  <div class="dash-focus dash-book">
+                    <h2>{{public_items}}</h2>
+                    <p>کل فایل ها</p>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
 
-            <!--user items-->
-            <h3>
-                فایل ها :
-                <br/>
-            </h3>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="dash-menu-list col-md-12">
+              <ul  class="col-md-12 col-sm-12">
+                <li><a class="active " href="#">پروفایل</a></li>
+                {% if request.user.id == items_user.id %}
+                <li><a href="{% url 'accounts:edit_profile' request.user.id %}">تنظیمات </a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!--user items-->
+    <section class="ad-list-part">
+      <div class="container">
+        <div class="row">
+            {% if items %}
             {% for item in items %}
-                <a href="{% url 'files:item_detail' item.code %}">{{ item }}</a>
-                <br/>
-                <hr/>
-            {% endfor %}
+          <div class="col-sm-6 col-md-4 col-lg-3 card-grid">
+            <div class="product-card">
+              <div class="product-head">
+                <div
+                  class="product-img"
+                    style=
+                    "background: url({% if item.images.all.first %}
+                    {{item.images.all.first.image.url}}
+                    {% else %}
+                    {% static 'images/defaults/item-default.jpg' %}
+                    {% endif %}) no-repeat center;
+                    background-size: cover;">
+                    {% if item.publish %}
+                    <i class="cross-badge fas fa-eye"></i>
+                    {% else %}
+                    {% endif %}
+                    <span class="flat-badge
+                  {% if item.subject == 'sale' %}
+                    sale
+                  {% elif item.subject == 'mortgage' %}
+                    booking
+                  {% else %}
+                    rent
+                  {% endif%}
+                  ">
+                  {% if item.subject == 'sale' %}
+                    فروش
+                  {% elif item.subject == 'mortgage' %}
+                    رهن
+                  {% elif item.subject == 'rent' %}
+                    اجاره
+                  {% endif%}
+                </span>
+                  <ul class="product-meta">
+                    <li>
+                      <i class="fas fa-eye"></i>
+                      <p>{{ item.publish|yesno:"منتشر شده,منتشر نشده" }}</p>
+                    </li>
+                    <li>
+                      <i class="fas fa-star"></i>
+                      <p>{{ item.public|yesno:"عمومی,غیر عمومی" }}</p>
+                    </li>
+                  </ul>
+                </div>
 
+              </div>
+              <div class="product-info">
+                <div class="product-tag">
+                  <i class="fas fa-tags"></i>
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">
+                      {% if item.type == 'house' %}
+                        خانه
+                    {% elif item.type == 'land' %}
+                        زمین
+                    {% else %}
+                        مغازه
+                    {% endif %}
+                    </a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      {% if item.house_type == 'villa'%}
+                        ویلایی
+                    {% elif item.house_type == 'apartment' %}
+                        آپارتمانی
+                    {% else %}
+                    {% endif %}
+
+                    {% if item.land_type == 'residential' %}
+                            مسکونی
+                        {% elif item.land_type == 'commercial' %}
+                            تجاری
+                        {% elif item.land_type == 'res_comm' %}
+                            مسکونی - تجاری
+                        {% elif item.land_type == 'garden' %}
+                            باغی
+                        {% elif item.land_type == 'rice_field' %}
+                            کشاورزی
+                            <!--rice field type-->
+                            {% if item.rice_field_type == 'mechanized' %}
+                                 مکانیزه
+                            {% elif item.rice_field_type == 'traditional' %}
+                                سنتی
+                            {% else %}
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
+                    </li>
+                  </ol>
+                </div>
+                <div class="product-title">
+
+                  <h5>
+                      <a href="{% url 'files:item_detail' item.code %}">کد : {{item.code}}</a>
+                  </h5>
+                  <h5>
+                    <a href="{% url 'files:item_detail' item.code %}">
+
+                    <!--type-->
+                    {% if item.type == 'house' %}
+
+                        خانه
+                        <!--house type-->
+                        {% if item.house_type == 'villa' %}
+                            ویلایی
+                        {% elif item.house_type == 'apartment' %}
+                            آپارتمانی
+                        {% else %}
+                        {% endif %}
+
+                    {% elif item.type == 'land' %}
+
+                        زمین
+                        <!--land type-->
+                        {% if item.land_type == 'residential' %}
+                            مسکونی
+                        {% elif item.land_type == 'commercial' %}
+                            تجاری
+                        {% elif item.land_type == 'res_comm' %}
+                            مسکونی - تجاری
+                        {% elif item.land_type == 'garden' %}
+                            باغی
+                        {% elif item.land_type == 'rice_field' %}
+                            کشاورزی
+                            <!--rice field type-->
+                            {% if item.rice_field_type == 'mechanized' %}
+                                 مکانیزه
+                            {% elif item.rice_field_type == 'traditional' %}
+                                سنتی
+                            {% else %}
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
+                    {% else %}
+                        مغازه
+                    {% endif %}
+
+                    {{ item.area }} متری
+
+                    {% if item.documents == 'deed'%}
+                        سند دار
+                    {% endif %}
+
+                    {% if item.city != None %}
+                    در {{ item.city }}
+                    {% endif %}
+
+                    </a>
+                  </h5>
+                  <ul class="product-location">
+                    <li>
+                      <i class="fas fa-user"></i>
+                      <p><a href="{% url 'accounts:user_profile' item.user.id %}">{{item.user.username}}</a></p>
+                    </li>
+                    <li>
+                      <i class="fas fa-clock"></i>
+                          <p>from : {{item.created|timesince}}</p>
+                    </li>
+                  </ul>
+                </div>
+                <div class="product-details">
+                  <div class="product-price">
+                      {% if item.subject == 'mortgage' and item.all_rent_price != None %}
+                        <h5 class="price">{{item.all_rent_price}}</h5><span>ودیعه</span>
+                      {% elif item.subject == 'rent' and item.rent != None %}
+                        <h5 class="price">{{item.rent}}</h5><span> هر ماه </span>
+                      {% elif item.subject == 'sale' %}
+                        {% if item.all_price != None %}
+                        <h5 class="price">{{item.all_price}}</h5><span>تومان</span>
+                        {% else %}
+                        <h5>
+                          توافقی
+                        </h5>
+                        {% endif %}
+                      {% endif %}
+
+                      {% if item.subject == 'mortgage' and item.all_rent_price == None %}
+                      <h5>توافقی</h5>
+                      {% elif item.subject == 'rent' and item.rent == None %}
+                      <h5>توافقی</h5>
+                      {% endif %}
+                    <span></span>
+                  </div>
+                  <ul class="product-widget">
+                    <li>
+                      <a href="{% url 'files:delete_item' item.code %}" class="tooltip"
+                        ><i class="fas fa-trash"></i
+                        ><span class="tooltext top">حذف </span></a
+                      >
+                    </li>
+                    <li>
+                      <a href="#" class="tooltip"
+                        ><i class="far fa-eye"></i
+                        ><span class="tooltext top">عمومی/خصوصی </span></a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
         {% else %}
-            <h1>You Are Not Logged In</h1>
+          </br>
+          <h1 class="text-center" style="margin-top:50px; ">هیچ فایلی نداری !</h1>
         {% endif %}
+        </div>
 
         <!--pagination-->
-        {% if is_paginated %}
-            <div class="pagination">
-                <span class="page-links">
-                    {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-                    <span class="page-current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">next</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
+
+      </div>
+    </section>
+
+
+        {% else %}
+            <h1>اول وارد شو !</h1>
         {% endif %}
+
+
     {% endblock %}

@@ -1,137 +1,460 @@
-<nav class="navbar bg-body-tertiary sticky-top">
-  <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home:home' %}">صفحه اصلی</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
+{% load static %}
+    <header class="header-part">
+      <div class="container">
+        <div class="header-content">
+          <div class="header-left">
+            <ul class="header-widget">
+              <li>
+                <button type="button" class="header-menu">
+                  <i class="fas fa-align-left"></i>
+                </button>
+              </li>
+              <li>
+                <a href="{% url 'home:home' %}" class="header-logo"
+                  ><img src="{% static 'images/logo.png' %}" alt="logo"
+                /></a>
+              </li>
 
-      <div class="offcanvas-body">
+              {% if not request.user.is_authenticated %}
+              <li>
+                <a href="{% url 'accounts:login' %}" class="header-user">
+                  <i class="fas fa-user"></i><span>ورود</span></a>
+              </li>
+              {% else %}
+              <li>
+                <a href="{% url 'accounts:user_profile' request.user.id %}">
+                  <i class="fas fa-user"></i><span>پروفایل</span></a>
+              </li>
+              {% endif %}
 
-            <a class="navbar-brand" href="{% url 'home:home' %}">صفحه اصلی</a>
+              <li>
+                <button type="button" class="header-src">
+                  <i class="fas fa-search"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+          <form class="header-search" role="search" method="GET" action="{% url 'home:search' %}">
+            <div class="header-main-search">
+                <button type="submit" class="header-search-btn">
+                    <i class="fas fa-search"></i></button
+                    ><input
+                name="code"
+                type="search"
+                class="form-control"
+                placeholder="کد مورد نظر را وارد کنید..."
+              />
+                <button type="button" class="header-option-btn ">
+                    <i class="fas fa-sliders-h"></i>
+                </button>
 
-            {% if not request.user.is_authenticated %}
-            <div class="nav-item">
-                <a class="nav-link" href="{% url 'accounts:login' %}">ورود</a>
-            </div>
-            <div class="nav-item">
-                <a class="nav-link" href="{% url 'accounts:register' %}">ثبتنام</a>
-            </div>
-            {% else %}
-            <div class="nav-item">
-                <a class="nav-link" href="{% url 'accounts:logout' %}">خروج</a>
-                <a class="nav-link" href="{% url 'accounts:user_profile' request.user.id %}">پروفایل</a>
-            </div>
-            {% endif %}
-
-            <a class="nav-link" href="{% url 'files:create' %}">فایل جدید</a>
-
-
-            <!-- code search field -->
-            <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
-                <input class="form-control me-2" type="search"
-                       placeholder="کد" aria-label="Search" name="code">
-                <select name="search_in">
-                    <option value="all">همه</option>
-                    <option value="profile">پروفایل</option>
+                {% if request.user.is_authenticated %}
+                <select class="nasted-menu " name="search_in" >
+                    <option value="all">جستوجوی کد بین همه</option>
+                    <option value="profile">بین فایل های من</option>
                 </select>
-                <button class="btn btn-outline-success" type="submit">جستوجوی کد</button>
-            </form>
+                {% endif %}
 
-            <!-- area search field and dropdown -->
-            <form class="d-flex" role="search" method="GET" action="{% url 'home:search' %}">
-                <input class="form-control me-2" placeholder="متراژ"
-                       name="area" type="search" aria-label="Search" >
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">متراژ</button>
-                    <ul class="dropdown-menu">
-                        <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="area" value="500">500</button>
-                        <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="area" value="1000">1000</button>
-                        <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="area" value="2000">2000</button>
-                        <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="area" value="3000">3000</button>
-                    </ul>
+            </div>
+            <div class="header-search-option">
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <input name="state" type="text" class="form-control" placeholder="استان" />
+                  </div>
                 </div>
-
-                <!-- all price search field and dropdown -->
-                <input class="form-control me-2" placeholder="قیمت کل"
-                        name="all_price" aria-label="Search" type="search">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">قیمت کل</button>
-                    <ul class="dropdown-menu">
-                        <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="all_price" value="1000000000">1,000,000,000</button>
-                        <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="all_price" value="2000000000">2,000,000,000</button>
-                        <button class="btn btn-outline-success dropdown-item"
-                                type="submit" name="all_price" value="3000000000">3,000,000,000</button>
-                    </ul>
+                <div class="col-6">
+                  <div class="form-group">
+                    <input name="city" type="text" class="form-control" placeholder="شهر/محل" />
+                  </div>
                 </div>
-
-                    <input class="form-control me-2" type="search"
-                       placeholder="شهر/محل" aria-label="Search" name="city">
-
-                    <select name="subject">
-                        <option value="">-</option>
-                        <option value="sell">فروش</option>
-                        <option value="mortgage">رهن</option>
-                        <option value="rent">اجاره</option>
+                <div class="col-6">
+                  <div class="form-group">
+                    <input onkeyup="ToRial(this.value, 'a');"
+                      name="area"
+                      type="number"
+                      class="form-control"
+                      placeholder="متراژ تا.."
+                    /><span id="a"></span>
+                  </div>
+                </div>
+                <div class="col-6 all_price">
+                  <div class="form-group">
+                    <input
+                            onkeyup="ToRial(this.value, 'p');"
+                            id="id_all_price"
+                      name="all_price"
+                      type="number"
+                      class="form-control"
+                      placeholder="قیمت تا.."
+                    /><span id="p"></span>
+                  </div>
+                </div>
+                <div class="col-6 all_rent_price d-none">
+                  <div class="form-group">
+                    <input onkeyup="ToRial(this.value, 'arp');"
+                      name="all_rent_price"
+                      type="number"
+                      class="form-control"
+                      placeholder="ودیعه تا.."
+                    /><span id="arp"></span>
+                  </div>
+                </div>
+                <div class="col-6 reent d-none">
+                  <div class="form-group">
+                    <input onkeyup="ToRial(this.value, 'r');"
+                      name="rent"
+                      type="number"
+                      class="form-control"
+                      placeholder="کرایه تا.."
+                    /><span id="r"></span>
+                  </div>
+                </div>
+                <div class="col-6 subject">
+                  <div class="form-group">
+                    <select onchange="Subject(this.value)" class="nasted-menu " name="subject" id="subjectval">
+                      <option value="">نوع قرارداد</option>
+                      <option value="sale">فروش</option>
+                      <option value="mortgage">رهن</option>
+                      <option value="rent">اجاره</option>
                     </select>
+                  </div>
+                </div>
+                <div class="col-6 type">
+                  <div class="form-group">
+                    <select onchange="Type(this.value)" class="nasted-menu" name="type">
+                      <option value="">نوع ملک</option>
+                      <option value="house">خانه</option>
+                      <option value="land">زمین</option>
+                      <option value="shop">مغازه</option>
+                  </select>
+                  </div>
+                </div>
+                <div class="col-6 land_type d-none">
+                  <div class="form-group">
+                    <select onchange="LandType(this.value)" class="nasted-menu"  name="land_type">
+                      <option value="">نوع زمین</option>
+                      <option value="rice_field">کشاورزی</option>
+                      <option value="garden">باغی</option>
+                      <option value="residential">مسکونی</option>
+                      <option value="commercial">تجاری</option>
+                      <option value="res_comm">مسکونی - تجاری</option>
+                  </select>
+                  </div>
+                </div>
+                <div class="col-6 house_type d-none">
+                  <div class="form-group">
+                    <select class="nasted-menu"  name="house_type">
+                      <option value="">نوع خانه</option>
+                      <option value="villa"> ویلایی</option>
+                      <option value="apartment">آپارتمانی</option>
+                  </select>
+                  </div>
+                </div>
+                <div class="col-6 rice_field_type d-none">
+                  <div class="form-group">
+                    <select class="nasted-menu"  name="rice_field_type">
+                      <option value="">نوع زمین کشاورزی</option>
+                      <option value="traditional">سنتی</option>
+                      <option value="mechanized">مکانیزه</option>
+                  </select>
+                  </div>
+                </div>
+                <div class="col-6 documents">
+                  <div class="form-group">
+                    <select class="nasted-menu"  name="documents">
+                      <option value="">نوع مدرک</option>
+                      <option value="deed">سند دار</option>
+                      <option value="nasaq">نسق</option>
+                      <option value="arrangement">قولنامه / فروشنامه ای</option>
+                  </select>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-btn">
+                    <button type="submit" class="btn btn-inline">
+                      <i class="fas fa-search"></i><span>جستجو کنید</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="header-right">
+            <ul class="header-widget">
+              <li>
+                <button class="header-favourite">
+                  <i class="fas fa-heart"></i><sup>0</sup>
+                </button>
+              </li>
+              <li>
+                <button class="header-message">
+                  <i class="fas fa-envelope"></i><sup>0</sup>
+                </button>
+              </li>
+            </ul>
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'files:create' %}" class="btn btn-inline">
+              <i class="fas fa-plus-circle"></i>
+              <span>ایجاد فایل جدید</span></a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="sidebar-part">
+      <div class="sidebar-body">
+        <div class="sidebar-header">
+<!--                                 add logo                                -->
+          <a href="{% url 'home:home' %}" class="sidebar-logo"
+            ><img src="{% static 'images/logo.png' %}" alt="logo" /></a
+          ><button class="sidebar-cross"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="sidebar-content">
+          {% if request.user.is_authenticated %}
+          <div class="sidebar-profile">
+            <a href="" class="sidebar-avatar"
+              ><img src="
+                {% if request.user.avatar %}
+                  {{request.user.avatar.url}}
+                {% else %}
+                {% static 'images/defaults/avatar-default.jpg' %}
+                {% endif %}
+              "
+              alt="avatar"
+            /></a>
+            <h4><a href="{% url 'accounts:user_profile' request.user.id %}" class="sidebar-name">{{request.user.username}}</a></h4>
+            <a href="{% url 'files:create' %}" class="btn btn-inline sidebar-btn"
+              ><i class="fas fa-plus-circle"></i
+              ><span>ایجاد فایل جدید</span></a
+            >
+          </div>
+          {% endif %}
+          <div class="sidebar-menu">
+            <ul class="nav nav-tabs">
+              <li>
+                <a href="#main-menu" class="nav-link active" data-toggle="tab"
+                  >منوی اصلی
+                </a>
+              </li>
+              <li>
+                <a href="#author-menu" class="nav-link" data-toggle="tab"
+                  >منوی شخصی</a
+                >
+              </li>
+            </ul>
+            <div class="tab-pane active" id="main-menu">
+              <ul class="navbar-list">
+                <li class="navbar-item">
+                  <a class="navbar-link" href="{% url 'home:home' %}">صفحه اصلی</a>
+                </li>
+                <li class="navbar-item">
+                  <a class="navbar-link" href="#">تماس با ما</a>
+                </li>
+                <li class="navbar-item">
+                  <a class="navbar-link" href="#">راهنما </a>
+                </li>
+                <!-- <li class="navbar-item navbar-dropdown">
+                  <a class="navbar-link" href="#"
+                    ><span>صفحات</span><i class="fas fa-plus"></i
+                  ></a>
+                  <ul class="dropdown-list">
+                    <li>
+                      <a class="dropdown-link" href="about.html">درباره ما</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-link" href="compare.html"
+                        >مقایسه تبلیغات</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-link" href="cities.html"
+                        >آگهی توسط شهرها</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-link" href="price.html">قیمت گذاری</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-link" href="user-form.html"
+                        >فرم کاربر</a
+                      >
+                    </li>
+                    <li><a class="dropdown-link" href="404.html">404</a></li>
+                  </ul>
+                </li> -->
+              </ul>
+            </div>
+            <div class="tab-pane" id="author-menu">
+              <ul class="navbar-list">
+                  {% if request.user.is_authenticated %}
+                <li class="navbar-item">
+                  <a class="navbar-link" href="{% url 'accounts:user_profile' request.user.id %}">پروفایل</a>
+                </li>
+                <li class="navbar-item">
+                  <a class="navbar-link" href="{% url 'accounts:edit_profile' request.user.id %}">ویرایش پروفایل </a>
+                </li>
+                <li class="navbar-item">
+                  <a class="navbar-link" href="{% url 'accounts:logout' %}">خروج از حساب </a>
+                </li>
+                {% else %}
+                <li class="navbar-item">
+                  <a class="navbar-link" href="{% url 'accounts:login' %}">ورود</a>
+                </li>
+                {% endif %}
 
-                    <select name="type">
-                        <option value="">-</option>
-                        <option value="house">خانه</option>
-                        <option value="land">زمین</option>
-                    </select>
-
-                    <select name="house_type">
-                        <option value="">-</option>
-                        <option value="villa"> ویلایی</option>
-                        <option value="apartment">آپارتمانی</option>
-                    </select>
-
-                    <select name="documents">
-                        <option value="">-</option>
-                        <option value="deed">سند دار</option>
-                        <option value="nasaq">نسق</option>
-                        <option value="arrangement">قولنامه ای</option>
-                    </select>
-
-                    <select name="land_type">
-                        <option value="">-</option>
-                        <option value="rice_field">کشاورزی</option>
-                        <option value="garden">باغی</option>
-                        <option value="residential">مسکونی</option>
-                        <option value="commercial">تجاری</option>
-                        <option value="res_comm">مسکونی - تجاری</option>
-                    </select>
-
-                    <select name="rice_field_type">
-                        <option value="">-</option>
-                        <option value="traditional">سنتی</option>
-                        <option value="mechanized">مکانیزه</option>
-                    </select>
-
-                    <select name="search_in">
-                        <option value="all_files">همه فایل ها</option>
-                        {% if request.user.is_authenticated %}
-                            <option value="my_files">فایل های من</option>
-                        {% endif %}
-                    </select>
-
-                <button class="btn btn-outline-success" type="submit">جستجوی فایل</button>
-
-            </form>
+                <!-- <li class="navbar-item">
+                  <a class="navbar-link" href="dashboard.html">داشبورد</a>
+                </li> -->
+                <!-- <li class="navbar-item navbar-dropdown">
+                  <a class="navbar-link" href="#"
+                    ><span>پیام </span><span>0</span></a
+                  >
+                </li> -->
+                <!-- <li class="navbar-item">
+                  <a class="navbar-link" href="ad-post.html">ارسال آگهی </a>
+                </li> -->
+                <!-- <li class="navbar-item">
+                  <a class="navbar-link" href="my-ads.html">تبلیغات من </a>
+                </li> -->
+                <!-- <li class="navbar-item navbar-dropdown">
+                  <a class="navbar-link" href="bookmark.html"
+                    ><span>نشانک </span><span>0</span></a
+                  >
+                </li>
+                <li class="navbar-item navbar-dropdown">
+                  <a class="navbar-link" href="#"
+                    ><span>اعلانات</span><span>0</span></a
+                  >
+                </li> -->
+              </ul>
+            </div>
+          </div>
+          <div class="sidebar-footer">
+            <!-- <p><a href="#"></a></p>
+            <p><a href=""></a></p> -->
+          </div>
         </div>
       </div>
     </div>
-</nav>
+    <div class="btmbar-part">
+      <div class="container">
+        <ul class="btmbar-widget">
+          <li>
+
+              {% if request.user.is_authenticated %}
+                <a href="{% url 'accounts:user_profile' request.user.id %}"><i class="fas fa-user"></i></a>
+              {% else %}
+                <a href="{% url 'accounts:login' %}"><i class="fas fa-user"></i></a>
+              {% endif %}
+
+          </li>
+          <li>
+            <a href="{% url 'home:home' %}"><i class="fas fa-home"></i></a>
+          </li>
+          <li>
+            <a class="plus-btn" href="{% url 'files:create' %}"
+              ><i class="fas fa-plus"></i><span>ایجاد فایل جدید</span></a
+            >
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-bell"></i><sup>0</sup></a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-envelope"></i><sup>0</sup></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+        <script>
+        function ToRial(str, e) {
+
+            str = str.replace(/\,/g, '');
+            var objRegex = new RegExp('(-?[0-9]+)([0-9]{3})');
+
+            while (objRegex.test(str)) {
+                str = str.replace(objRegex, '$1,$2');
+            }
+            var span = document.getElementById(e);
+            span.innerHTML = str
+            return str;
+        }
+
+
+
+var subject = null
+
+function Subject(value) {
+  subject = value
+  if (value == "rent" | value == "mortgage"){
+    if(value == "mortgage"){
+      $(".all_rent_price").removeClass("d-none");
+      $(".reent").addClass("d-none");
+    }else if (value == "rent"){
+      $(".all_rent_price").removeClass("d-none"),
+      $(".reent").removeClass("d-none");
+    }
+    $(".all_price").addClass("d-none"),
+    $(".land_type").addClass("d-none"),
+    $(".rice_field_type").addClass("d-none");
+  }else{
+    $(".all_rent_price").addClass("d-none"),
+    $(".reent").addClass("d-none"),
+    $(".all_price").removeClass("d-none");
+  };
+}
+
+
+
+
+function Type(value) {
+  if (value == "house" | value == "shop"){
+    if (subject != 'rent'){
+      $(".all_rent_price").removeClass("d-none"),
+      $(".reent").removeClass("d-none"),
+      $(".all_price").addClass("d-none");
+    }
+    if (subject == 'mortgage'){
+      $(".all_rent_price").removeClass("d-none"),
+      $(".reent").addClass("d-none");
+    }
+    if (subject == 'sale'){
+      $(".all_price").removeClass("d-none"),
+      $(".all_rent_price").addClass("d-none"),
+      $(".land_type").addClass("d-none"),
+      $(".rice_field_type").addClass("d-none"),
+      $(".reent").addClass("d-none");
+    }
+    if (value == "house"){
+      $(".house_type").removeClass("d-none");
+      }
+
+    $(".options").removeClass("d-none"),
+    $(".production_license").addClass("d-none"),
+    $(".inside_plan").addClass("d-none"),
+    $(".points").addClass("d-none");
+  }else{
+    $(".house_type").addClass("d-none"),
+    $(".rice_field_type").addClass("d-none"),
+    $(".options").addClass("d-none"),
+    $(".land_type").removeClass("d-none"),
+    $(".production_license").removeClass("d-none"),
+    $(".inside_plan").removeClass("d-none"),
+    $(".points").removeClass("d-none");
+  };
+}
+
+
+
+function LandType(value) {
+  if (value == "rice_field"){
+    $(".rice_field_type").removeClass("d-none");
+  }else{
+    $(".rice_field_type").addClass("d-none");
+  };
+}
+
+
+
+        </script>

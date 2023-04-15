@@ -1,10 +1,113 @@
 {% extends 'base.html' %}
+{% load static %}
+    {% block title %} ثبتنام - شکارچی {% endblock %}
+        {% block style %}
+            <link rel="stylesheet" href="{% static 'css/custom/user-form.css' %}" />
+        {% endblock %}
+
     {% block content %}
 
-        <!--register form-->
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input class="btn btn-success" type="submit" value="Register">
-        </form>
+    <section class="user-form-part h-auto">
+      <div class="user-form-banner">
+        <div class="user-form-content">
+<!--                 add logo                     -->
+          <a href="#"><img src="{% static 'images/logo.png' %}" alt="logo" /></a>
+          <h1>
+            از همینجا...
+          </h1>
+          <p>میتونی فایل های خوبو شکار کنی!</p>
+          <p> فایل هاتو به صورت آنلاین مدیریت کنی!</p>
+          <p> و اونا رو اشتراگذاری کنی!</p>
+        </div>
+      </div>
+      <div class="user-form-category">
+        <div class="user-form-header">
+<!--                 add logo                     -->
+          <a href="#"><img src="{% static 'images/logo.png' %}" alt="logo" /></a
+          >
+        </div>
+        <div class="user-form-category-btn">
+          <ul class="nav nav-tabs">
+            <li>
+              <a href="#login-tab" class="nav-link active" data-toggle="tab"
+                >ثبتنام</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="tab-pane active" id="login-tab">
+          <div class="user-form-title">
+            <h2>خوش اومدی!</h2>
+            <p>تو کمتر از یک دقیقه ثبتنام کن!</p>
+          </div>
+
+          <form method="post">
+          {% csrf_token %}
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <input
+                          name="phone"
+                          maxlength="11"
+                          required
+                          id="id_phone"
+                    type="text"
+                    class="form-control"
+                    placeholder="شماره تلفن"
+                  /><small class="form-alert"
+                  >مثال : 09123456789</small
+                  >
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <input
+                          name="username"
+                          maxlength="25"
+                          required
+                          id="id_username"
+                    type="text"
+                    class="form-control"
+                    placeholder="نام املاک شما "
+                  /><small class="form-alert"
+                  >مثال : املاک شکارچی</small
+                  >
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <input
+                        name="password"
+                        maxlength="20"
+                        minlength="6"
+                        required
+                        id="id_password"
+                        type="password"
+                    class="form-control"
+                    placeholder="رمز عبور"
+                  /><button class="form-icon">
+                    <i class="eye fas fa-eye"></i></button
+                    ><small class="form-alert">رمزت باید بین 6 تا 20 کلمه باشه</small>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <button type="submit" class="btn btn-inline">
+                    <i class="fas fa-user-check"></i
+                    ><span>حسابتو ایجاد کن!</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="user-form-direction">
+            <p>
+                حساب داری؟
+                روی <a href="{% url 'accounts:login' %}">( ورود )</a> کلیک کن
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     {% endblock %}

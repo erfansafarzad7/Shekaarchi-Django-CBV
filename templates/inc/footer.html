@@ -1,0 +1,119 @@
+{% load static %}
+    <section class="intro-part">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="section-center-heading">
+              {% if request.user.is_authenticated %}
+              <h2>میخوای فایل هاتو ایجاد کنی ؟!</h2>
+              <p>
+                کاری نداره ! روی ایجاد فایل کلیک کن ، مشخصات ملک یا زمین خودتو وارد کن !
+              </p>
+              <a href="{% url 'files:create' %}" class="btn btn-outline"
+              ><i class="fas fa-plus-circle"></i
+                ><span>ایجاد فایل جدید</span></a>
+              {% else %}
+              <h2>میخوای شروع کنی ؟!</h2>
+              <p>
+                اگه حسابی نداری اول ثبتنام کن..
+              </p>
+              <a href="{% url 'accounts:register' %}" class="btn btn-outline"
+              ><i class="fas fa-user-circle"></i
+                ><span> ثبتنام !</span></a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer-part">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="footer-content">
+              <h3>تماس با ما</h3>
+              <ul class="footer-address">
+                <li>
+                  <i class="fas fa-map-marker-alt"></i>
+                  <p>
+                    ایران - گیلان
+                    </p>
+                </li>
+                <li>
+                  <i class="fas fa-envelope"></i>
+                  <p>erfansafarzad7@gmail.com</p>
+                </li>
+                <li>
+                  <i class="fab fa-telegram"></i>
+                  <a href="https://t.me/erfansafarzad7">Erfnasafarzad7@</a>
+                </li>
+                <li>
+                  <i class="fab fa-instagram"></i>
+                  <a href="https://instagram.com/shekaarchi.ir?igshid=YmMyMTA2M2Y=">Shekaarchi.ir</a>
+                </li>
+
+
+<!--                <li>-->
+<!--                  <i class="fas fa-phone-alt"></i>-->
+<!--                  <p>09920970954</p>-->
+<!--                </li>-->
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="footer-content">
+              <h3>لینک های کمکی</h3>
+              <ul class="footer-widget">
+                <li><a href="#">پروفایل  </a></li>
+                <li><a href="#">ویرایش پروفایل   </a></li>
+<!--                <li><a href="#">راهنما </a></li>-->
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="footer-content">
+              <h3>اطلاعات</h3>
+              <ul class="footer-widget">
+<!--                <li><a href="#">پرداخت امن </a></li>-->
+                <li><a href="#">درباره ما</a></li>
+                <li><a href="#"> راهنما</a></li>
+<!--                <li><a href="#">تماس با ما</a></li>-->
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="footer-info">
+              <a href="#"><img src="{% static 'images/logo.png' %}" alt="logo" /></a>
+              <ul class="social-transparent footer-social">
+              <li>
+              </li>
+            </ul>
+<!--              <ul class="footer-count">-->
+<!--                <li>-->
+<!--                  <h5>29,238</h5>-->
+<!--                  <p>کاربران ثبت نام شده</p>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                  <h5>242,789</h5>-->
+<!--                  <p>کل فایل ها</p>-->
+<!--                </li>-->
+<!--              </ul>-->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="footer-card-content">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-end">
+        <div class="container">
+          <div class="footer-end-content">
+
+          </div>
+        </div>
+      </div>
+    </footer>
