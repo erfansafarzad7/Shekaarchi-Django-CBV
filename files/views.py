@@ -89,7 +89,10 @@ class ItemDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['item_images'] = self.item_images
-        context['price_per_meter'] = round(self.get_object().all_price / self.get_object().area)
+
+        if self.get_object().all_price:
+            context['price_per_meter'] = round(self.get_object().all_price / self.get_object().area)
+
         all_items = Item.objects\
                 .filter(user_id__exact=self.get_object().user.id)\
                 .filter(publish=True)
@@ -157,7 +160,7 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def form_valid(self, form):
         images = self.request.FILES.getlist('img')
         item_code = self.kwargs['code']
-        item_images = Image.objects.filter(code__exact=item_code)
+        item_images = self.get_queryset().images.all()
 
         # image limit
         i = 0
@@ -219,8 +222,7 @@ class DeleteImageView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         for i in img:
             img_user = Item.objects.get(code__exact=i.code).user
             if img_user == self.request.user:
-                if self.kwargs['name'] == i.image.name:
-                    i.delete()
+                i.delete()
         return True
 
     def get_context_data(self, **kwargs):

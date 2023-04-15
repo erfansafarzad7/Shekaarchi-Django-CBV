@@ -26,7 +26,7 @@ class Item(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item_user')
     images = models.ManyToManyField(Image, related_name='item_images')
-    code = models.BigIntegerField(unique=True, verbose_name='کد')
+    code = models.PositiveBigIntegerField(unique=True, verbose_name='کد')
     publish = models.BooleanField(default=False, verbose_name='انتشار')
     public = models.BooleanField(default=True, verbose_name='نمایش عمومی')
 
@@ -59,7 +59,7 @@ class Item(models.Model):
     state = models.CharField(max_length=20, verbose_name='استان', null=True, blank=True)
     city = models.CharField(max_length=20, verbose_name='شهر/محل', null=True, blank=True)
     area = models.PositiveIntegerField(verbose_name='متراژ')
-    all_price = models.BigIntegerField(verbose_name='قیمت کل')
+    all_price = models.BigIntegerField(verbose_name='قیمت کل', null=True, blank=True)
     rent = models.BigIntegerField(verbose_name='اجاره ', null=True, blank=True)
     all_rent_price = models.BigIntegerField(verbose_name='ودیعه', null=True, blank=True)
     owner = models.CharField(max_length=30, verbose_name='نام مالک')
