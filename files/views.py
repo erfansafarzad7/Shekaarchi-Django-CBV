@@ -147,7 +147,6 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         self.item_images = None
         item_code = self.kwargs['code']
         if item_code:
-            # self.item_images = Image.objects.filter(code__exact=item_code)
             self.item_images = self.get_queryset().images.all()
         return super().get(request, *args, **kwargs)
 

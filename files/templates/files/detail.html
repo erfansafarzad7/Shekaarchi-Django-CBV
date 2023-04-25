@@ -71,12 +71,17 @@
                 <span> قیمت هر متر : <span class="price-pm">{{price_per_meter}}</span> تومان </span>
                 <div class="ad-details-price">
                   <h2 class="price">{{item.all_price}}</h2><span>تومان</span>
-                  {% else %}
-                  <div class="ad-details-price">
-                  <h2>توافقی</h2>
-                  {% endif %}
                   <i class="flaticon-bargain"></i>
                 </div>
+                  {% else %}
+                <div class="ad-details-price">
+                  <h2>توافقی
+                  <span>قیمت کل</span>
+                  </h2>
+                <i class="flaticon-bargain"></i>
+                </div>
+                  {% endif %}
+
               </div>
               {% else %}
               <div class="col-md-6 col-lg-6">
@@ -84,7 +89,9 @@
                   {% if item.all_rent_price != None %}
                   <h2 class="price">{{item.all_rent_price}}</h2><span>تومان</span>
                   {% else %}
-                 <h2> (ودیعه تعیین نشده)</h2>
+                 <h2> توافقی
+                 <span>ودیعه</span>
+                 </h2>
                   {% endif %}
                   <i class="flaticon-bargain"></i>
                 </div>

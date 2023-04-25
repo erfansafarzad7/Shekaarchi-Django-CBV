@@ -30,7 +30,8 @@ function Subject(value) {
     if(value == "mortgage"){
       $(".all_rent_price").removeClass("d-none");
       $(".reent").addClass("d-none");
-    }else if (value == "rent"){
+    }
+    if(value == "rent"){
       $(".all_rent_price").removeClass("d-none"),
       $(".reent").removeClass("d-none");
     }
@@ -46,11 +47,9 @@ function Subject(value) {
 
 
 
-
-
 function Type(value) {
   if (value == "house" | value == "shop"){
-    if (subject != 'rent'){
+    if (subject == 'rent'){
       $(".all_rent_price").removeClass("d-none"),
       $(".reent").removeClass("d-none"),
       $(".all_price").addClass("d-none");
@@ -67,7 +66,8 @@ function Type(value) {
       $(".reent").addClass("d-none");
     }
     if (value == "house"){
-      $(".house_type").removeClass("d-none");
+      $(".house_type").removeClass("d-none"),
+      $(".foundation").removeClass("d-none");
       }
 
     $(".options").removeClass("d-none"),
@@ -75,6 +75,7 @@ function Type(value) {
     $(".inside_plan").addClass("d-none"),
     $(".points").addClass("d-none");
   }else{
+    $(".foundation").addClass("d-none"),
     $(".house_type").addClass("d-none"),
     $(".rice_field_type").addClass("d-none"),
     $(".options").addClass("d-none"),
@@ -574,7 +575,7 @@ function LandType(value) {
                       ><input name="address" cols="40" rows="10" maxlength="250" required id="id_address"
                         type="text"
                         class="form-control"
-                        placeholder="مثال : ایران-گیلان-خیابان-کوچه "
+                        placeholder="مثال : گیلان-خیابان-کوچه "
                       />
                     </div>
                   </div>

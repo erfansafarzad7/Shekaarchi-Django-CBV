@@ -3,7 +3,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
-from django.views.generic import UpdateView, ListView, FormView
+from django.views.generic import UpdateView, ListView, FormView, DeleteView
+from django.db import transaction
 from files.models import Item
 from .models import User, Otp
 from .forms import UserCreationForm, SMSVerifyForm, GetPhoneForm
@@ -132,9 +133,9 @@ class UserProfileView(LoginRequiredMixin, ListView):
         public_items = publish_items.filter(public=True)
 
         if self.request.user.id == self.items_user.id:
-            context["items"] = all_items.order_by('-created')
+            context["items"] = all_items.order_by('-updated')
         else:
-            context["items"] = all_items.exclude(publish__exact=False).order_by('-created')
+            context["items"] = all_items.exclude(publish__exact=False).order_by('-updated')
 
         a, psh, pc = 0, 0, 0
         for item in all_items:

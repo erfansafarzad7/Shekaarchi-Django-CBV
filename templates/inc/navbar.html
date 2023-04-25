@@ -391,7 +391,8 @@ function Subject(value) {
     if(value == "mortgage"){
       $(".all_rent_price").removeClass("d-none");
       $(".reent").addClass("d-none");
-    }else if (value == "rent"){
+    }
+    if(value == "rent"){
       $(".all_rent_price").removeClass("d-none"),
       $(".reent").removeClass("d-none");
     }
@@ -407,10 +408,9 @@ function Subject(value) {
 
 
 
-
 function Type(value) {
   if (value == "house" | value == "shop"){
-    if (subject != 'rent'){
+    if (subject == 'rent'){
       $(".all_rent_price").removeClass("d-none"),
       $(".reent").removeClass("d-none"),
       $(".all_price").addClass("d-none");
@@ -427,7 +427,8 @@ function Type(value) {
       $(".reent").addClass("d-none");
     }
     if (value == "house"){
-      $(".house_type").removeClass("d-none");
+      $(".house_type").removeClass("d-none"),
+      $(".foundation").removeClass("d-none");
       }
 
     $(".options").removeClass("d-none"),
@@ -435,6 +436,7 @@ function Type(value) {
     $(".inside_plan").addClass("d-none"),
     $(".points").addClass("d-none");
   }else{
+    $(".foundation").addClass("d-none"),
     $(".house_type").addClass("d-none"),
     $(".rice_field_type").addClass("d-none"),
     $(".options").addClass("d-none"),
@@ -449,10 +451,17 @@ function Type(value) {
 
 function LandType(value) {
   if (value == "rice_field"){
-    $(".rice_field_type").removeClass("d-none");
+    $(".rice_field_type").removeClass("d-none"),
+    $(".production_license").addClass("d-none");
   }else{
-    $(".rice_field_type").addClass("d-none");
+    $(".rice_field_type").addClass("d-none"),
+    $(".production_license").removeClass("d-none");
   };
+  if (value == "garden" | value == "rice_field"){
+    $(".inside_plan").removeClass("d-none");
+  }else{
+    $(".inside_plan").addClass("d-none");
+  }
 }
 
 

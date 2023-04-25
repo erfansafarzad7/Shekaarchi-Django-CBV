@@ -30,7 +30,8 @@ function Subject(value) {
     if(value == "mortgage"){
       $(".all_rent_price").removeClass("d-none");
       $(".reent").addClass("d-none");
-    }else if (value == "rent"){
+    }
+    if(value == "rent"){
       $(".all_rent_price").removeClass("d-none"),
       $(".reent").removeClass("d-none");
     }
@@ -46,39 +47,38 @@ function Subject(value) {
 
 
 
-
 function Type(value) {
   if (value == "house" | value == "shop"){
-    if (subject != 'rent' | subject != 'mortgage'){
+    if (subject == 'rent'){
       $(".all_rent_price").removeClass("d-none"),
+      $(".reent").removeClass("d-none"),
       $(".all_price").addClass("d-none");
-    }else{
-      $(".all_rent_price").addClass("d-none"),
-      $(".all_price").removeClass("d-none");
     }
     if (subject == 'mortgage'){
+      $(".all_rent_price").removeClass("d-none"),
       $(".reent").addClass("d-none");
-    }else{
-      $(".reent").removeClass("d-none");
+    }
+    if (subject == 'sale'){
+      $(".all_price").removeClass("d-none"),
+      $(".all_rent_price").addClass("d-none"),
+      $(".land_type").addClass("d-none"),
+      $(".rice_field_type").addClass("d-none"),
+      $(".reent").addClass("d-none");
     }
     if (value == "house"){
-      $(".house_type").removeClass("d-none");
-      }else{
-      $(".house_type").addClass("d-none");
+      $(".house_type").removeClass("d-none"),
+      $(".foundation").removeClass("d-none");
       }
 
     $(".options").removeClass("d-none"),
-    $(".land_type").addClass("d-none"),
-    $(".rice_field_type").addClass("d-none"),
     $(".production_license").addClass("d-none"),
     $(".inside_plan").addClass("d-none"),
     $(".points").addClass("d-none");
   }else{
-    $(".reent").addClass("d-none"),
+    $(".foundation").addClass("d-none"),
     $(".house_type").addClass("d-none"),
     $(".rice_field_type").addClass("d-none"),
     $(".options").addClass("d-none"),
-    $(".all_price").removeClass("d-none"),
     $(".land_type").removeClass("d-none"),
     $(".production_license").removeClass("d-none"),
     $(".inside_plan").removeClass("d-none"),

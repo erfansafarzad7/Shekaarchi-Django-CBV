@@ -11,7 +11,7 @@ class HomeView(ListView):
     template_name = 'home/home.html'
     queryset = Item.objects.all().filter(publish=True, public=True)
     context_object_name = 'items'
-    ordering = ('-created', )
+    ordering = ('-updated', )
     paginate_by = 12
 
     def get(self, request, *args, **kwargs):
@@ -50,7 +50,7 @@ class ItemSearchView(ListView):
         search_in = False if request.GET.get('search_in', '') == 'profile' else True
         self.results = Item.objects.all().filter(publish=True, public=True)
 
-        if code > '0' and not isinstance(code, str):
+        if code > '0' and code.isnumeric():
             self.results = Item.objects.filter(Q(code__exact=code), Q(public=search_in) | Q(publish=True))
 
         # filter items by query parameters
@@ -99,7 +99,11 @@ class ItemSearchView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['results'] = self.results.order_by('-created')
+        if self.results:
+            context['results'] = self.results.order_by('-updated')
+        else:
+            context['results'] = self.results
+
         i=0
         for item in self.results:
             i+=1
