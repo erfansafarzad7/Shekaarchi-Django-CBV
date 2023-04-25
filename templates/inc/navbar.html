@@ -215,7 +215,7 @@
           <div class="sidebar-profile">
             <a href="" class="sidebar-avatar"
               ><img src="
-                {% if request.user.avatar %}
+                {% if request.user.show_avatar and request.user.avatar %}
                   {{request.user.avatar.url}}
                 {% else %}
                 {% static 'images/defaults/avatar-default.jpg' %}

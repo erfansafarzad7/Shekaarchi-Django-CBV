@@ -38,7 +38,7 @@
               <div class="dash-avatar">
   <!-- href   src -->
                 <a href="#"><img src="
-                  {% if request.user.avatar %}
+                  {% if request.user.show_avatar and request.user.avatar %}
                     {{request.user.avatar.url}}
                   {% else %}
                   {% static 'images/defaults/avatar-default.jpg' %}
@@ -100,7 +100,7 @@
 
     <div class="setting-part" >
       <div class="container">
-        <form class="setting-form" method="post">
+        <form class="setting-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
           <div class="row">
             <!-- <div class="col-lg-6">
@@ -109,7 +109,29 @@
                 ><input type="file" class="form-control" />
               </div>
             </div> -->
-            <div class="col-lg-12">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-label">عکس پروفایل </label>
+                  <br>
+                  {% if user.avatar %}
+
+                  <img src="{{user.avatar.url}}" width="200px" height="200px">
+                  <a class="btn btn-danger" href="{% url 'accounts:delete_avatar' request.user.id %}" > حذف</a>
+
+                  {% else %}
+
+                  <input
+
+                  name="avatar"
+                  id="id_avatar"
+                  type="file"
+                  class="form-control"
+                  accept="image/*"/>
+
+                  {% endif %}
+              </div>
+            </div>
+            <div class="col-lg-6">
               <div class="form-group">
                 <label class="form-label">آدرس </label
                 ><input

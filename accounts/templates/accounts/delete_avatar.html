@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+    {% block content %}
+
+        <!-- avatar deleted information -->
+        <h4>تصویر مورد نظر  با موفقیت حذف شد !</h4>
+        <br>
+        <a href="{% url 'accounts:edit_profile' request.user.id %}"><button class="btn btn-danger">بازگشت به تنظیمات </button></a>
+    {% endblock %}

@@ -160,10 +160,23 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     template_name = 'accounts/edit_profile.html'
     model = User
-    fields = ('username', 'address')
+    fields = ('username', 'address', 'avatar')
     context_object_name = 'user'
-    success_message = "تغییرات با موفقیت ثبت شد !"
+    success_message = "تغییرات پس از تایید ثبت خواهند شد !"
     success_url = reverse_lazy('home:home')
+
+    def get(self, request, *args, **kwargs):
+        self.avatar = None
+        user_id = self.kwargs['pk']
+        if user_id:
+            self.avatar = self.get_object().avatar
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.show_avatar = False
+        user.save()
+        return super().post(self, request, *args, **kwargs)
 
     def get_queryset(self):
         return get_object_or_404(User, id=self.kwargs['pk'])
@@ -200,6 +213,36 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         context['items_user'] = self.get_queryset()
 
         return context
+
+    def form_valid(self, form):
+        avatar = self.request.FILES.get('avatar')
+        user = self.get_object()
+        print(avatar, user)
+
+        if avatar and avatar.size < 1000000:
+            with transaction.atomic():
+                user.avatar = avatar
+                user.save()
+
+        return super(UserEditProfileView, self).form_valid(form)
+
+
+class DeleteAvatarView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = User
+    template_name = 'accounts/delete_avatar.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.error(request, "تصویر مورد نظر با موفقیت حذف شد !", 'danger')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return get_object_or_404(User, id=self.kwargs['pk'])
+
+    def get_object(self, queryset=None):
+        avatar = self.get_queryset().avatar
+        if self.get_queryset() == self.request.user:
+            avatar.delete()
+        return True
 
 
 class EditPhoneView(LoginRequiredMixin, SuccessMessageMixin, FormView):

@@ -9,7 +9,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     phone = models.CharField(max_length=11, unique=True, verbose_name='شماره تماس ')
     username = models.CharField(max_length=25, unique=True, verbose_name='نام املاک ')
-    avatar = models.ImageField(verbose_name='آواتار', null=True, blank=True)
+    avatar = models.ImageField(upload_to="avatars", verbose_name='آواتار', null=True, blank=True)
+    show_avatar = models.BooleanField(default=False, verbose_name='نمایش عکس پروفایل')
     address = models.CharField(max_length=100, verbose_name='آدرس ', null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
