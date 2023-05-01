@@ -8,5 +8,5 @@ urlpatterns = [
     path('create/', views.ItemCreateView.as_view(), name='create'),
     path('delete-item/<int:code>/', views.ItemDeleteView.as_view(), name='delete_item'),
     path('edit-item/<int:code>/', views.ItemUpdateView.as_view(), name='edit_item'),
-    path('delete-image/<int:code>/', views.DeleteImageView.as_view(), name='delete_image'),
+    path('delete-image/<int:code>/<str:name>', views.DeleteImageView.as_view(), name='delete_image'),
 ]

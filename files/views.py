@@ -34,7 +34,7 @@ class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         if images:
             with transaction.atomic():
                 for img in images:
-                    if i <= 5 and img.size < 600000:
+                    if i <= 5 and img.size < 1000000:
                         image = Image.objects.create(code=item_code, image=img)
                         image.save()
                         i += 1
@@ -181,7 +181,7 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         if images:
             with transaction.atomic():
                 for img in images:
-                    if i <= 5 and img.size < 600000:
+                    if i <= 5 and img.size < 1000000:
                         image = Image.objects.create(code=item_code, image=img)
                         image.save()
                         i += 1
@@ -232,7 +232,8 @@ class DeleteImageView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         for i in img:
             img_user = Item.objects.get(code__exact=i.code).user
             if img_user == self.request.user:
-                i.delete()
+                if self.kwargs['name'] == i.image.name:
+                    i.delete()
         return True
 
     def get_context_data(self, **kwargs):

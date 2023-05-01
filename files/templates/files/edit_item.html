@@ -194,7 +194,7 @@ function LandType(value) {
                         {% for img in item_images.all %}
                         </br>
                         <img src="{{img.image.url}}" width="200px" height="200px">
-                        <a class="btn btn-danger" href="{% url 'files:delete_image' img.code %}" >حذف</a>
+                        <a class="btn btn-danger" href="{% url 'files:delete_image' img.code img.image.name %}" >حذف</a>
                         {% endfor %}
                         {% endif %}
 
