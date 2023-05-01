@@ -47,11 +47,14 @@ class ItemSearchView(ListView):
     def get(self, request, *args, **kwargs):
         # find item by code
         code = request.GET.get('code', '')
-        search_in = False if request.GET.get('search_in', '') == 'profile' else True
+        search_in_all = False if request.GET.get('search_in', '') == 'profile' else True
         self.results = Item.objects.all().filter(publish=True, public=True)
 
         if code > '0' and code.isnumeric():
-            self.results = Item.objects.filter(Q(code__exact=code), Q(public=search_in) | Q(publish=True))
+            if search_in_all:
+                self.results = Item.objects.filter(Q(code__exact=code), Q(public=True), Q(publish=True))
+            else:
+                self.results = Item.objects.filter(Q(code__exact=code), Q(user__exact=self.request.user))
 
         # filter items by query parameters
         for qp in self.request.GET.items():
@@ -92,7 +95,7 @@ class ItemSearchView(ListView):
                 self.results = self.results.filter(Q(city__contains=qp[1]))
 
             if qp[0] == 'search_in' and qp[1]:
-                if qp[1] == 'my_files':
+                if qp[1] == 'profile':
                     self.results = self.results.filter(user__exact=self.request.user)
 
         return super().get(request, *args, **kwargs)
