@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from .models import Item, Image
+import datetime
 
 
 class AreaFilter(SimpleListFilter):
@@ -91,7 +92,6 @@ class RentFilter(admin.SimpleListFilter):
             (3000000000, '3/000/000/000'),
             (4000000000, '4/000/000/000'),
             (5000000000, '5/000/000/000'),
-            (10000000000, '10/000/000/000'),
         )
 
     def queryset(self, request, queryset):
@@ -104,10 +104,15 @@ def make_published(modeladmin, request, queryset):
     queryset.update(publish=True)
 
 
+@admin.action(description='Set time now')
+def set_time_now(modeladmin, request, queryset):
+    queryset.update(updated=datetime.datetime.now())
+
+
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     search_fields = ('code', )
-    actions = (make_published, )
+    actions = (make_published, set_time_now)
     list_display = ('code',
                     'type',
                     'subject',
@@ -117,7 +122,7 @@ class ItemAdmin(admin.ModelAdmin):
                     'publish',
                     'public',
                     'city',
-                    'created')
+                    'updated')
 
     list_filter = (AreaFilter,
                    AllPriceFilter,
@@ -134,7 +139,7 @@ class ItemAdmin(admin.ModelAdmin):
                    'rice_field_type',
                    'inside_plan',
                    'city',
-                   'created')
+                   'updated')
 
 
 @admin.register(Image)
