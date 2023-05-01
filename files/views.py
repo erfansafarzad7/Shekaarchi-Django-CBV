@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from .forms import ItemCreateForm, ItemUpdateForm
 from django.shortcuts import get_object_or_404
+from hitcount.utils import get_hitcount_model
+from hitcount.views import HitCountMixin
 
 
 class ItemCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -88,7 +90,11 @@ class ItemDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['item_images'] = self.item_images
+        hit_count = get_hitcount_model().objects.get_for_object(self.get_object())
+        hits = hit_count.hits
+        hit_count_response = HitCountMixin.hit_count(self.request, hit_count)
+        if hit_count_response.hit_counted:
+            hits = hits + 1
 
         if self.get_object().all_price:
             context['price_per_meter'] = round(self.get_object().all_price / self.get_object().area)
@@ -101,6 +107,8 @@ class ItemDetailView(DetailView):
             a += 1
 
         context['all_user_items'] = a
+        context['item_images'] = self.item_images
+        context['object'] = self.get_object()
         return context
 
 

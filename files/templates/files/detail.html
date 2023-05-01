@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load hitcount_tags %}
+
   {% block title %} جزئیات فایل - شکارچی {% endblock %}
         {% block style %}
             <link rel="stylesheet" href="{% static 'css/custom/grid-details.css' %}" />
@@ -488,6 +490,61 @@
               </div>
             </div>
             <div class="row">
+
+              {% if request.user.id == item.user.id %}
+              <div class="col-md-6 col-lg-6">
+                <div class="ad-details-card">
+                  <div class="ad-details-title"><h5> مشخصات اصلی فایل</h5></div>
+                  <div class="ad-details-safety">
+                    <ul>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        <p><span>نام مالک : </span> {{item.owner}}</p>
+                      </li>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        <p><span>مشخصات مالک : </span>{{item.owner_info}}</p>
+                      </li>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        <p><span>آدرس فایل : </span>{{item.address}}</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-6">
+                <div class="ad-details-card">
+                  <div class="ad-details-title"><h5>بازدید</h5></div>
+                  <div class="ad-details-safety">
+                    <ul>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        {% get_hit_count for object as allhits %}
+                        <p><span>کل بازدید  : </span>{{allhits}}</p>
+                      </li>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        {% get_hit_count for object within "days=3" as last3days %}
+                        <p><span>بازدید 3 روز اول : </span>{{last3days}}</p>
+                      </li>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        {% get_hit_count for object within "days=7" as last7days %}
+                        <p><span>بازدید 7روز اول  : </span>{{last7days}}</p>
+                      </li>
+                      <li>
+                        <i class="fas fa-dot-circle"></i>
+                        {% get_hit_count for object within "days=30" as last30days %}
+                        <p><span>بازدید 30 روز اول : </span>{{last30days}}</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
               <div class="col-md-6 col-lg-6">
                 <div class="ad-details-card">
                   <div class="ad-details-title"><h5>اطلاعات املاک</h5></div>
@@ -517,52 +574,6 @@
                   </div>
                 </div>
               </div>
-
-              {% if request.user.id == item.user.id %}
-              <div class="col-md-6 col-lg-6">
-                <div class="ad-details-card">
-                  <div class="ad-details-title"><h5> مشخصات اصلی فایل</h5></div>
-                  <div class="ad-details-safety">
-                    <ul>
-                      <li>
-                        <i class="fas fa-dot-circle"></i>
-                        <p><span>نام مالک : </span> {{item.owner}}</p>
-                      </li>
-                      <li>
-                        <i class="fas fa-dot-circle"></i>
-                        <p><span>مشخصات مالک : </span>{{item.owner_info}}</p>
-                      </li>
-                      <li>
-                        <i class="fas fa-dot-circle"></i>
-                        <p><span>آدرس فایل : </span>{{item.address}}</p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              {% endif %}
-
-<!--              <div class="col-md-6 col-lg-6">-->
-<!--                <div class="ad-details-card">-->
-<!--                  <div class="ad-details-title"><h5>نکات ایمنی</h5></div>-->
-<!--                  <div class="ad-details-safety">-->
-<!--                    <ul>-->
-<!--                      <li>-->
-<!--                        <i class="fas fa-dot-circle"></i>-->
-<!--                        <p>قبل از خرید مورد را بررسی کنید</p>-->
-<!--                      </li>-->
-<!--                      <li>-->
-<!--                        <i class="fas fa-dot-circle"></i>-->
-<!--                        <p>فقط پس از جمع آوری کالا پرداخت کنید</p>-->
-<!--                      </li>-->
-<!--                      <li>-->
-<!--                        <i class="fas fa-dot-circle"></i>-->
-<!--                        <p>مراقب پیشنهادهای غیرواقعی باشید</p>-->
-<!--                      </li>-->
-<!--                    </ul>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
 
             </div>
           </div>

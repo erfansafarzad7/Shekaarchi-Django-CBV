@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     'fontawesomefree',
     'minio_storage',
+    'hitcount',
 
 ]
 

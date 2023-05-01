@@ -1,5 +1,7 @@
 from django.db import models
 from accounts.models import User
+from django.contrib.contenttypes.fields import GenericRelation
+from hitcount.models import HitCountMixin, HitCount
 
 
 class Image(models.Model):
@@ -18,12 +20,16 @@ class Image(models.Model):
         super(Image, self).delete(*args, **kwargs)
 
 
-class Item(models.Model):
+class Item(models.Model, HitCountMixin):
     """
     Item model.
     item code is unique.
     required fields : (user, code, type, address, area, all_price, owner, owner_info)
     """
+    hit_count_generic = GenericRelation(
+        HitCount, object_id_field='object_pk',
+        related_query_name='hit_count_generic_relation')
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item_user')
     images = models.ManyToManyField(Image, related_name='item_images', blank=True)
     code = models.PositiveBigIntegerField(unique=True, verbose_name='کد')
