@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+      {% block style %}
+        <link rel="stylesheet" href="{% static 'css/custom/404.css' %}" />
+      {% endblock %}
+
+{% block content %}
+    <section class="error-part">
+      <div class="container">
+        <div class="error">
+          <h1>404</h1>
+          <h2>صفحه مورد نظر پیدا نشد !</h2>
+          <a href="{% url 'home:home' %}" class="btn btn-outline"
+            ><i class="fas fa-home"></i><span>برو صفحه اصلی</span></a
+          >
+        </div>
+      </div>
+    </section>
+{% endblock %}
