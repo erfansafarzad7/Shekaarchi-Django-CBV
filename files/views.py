@@ -86,7 +86,10 @@ class ItemDetailView(DetailView):
         return super().get(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Item, code__exact=self.kwargs['code'])
+        user = Item.objects.get(code__exact=self.kwargs['code']).user
+        item = Item.objects.filter(code__exact=self.kwargs['code'])
+        other_user = Item.objects.filter(code__exact=self.kwargs['code'], publish=True, public=True)
+        return get_object_or_404(item) if self.request.user == user else get_object_or_404(other_user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
