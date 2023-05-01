@@ -280,10 +280,14 @@
                     </li>
                     <li>
                       <i class="fas fa-clock"></i>
-                          <p>from : {{item.updated|timesince}}</p>
+                          <p>ago | {{item.updated|timesince}}</p>
                     </li>
                   </ul>
                 </div>
+                        <a href="{% url 'files:item_detail' item.code %}">
+                            <i class="fas fa-align-justify"> </i>
+                            جزئیات بیشتر...
+                        </a>
                 <div class="product-details">
                   <div class="product-price">
                       {% if item.subject == 'mortgage' and item.all_rent_price != None %}
