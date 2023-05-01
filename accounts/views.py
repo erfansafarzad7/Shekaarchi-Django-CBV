@@ -313,8 +313,8 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
         if not otp and session_timer['now'] < session_timer['delay']:
             Otp.objects.create(phone=user_phone, code=rnd_code)
             # send code with sms
-            text = f" shekaarchi.ir \n کد یکبار مصرف شما : {rnd_code} \n لغو پیامک:۱۱ "
-            send_sms(user_phone, text)
+            data = {'bodyId': 135668, 'to': str(user_phone), 'args': [str(rnd_code), ]}
+            send_sms(data)
 
         return super(SMSVerifyView, self).get(self, request, *args, **kwargs)
 
