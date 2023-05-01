@@ -412,6 +412,11 @@
                     <h6> سال ساخت:</h6>
                     <p>{{ item.year|default_if_none:"تعیین نشده" }}</p>
                   </li>
+                  {% if item.house_type == 'apartment' %}
+                  <li>
+                    <h6> طبقه:</h6>
+                    <p>{{ item.floor|default_if_none:"تعیین نشده" }}</p>
+                  </li>
                   <li>
                     <h6>  آسانسور:</h6>
                     <p>{% if item.elevator %}
@@ -421,6 +426,7 @@
                       {% endif %}
                     </p>
                   </li>
+                  {% endif %}
                   <li>
                     <h6>  پارکینگ:</h6>
                     <p>{% if item.parking %}

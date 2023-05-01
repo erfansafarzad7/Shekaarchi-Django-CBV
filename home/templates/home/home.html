@@ -30,6 +30,114 @@
                     price[i].innerHTML = price[i].innerHTML.split('').reverse().join('').replace(/(.{3})/g,'$1,').replace(/,$/,'').split('').reverse().join('')
                 }}
             </script>
+
+
+        <script>
+        function ToRial(str, e) {
+
+            str = str.replace(/\,/g, '');
+            var objRegex = new RegExp('(-?[0-9]+)([0-9]{3})');
+
+            while (objRegex.test(str)) {
+                str = str.replace(objRegex, '$1,$2');
+            }
+            var span = document.getElementById(e);
+            span.innerHTML = str
+            return str;
+        }
+
+
+
+var subject = null
+
+function Subject(value) {
+  subject = value
+  if (value == "rent" | value == "mortgage"){
+    if(value == "mortgage"){
+      $(".all_rent_price").removeClass("d-none");
+      $(".reent").addClass("d-none");
+    }
+    if(value == "rent"){
+      $(".all_rent_price").removeClass("d-none"),
+      $(".reent").removeClass("d-none");
+    }
+    $(".all_price").addClass("d-none"),
+    $(".land_type").addClass("d-none"),
+    $(".rice_field_type").addClass("d-none");
+  }else{
+    $(".all_rent_price").addClass("d-none"),
+    $(".reent").addClass("d-none"),
+    $(".all_price").removeClass("d-none");
+  };
+}
+
+
+
+function Type(value) {
+  if (value == "house" | value == "shop"){
+    if (subject == 'rent'){
+      $(".all_rent_price").removeClass("d-none"),
+      $(".reent").removeClass("d-none"),
+      $(".all_price").addClass("d-none");
+    }
+    if (subject == 'mortgage'){
+      $(".all_rent_price").removeClass("d-none"),
+      $(".reent").addClass("d-none");
+    }
+    if (subject == 'sale'){
+      $(".all_price").removeClass("d-none"),
+      $(".all_rent_price").addClass("d-none"),
+      $(".land_type").addClass("d-none"),
+      $(".rice_field_type").addClass("d-none"),
+      $(".reent").addClass("d-none");
+    }
+    if (value == "house"){
+      $(".house_type").removeClass("d-none"),
+      $(".foundation").removeClass("d-none");
+      }
+
+    if (value == "house" | value == "apartment"){
+        $(".bedroom").removeClass("d-none"),
+        $(".year").removeClass("d-none");
+      }
+
+
+    $(".options").removeClass("d-none"),
+    $(".production_license").addClass("d-none"),
+    $(".inside_plan").addClass("d-none"),
+    $(".points").addClass("d-none");
+  }else{
+    $(".foundation").addClass("d-none"),
+    $(".house_type").addClass("d-none"),
+    $(".rice_field_type").addClass("d-none"),
+    $(".options").addClass("d-none"),
+    $(".bedroom").addClass("d-none"),
+    $(".year").addClass("d-none"),
+    $(".land_type").removeClass("d-none"),
+    $(".production_license").removeClass("d-none"),
+    $(".inside_plan").removeClass("d-none"),
+    $(".points").removeClass("d-none");
+  };
+}
+
+
+
+function LandType(value) {
+  if (value == "rice_field"){
+    $(".rice_field_type").removeClass("d-none"),
+    $(".production_license").addClass("d-none");
+  }else{
+    $(".rice_field_type").addClass("d-none"),
+    $(".production_license").removeClass("d-none");
+  };
+  if (value == "garden" | value == "rice_field"){
+    $(".inside_plan").removeClass("d-none");
+  }else{
+    $(".inside_plan").addClass("d-none");
+  }
+}
+
+        </script>
         {% endblock %}
 
     {% block content %}

@@ -70,6 +70,12 @@ function Type(value) {
       $(".foundation").removeClass("d-none");
       }
 
+    if (value == "house" | value == "apartment"){
+        $(".bedroom").removeClass("d-none"),
+        $(".year").removeClass("d-none");
+      }
+
+
     $(".options").removeClass("d-none"),
     $(".production_license").addClass("d-none"),
     $(".inside_plan").addClass("d-none"),
@@ -79,6 +85,8 @@ function Type(value) {
     $(".house_type").addClass("d-none"),
     $(".rice_field_type").addClass("d-none"),
     $(".options").addClass("d-none"),
+    $(".bedroom").addClass("d-none"),
+    $(".year").addClass("d-none"),
     $(".land_type").removeClass("d-none"),
     $(".production_license").removeClass("d-none"),
     $(".inside_plan").removeClass("d-none"),
@@ -106,8 +114,10 @@ function LandType(value) {
   };
   if (value == "garden" | value == "rice_field"){
     $(".inside_plan").removeClass("d-none");
+    $(".production_license").addClass("d-none");
   }else{
     $(".inside_plan").addClass("d-none");
+    $(".production_license").removeClass("d-none");
   }
 }
 
