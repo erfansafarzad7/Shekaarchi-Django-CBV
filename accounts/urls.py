@@ -1,10 +1,11 @@
 from django.urls import path
 from . import views
+from .forms import LoginAuthenticationForm
 
 
 app_name = 'accounts'
 urlpatterns = [
-    path('login/', views.LoginView.as_view(), name='login'),
+    path('login/', views.LoginView.as_view(form_class=LoginAuthenticationForm), name='login'),
     path('otp-login/', views.OtpLoginView.as_view(), name='otp_login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('register/', views.RegisterView.as_view(), name='register'),

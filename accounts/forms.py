@@ -1,6 +1,8 @@
 from django import forms
 from .models import User, Otp
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import AuthenticationForm
+from unidecode import unidecode
 
 
 class UserCreationForm(forms.ModelForm):
@@ -47,3 +49,8 @@ class SMSVerifyForm(forms.ModelForm):
 class GetPhoneForm(forms.Form):
     phone = forms.CharField()
 
+
+class LoginAuthenticationForm(AuthenticationForm):
+
+    def clean_username(self):
+        return unidecode(self.cleaned_data['username'])

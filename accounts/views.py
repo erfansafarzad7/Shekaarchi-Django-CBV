@@ -16,6 +16,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from .custom_auth import auth as c_auth
 import datetime
+from unidecode import unidecode
 
 
 class LoginView(SuccessMessageMixin, LoginView):
@@ -44,7 +45,7 @@ class OtpLoginView(SuccessMessageMixin, FormView):
         """
         Get phone and send to sms verification view.
         """
-        phone = form.cleaned_data.get('phone')
+        phone = unidecode(form.cleaned_data.get('phone'))
         now = datetime.datetime.now()
 
         # create random code for otp
@@ -89,7 +90,7 @@ class RegisterView(SuccessMessageMixin, FormView):
         Create user register info session.
         """
         cd = form.cleaned_data
-        phone, username, password = cd.get('phone'), cd.get('username'), cd.get('password')
+        phone, username, password = unidecode(cd.get('phone')), cd.get('username'), cd.get('password')
         now = datetime.datetime.now()
 
         # create random code for otp
@@ -263,7 +264,7 @@ class EditPhoneView(LoginRequiredMixin, SuccessMessageMixin, FormView):
         """
         Get new phone and send to sms verification view.
         """
-        new_phone = form.cleaned_data.get('phone')
+        new_phone = unidecode(form.cleaned_data.get('phone'))
         now = datetime.datetime.now()
 
         # create random code for otp
@@ -323,11 +324,11 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
         Register new user or change phone number after sms verification.
         """
         try:
-            entered_otp = form.cleaned_data.get('code')
+            entered_otp = unidecode(str(form.cleaned_data.get('code')))
             user_session = self.request.session
             otp = Otp.objects.get(code__exact=entered_otp)
 
-            if entered_otp == otp.code:
+            if int(entered_otp) == otp.code:
                 # for user change phone
                 if 'user_change_phone' in user_session:
                     user_session = self.request.session['user_change_phone']
