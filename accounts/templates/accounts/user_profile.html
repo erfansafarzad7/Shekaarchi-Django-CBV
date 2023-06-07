@@ -14,6 +14,11 @@
                   for (var i = 0; i < price.length; i++) {
                     price[i].innerHTML = price[i].innerHTML.split('').reverse().join('').replace(/(.{3})/g,'$1,').replace(/,$/,'').split('').reverse().join('')
                 }}
+
+                function OpenLink(link) {
+                    window.location = link;
+                }
+
             </script>
         {% endblock %}
 
@@ -127,7 +132,7 @@
         <div class="row">
             {% if items %}
             {% for item in items %}
-          <div class="col-sm-6 col-md-4 col-lg-3 card-grid">
+          <div class="col-sm-6 col-md-4 col-lg-3 card-grid" onclick="OpenLink('{% url 'files:item_detail' item.code %}')">
             <div class="product-card">
               <div class="product-head">
                 <div

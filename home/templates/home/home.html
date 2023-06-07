@@ -48,6 +48,10 @@
             return str;
         }
 
+        function OpenLink(link) {
+            window.location = link;
+        }
+
 
 
 var subject = null
@@ -219,39 +223,39 @@ function LandType(value) {
                         <input name="city" type="text" class="form-control" placeholder="شهر/محل" />
                       </li>
                       <li>
-                        <input onkeyup="ToRial(this.value, 'a');"
+                        <input onkeyup="ToRial(this.value, 'ar');"
                           name="area"
                           type="number"
                           class="form-control"
                           placeholder="متراژ تا.."
-                        /><span id="a"></span>
-                      </li>
+                        />
+                      </li><span id="ar"></span>
                       <li class="all_price">
                         <input
-                                onkeyup="ToRial(this.value, 'p');"
+                                onkeyup="ToRial(this.value, 'pr');"
                                 id="id_all_price"
                           name="all_price"
                           type="number"
                           class="form-control"
                           placeholder="قیمت تا.."
-                        /><span id="p"></span>
-                      </li>
+                        />
+                      </li><span id="pr"></span>
                       <li class="all_rent_price d-none">
-                        <input onkeyup="ToRial(this.value, 'arp');"
+                        <input onkeyup="ToRial(this.value, 'arps');"
                           name="all_rent_price"
                           type="number"
                           class="form-control"
                           placeholder="ودیعه تا.."
-                        /><span id="arp"></span>
-                      </li>
+                        />
+                      </li><span id="arps"></span>
                       <li class="reent d-none">
-                        <input onkeyup="ToRial(this.value, 'r');"
+                        <input onkeyup="ToRial(this.value, 're');"
                         name="rent"
                         type="number"
                         class="form-control"
                         placeholder="کرایه تا.."
-                         /><span id="r"></span>
-                      </li>
+                         />
+                      </li><span id="re"></span>
                       <li class="subject">
                        <select onchange="Subject(this.value)" class="nasted-menu " name="subject" id="subjectval">
                             <option value="">نوع قرارداد</option>
@@ -324,7 +328,7 @@ function LandType(value) {
           <div class="col-lg-9">
             <div class="row">
                 {% for item in items %}
-                <div class="col-sm-6 col-md-4 col-lg-4 card-grid">
+                <div class="col-sm-6 col-md-4 col-lg-4 card-grid" onclick="OpenLink('{% url 'files:item_detail' item.code %}')">
                   <div class="product-card">
                     <div class="product-head">
                       <div
@@ -470,7 +474,7 @@ function LandType(value) {
                           </li>
                         </ul>
                       </div>
-                        <a href="{% url 'files:item_detail' item.code %}">
+                        <a class="more" href="{% url 'files:item_detail' item.code %}">
                             <i class="fas fa-align-justify"> </i>
                             جزئیات بیشتر...
                         </a>

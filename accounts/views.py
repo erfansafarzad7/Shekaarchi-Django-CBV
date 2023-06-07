@@ -146,7 +146,7 @@ class UserProfileView(LoginRequiredMixin, ListView):
         if self.request.user.id == self.items_user.id:
             context["items"] = all_items.order_by('-updated')
         else:
-            context["items"] = all_items.exclude(publish__exact=False).order_by('-updated')
+            context["items"] = all_items.exclude(publish__exact=False, public__exact=False).order_by('-updated')
 
         a, psh, pc = 0, 0, 0
         for item in all_items:

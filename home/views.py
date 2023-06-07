@@ -65,7 +65,7 @@ class ItemSearchView(ListView):
             # qp[0] is query parameter(field)
             # qp[1] is query parameters value
             if qp[0] == 'area' and qp[1]:
-                self.results = self.results.filter(area__lte=int(qp[1]) or 0)
+                self.results = self.results.filter(area__lte=int(qp[1]) or 0).order_by('area')
             if qp[0] == 'all_price' and qp[1]:
                 self.results = self.results.filter(all_price__lte=int(qp[1]) or 0)
             if qp[0] == 'all_rent_price' and qp[1]:
