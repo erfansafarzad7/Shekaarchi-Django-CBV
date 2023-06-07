@@ -30,6 +30,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Otp(models.Model):
+    """
+    Otp code for register/login and forget password.
+    """
     phone = models.CharField(max_length=11)
     code = models.PositiveSmallIntegerField()
     created = models.DateTimeField(auto_now_add=True)

@@ -98,12 +98,17 @@ class RentFilter(admin.SimpleListFilter):
         if self.value():
             return queryset.filter(rent__lte=self.value()).filter(subject='rent')
 
-
+# mark selected items as publish
 @admin.action(description='Mark as published')
 def make_published(modeladmin, request, queryset):
     queryset.update(publish=True)
 
+# mark selected items as unpublish
+@admin.action(description='Mark as published')
+def make_published(modeladmin, request, queryset):
+    queryset.update(publish=False)
 
+# set selected items time to now
 @admin.action(description='Set time now')
 def set_time_now(modeladmin, request, queryset):
     queryset.update(updated=datetime.datetime.now())

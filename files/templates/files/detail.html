@@ -6,7 +6,9 @@
         {% block style %}
             <link rel="stylesheet" href="{% static 'css/custom/grid-details.css' %}" />
         {% endblock %}
+
         {% block scripts %}
+        <!--copy share link to clipboard and 3 digits price-->
             <script src="{% static 'js/vendor/jquery-ui.min.js' %}"></script>
             <script src="{% static 'js/custom/price-range.js' %}"></script>
             <script>
@@ -36,6 +38,7 @@
             </script>
         {% endblock %}
 
+<!--banner-->
   {% block banner %}
     <section class="single-banner">
       <div class="container">
@@ -61,6 +64,7 @@
     </section>
   {% endblock %}
 
+<!--item detail-->
     {% block content %}
     <section class="ad-details-part">
       <div class="container">
@@ -141,6 +145,7 @@
                         آپارتمانی
                     {% endif %}
 
+                    <!--land type-->
                     {% if item.land_type == 'residential' %}
                             مسکونی
                         {% elif item.land_type == 'commercial' %}
@@ -284,6 +289,8 @@
               </div>
             </div>
               {% endif %}
+
+            <!--item options-->
             <div class="ad-details-card">
               <div class="ad-details-title"><h5>مشخصات</h5></div>
               <div class="ad-details-specific">

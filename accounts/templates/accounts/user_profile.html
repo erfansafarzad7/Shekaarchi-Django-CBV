@@ -7,6 +7,7 @@
     {% endblock %}
 
         {% block scripts %}
+            <!-- 3 digits space and open file on tap -->
             <script>
                 let price = document.getElementsByClassName("price")
                 window.onload = function WindowLoad(event) {
@@ -16,6 +17,7 @@
             </script>
         {% endblock %}
 
+<!--banner-->
   {% block banner %}
     <section class="single-banner">
       <div class="container">
@@ -39,14 +41,15 @@
   {% endblock %}
 
     {% block content %}
-        <!-- (login required)-->
+
+<!--user profile (Login Required)-->
         {% if user.is_authenticated %}
+<!--user info-->
     <section class="dash-header-part">
         <div class="container">
           <div class="row">
             <div class="col-sm-4 col-md-3 col-lg-2">
               <div class="dash-avatar">
-  <!-- href   src -->
                 <a href="#"><img src="
                   {% if request.user.show_avatar and request.user.avatar %}
                     {{request.user.avatar.url}}
@@ -57,7 +60,6 @@
             </div>
             <div class="col-sm-8 col-md-9 col-lg-3">
               <div class="dash-intro">
-  <!-- href   var -->
                 <h4><a href="#">{{items_user.username}}</a></h4>
               </div>
               <ul class="dash-meta">
@@ -103,7 +105,7 @@
             </div>
           </div>
 
-
+<!--tabs-->
         <div class="row">
           <div class="col-lg-12">
             <div class="dash-menu-list col-md-12">

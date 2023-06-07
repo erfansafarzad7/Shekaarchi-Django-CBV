@@ -34,6 +34,7 @@
               </li>
             </ul>
           </div>
+          <!--search code-->
           <form class="header-search" role="search" method="GET" action="{% url 'home:search' %}">
             <div class="header-main-search">
                 <button type="submit" class="header-search-btn">
@@ -48,7 +49,7 @@
                     <i class="fas fa-sliders-h"></i>
                 </button>
 
-
+<!--filters-->
             </div>
             <div class="header-search-option">
               <div class="row">
@@ -174,6 +175,7 @@
               </div>
             </div>
           </form>
+<!--mobile buttons-->
           <div class="header-right">
             <ul class="header-widget">
               <li>
@@ -196,10 +198,10 @@
         </div>
       </div>
     </header>
+<!--sidebar panel-->
     <div class="sidebar-part">
       <div class="sidebar-body">
         <div class="sidebar-header">
-<!--                                 add logo                                -->
           <a href="{% url 'home:home' %}" class="sidebar-logo"
             ><img src="{% static 'images/logo.png' %}" alt="logo" /></a
           ><button class="sidebar-cross"><i class="fas fa-times"></i></button>
@@ -331,6 +333,7 @@
         </div>
       </div>
     </div>
+<!--mobile buttons-->
     <div class="btmbar-part">
       <div class="container">
         <ul class="btmbar-widget">
@@ -361,6 +364,7 @@
       </div>
     </div>
 
+<!--3 digits space and filters-->
         <script>
         function ToRial(str, e) {
 

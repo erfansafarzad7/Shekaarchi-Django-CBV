@@ -3,6 +3,7 @@
     {% block title %} شکارچی {% endblock %}
 
   {% block banner %}
+<!--site banner-->
 <section class="banner-part" xmlns="http://www.w3.org/1999/html">
       <div class="container">
         <div class="banner-content">
@@ -21,6 +22,7 @@
   {% endblock %}
 
         {% block scripts %}
+        <!--3 digits space and filters-->
         <script src="js/vendor/jquery-ui.min.js"></script>
         <script src="js/custom/price-range.js"></script>
             <script>
@@ -139,9 +141,9 @@ function LandType(value) {
 
         </script>
         {% endblock %}
-
     {% block content %}
 
+<!--current page-->
     <section class="ad-list-part">
       <div class="container">
         <div class="row">
@@ -165,7 +167,7 @@ function LandType(value) {
 
 
 
-
+<!--item filters-->
         <div class="row content-reverse">
           <div class="col-lg-3">
             <div class="row">
@@ -318,7 +320,7 @@ function LandType(value) {
             </div>
           </div>
 
-
+<!--items-->
           <div class="col-lg-9">
             <div class="row">
                 {% for item in items %}
@@ -520,7 +522,7 @@ function LandType(value) {
 
 
 
-
+<!--paginations-->
             {% if is_paginated %}
 
             <div class="row">

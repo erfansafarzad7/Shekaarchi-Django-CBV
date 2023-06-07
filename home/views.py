@@ -15,6 +15,9 @@ class HomeView(ListView):
     paginate_by = 12
 
     def get(self, request, *args, **kwargs):
+        """
+        Add images after edit item.
+        """
         if 'add_image' in request.session:
             session = request.session['add_image']
             item = Item.objects.get(code__exact=session['code'])

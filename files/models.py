@@ -5,6 +5,9 @@ from hitcount.models import HitCountMixin, HitCount
 
 
 class Image(models.Model):
+    """
+    Item images.
+    """
     code = models.BigIntegerField(unique=False)
     image = models.ImageField()
     uploaded = models.DateTimeField(auto_now_add=True)

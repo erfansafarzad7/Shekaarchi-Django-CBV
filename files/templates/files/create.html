@@ -7,6 +7,7 @@
     {% endblock %}
 
         {% block scripts %}
+            <!-- 3 digits space and filter options -->
         <script>
         function ToRial(str, e) {
 
@@ -127,7 +128,7 @@ function LandType(value) {
         </script>
         {% endblock %}
 
-
+<!--banner-->
     {% block banner %}
     <section class="single-banner">
       <div class="container">
@@ -137,7 +138,6 @@ function LandType(value) {
               <h2>فایل جدید </h2>
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-<!-- href -->
                   <a href="{% url 'home:home' %}">صفحه اصلی</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
@@ -160,7 +160,6 @@ function LandType(value) {
         <div class="row">
           <div class="col-sm-4 col-md-3 col-lg-2">
             <div class="dash-avatar">
-<!-- href   src -->
               <a href="#"><img src="
                 {% if request.user.show_avatar and request.user.avatar %}
                   {{request.user.avatar.url}}
@@ -171,7 +170,6 @@ function LandType(value) {
           </div>
           <div class="col-sm-8 col-md-9 col-lg-3">
             <div class="dash-intro">
-<!-- href   var -->
               <h4><a href="#">{{request.user.username}}</a></h4>
             </div>
             <ul class="dash-meta">
@@ -320,7 +318,6 @@ function LandType(value) {
                           <option value="deed">سند </option>
                           <option value="nasaq">نسق</option>
                           <option value="arrangement">قولنامه / فروشنامه </option>
-
                       </select>
                     </div>
                   </div>
@@ -552,7 +549,7 @@ function LandType(value) {
                   </div>
                 </div>
               </div>
-<!-- if user -->
+<!-- if users own post -->
               <div class="adpost-card">
                 <div class="adpost-title"><h3>اطلاعات مالک (محفوظ و غیرقابل نمایش برای دیگران)</h3></div>
                 <div class="row">

@@ -51,13 +51,18 @@ class OtpLoginView(SuccessMessageMixin, FormView):
         # create random code for otp
         rnd_code = randint(1000, 9999)
 
+        # user phone for login with otp
         self.request.session['login_with_otp'] = {
             'entered_phone': phone
         }
+
+        # user info session for otp code
         self.request.session['user_info'] = {
             'phone': phone,
             'rnd_code': rnd_code
         }
+
+        # timer session for resend otp code
         self.request.session['request_timer'] = {
             'now': str(now)
         }
@@ -103,10 +108,13 @@ class RegisterView(SuccessMessageMixin, FormView):
             'password': password,
         }
 
+        # user info session for otp code
         self.request.session['user_info'] = {
             'phone': phone,
             'rnd_code': rnd_code
         }
+
+        # timer session for resend otp code
         self.request.session['request_timer'] = {
             'now': str(now)
         }
@@ -129,10 +137,12 @@ class UserProfileView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # user items info
         all_items = Item.objects.filter(user_id__exact=self.kwargs['pk'])
         publish_items = all_items.filter(publish=True)
         public_items = publish_items.filter(public=True)
 
+        # check if its user own profile
         if self.request.user.id == self.items_user.id:
             context["items"] = all_items.order_by('-updated')
         else:
@@ -148,6 +158,7 @@ class UserProfileView(LoginRequiredMixin, ListView):
         for item in public_items:
             pc += 1
 
+        # user items info
         context['all_user_items'] = a
         context['publish_items'] = psh
         context['public_items'] = pc
@@ -158,7 +169,7 @@ class UserProfileView(LoginRequiredMixin, ListView):
 
 class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
-    User can edit just own info.
+    Edit user info.
     """
     template_name = 'accounts/edit_profile.html'
     model = User
@@ -168,6 +179,7 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('home:home')
 
     def get(self, request, *args, **kwargs):
+        # get user avatar
         self.avatar = None
         user_id = self.kwargs['pk']
         if user_id:
@@ -175,6 +187,7 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        # set show avatar to false if avatar changed
         user = self.get_object()
         user.show_avatar = False
         user.save()
@@ -190,6 +203,7 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # user items info
         all_items = Item.objects.filter(user_id__exact=self.kwargs['pk'])
         publish_items = all_items.filter(publish=True)
         public_items = publish_items.filter(public=True)
@@ -209,6 +223,7 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         for item in public_items:
             pc += 1
 
+        # user items info
         context['all_user_items'] = a
         context['publish_items'] = psh
         context['public_items'] = pc
@@ -217,9 +232,9 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return context
 
     def form_valid(self, form):
+        # set new avatar
         avatar = self.request.FILES.get('avatar')
         user = self.get_object()
-        print(avatar, user)
 
         if avatar and avatar.size < 1000000:
             with transaction.atomic():
@@ -230,6 +245,9 @@ class UserEditProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class DeleteAvatarView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    """
+    Delete profile avatar.
+    """
     model = User
     template_name = 'accounts/delete_avatar.html'
 
@@ -270,14 +288,19 @@ class EditPhoneView(LoginRequiredMixin, SuccessMessageMixin, FormView):
         # create random code for otp
         rnd_code = randint(1000, 9999)
 
+        # user info session for change phone number
         self.request.session['user_change_phone'] = {
             'user_id': self.request.user.id,
             'phone': new_phone
         }
+
+        # user info session for otp code
         self.request.session['user_info'] = {
             'phone': new_phone,
             'rnd_code': rnd_code
         }
+
+        # timer session for resend otp code
         self.request.session['request_timer'] = {
             'now': str(now)
         }
@@ -311,6 +334,7 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
 
         otp = Otp.objects.filter(code__exact=rnd_code).exists()
 
+        # if otp with entered number is not exists, create new one and resend.
         if not otp and session_timer['now'] < session_timer['delay']:
             Otp.objects.create(phone=user_phone, code=rnd_code)
             # send code with sms
@@ -321,7 +345,7 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
 
     def form_valid(self, form):
         """
-        Register new user or change phone number after sms verification.
+        Do changes with sms verification.
         """
         try:
             entered_otp = unidecode(str(form.cleaned_data.get('code')))
@@ -329,7 +353,7 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
             otp = Otp.objects.get(code__exact=entered_otp)
 
             if int(entered_otp) == otp.code:
-                # for user change phone
+                # user change phone
                 if 'user_change_phone' in user_session:
                     user_session = self.request.session['user_change_phone']
                     user = User.objects.get(id=user_session['user_id'])
@@ -340,12 +364,11 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
                         del user_session
                         return super(SMSVerifyView, self).form_valid(form)
 
-                # for user register
+                # user register
                 if 'user_register_info' in user_session:
                     user_session = self.request.session['user_register_info']
                     if user_session['phone'] == otp.phone:
                         User.objects.create_user(phone=user_session['phone'],
-                                                 email=user_session['email'],
                                                  username=user_session['username'],
                                                  password=user_session['password'],
                                                  )
@@ -355,7 +378,7 @@ class SMSVerifyView(SuccessMessageMixin, FormView):
                         del user_session
                         return super(SMSVerifyView, self).form_valid(form)
 
-                # for user login with otp
+                # user login with otp
                 if 'login_with_otp' in user_session:
                     user_session = self.request.session['login_with_otp']
                     user = User.objects.get(phone__exact=user_session['entered_phone'])

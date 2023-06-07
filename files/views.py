@@ -79,6 +79,9 @@ class ItemDetailView(DetailView):
     context_object_name = 'item'
 
     def get(self, request, *args, **kwargs):
+        """
+        Fund item images with code.
+        """
         item_code = self.kwargs['code']
         self.item_images = None
         if item_code:
@@ -86,6 +89,11 @@ class ItemDetailView(DetailView):
         return super().get(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
+        """
+        Check the item if was publish or not.
+        if its published show item to all.
+        if its not just show it to item owner.
+        """
         user = Item.objects.get(code__exact=self.kwargs['code']).user
         item = Item.objects.filter(code__exact=self.kwargs['code'])
         other_user = Item.objects.filter(code__exact=self.kwargs['code'], publish=True, public=True)
@@ -93,12 +101,14 @@ class ItemDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # hits
         hit_count = get_hitcount_model().objects.get_for_object(self.get_object())
         hits = hit_count.hits
         hit_count_response = HitCountMixin.hit_count(self.request, hit_count)
         if hit_count_response.hit_counted:
             hits = hits + 1
 
+        # calculate price per meter
         if self.get_object().all_price:
             context['price_per_meter'] = round(self.get_object().all_price / self.get_object().area)
 
@@ -155,6 +165,9 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('home:home')
 
     def get(self, request, *args, **kwargs):
+        """
+        Fund item images with code.
+        """
         self.item_images = None
         item_code = self.kwargs['code']
         if item_code:
@@ -162,6 +175,9 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        """
+        Set item unpublish after changes.
+        """
         item = self.get_queryset()
         item.publish = False
         item.save()
@@ -194,6 +210,9 @@ class ItemUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return get_object_or_404(Item, code__exact=self.kwargs['code'])
 
     def get_object(self, queryset=None):
+        """
+        Check item owner.
+        """
         obj = Item.objects.get(code__exact=self.get_queryset().code)
         return obj if obj.user == self.request.user else None
 
@@ -228,6 +247,9 @@ class DeleteImageView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return Image.objects.filter(code__exact=self.kwargs['code'])
 
     def get_object(self, queryset=None):
+        """
+        Check item owner.
+        """
         img = self.get_queryset()
         for i in img:
             img_user = Item.objects.get(code__exact=i.code).user
