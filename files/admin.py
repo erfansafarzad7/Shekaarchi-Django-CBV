@@ -104,8 +104,8 @@ def make_published(modeladmin, request, queryset):
     queryset.update(publish=True)
 
 # mark selected items as unpublish
-@admin.action(description='Mark as published')
-def make_published(modeladmin, request, queryset):
+@admin.action(description='Mark as unpublished')
+def make_unpublished(modeladmin, request, queryset):
     queryset.update(publish=False)
 
 # set selected items time to now
@@ -117,7 +117,7 @@ def set_time_now(modeladmin, request, queryset):
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     search_fields = ('code', )
-    actions = (make_published, set_time_now)
+    actions = (make_published, make_unpublished, set_time_now)
     list_display = ('code',
                     'type',
                     'subject',
@@ -126,7 +126,9 @@ class ItemAdmin(admin.ModelAdmin):
                     'all_price',
                     'publish',
                     'public',
+                    'state',
                     'city',
+                    'village',
                     'updated')
 
     list_filter = (AreaFilter,
@@ -143,7 +145,9 @@ class ItemAdmin(admin.ModelAdmin):
                    'land_type',
                    'rice_field_type',
                    'inside_plan',
+                   'state',
                    'city',
+                   'village',
                    'updated')
 
 
