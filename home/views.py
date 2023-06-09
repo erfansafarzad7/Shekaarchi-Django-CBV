@@ -97,6 +97,9 @@ class ItemSearchView(ListView):
             if qp[0] == 'city' and qp[1]:
                 self.results = self.results.filter(Q(city__contains=qp[1]))
 
+            if qp[0] == 'village' and qp[1]:
+                self.results = self.results.filter(Q(village__contains=qp[1]))
+
             if qp[0] == 'search_in' and qp[1]:
                 if qp[1] == 'profile':
                     self.results = self.results.filter(user__exact=self.request.user)

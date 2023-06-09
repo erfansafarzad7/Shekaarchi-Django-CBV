@@ -15,13 +15,6 @@ class Image(models.Model):
     def __str__(self):
         return f"{self.code}"
 
-    def delete(self, *args, **kwargs):
-        """
-        Delete must be overridden because the inherited delete method does not call `self.file.delete()`.
-        """
-        self.image.delete()
-        super(Image, self).delete(*args, **kwargs)
-
 
 class Item(models.Model, HitCountMixin):
     """
@@ -65,8 +58,9 @@ class Item(models.Model, HitCountMixin):
 
     # required fields
     address = models.TextField(max_length=250, verbose_name='آدرس')
-    state = models.CharField(max_length=20, verbose_name='استان', null=True, blank=True)
-    city = models.CharField(max_length=20, verbose_name='شهر/محل', null=True, blank=True)
+    state = models.CharField(max_length=20, verbose_name='استان')
+    city = models.CharField(max_length=20, verbose_name='شهر/شهرستان')
+    village = models.CharField(max_length=20, verbose_name='محل/روستا', null=True, blank=True)
     area = models.PositiveIntegerField(verbose_name='متراژ')
     all_price = models.PositiveBigIntegerField(verbose_name='قیمت کل', null=True, blank=True)
     rent = models.PositiveBigIntegerField(verbose_name='اجاره ', null=True, blank=True)
@@ -89,6 +83,7 @@ class Item(models.Model, HitCountMixin):
     bedroom = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='تعداد اتاق خواب')
     year = models.PositiveIntegerField(null=True, blank=True, verbose_name='سال ساخت')
     mdf = models.BooleanField(default=False, verbose_name='ام دی اف')
+    ceramic = models.BooleanField(default=False, verbose_name='سرامیک')
     cooler = models.BooleanField(default=False, verbose_name='کولر')
     water_heater = models.BooleanField(default=False, verbose_name='آبگرمکن')
     elevator = models.BooleanField(default=False, verbose_name='اسانسور')

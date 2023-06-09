@@ -198,7 +198,7 @@
                         {% elif item.land_type == 'garden' %}
                             باغی
                         {% elif item.land_type == 'rice_field' %}
-                            کشاورزی
+                            شالیزار
                             <!--rice field type-->
                             {% if item.rice_field_type == 'mechanized' %}
                                  مکانیزه
@@ -218,9 +218,7 @@
                         سند دار
                     {% endif %}
 
-                    {% if item.city != None %}
-                    در {{ item.city }}
-                    {% endif %}
+
 
                   </a>
                 </h2>
@@ -344,14 +342,12 @@
                     <h6> متراژ :</h6>
                     <p class="price">{{item.area}}</p>
                   </li>
+
                   <li>
-                    <h6>استان :</h6>
-                    <p>{{ item.state|default_if_none:"تعیین نشده" }}</p>
+                    <h6>آدرس :</h6>
+                    <p>{{ item.state|default_if_none:"" }} - {{ item.city|default_if_none:"" }} - {{ item.village|default_if_none:"" }}</p>
                   </li>
-                  <li>
-                    <h6>شهر/محل :</h6>
-                    <p>{{ item.city|default_if_none:"تعیین نشده" }}</p>
-                  </li>
+
                   <li>
                     <h6>  مدارک :</h6>
                     <p>{% if item.documents == 'deed' %}
@@ -442,6 +438,15 @@
                   <li>
                     <h6>  کابینت:</h6>
                     <p>{% if item.mdf %}
+                    <i class="fa fa-check"></i>
+                      {% else %}
+                    <i class="fa fa-close"></i>
+                      {% endif %}
+                    </p>
+                  </li>
+                  <li>
+                    <h6>  کف سرامیک:</h6>
+                    <p>{% if item.ceramic %}
                     <i class="fa fa-check"></i>
                       {% else %}
                     <i class="fa fa-close"></i>

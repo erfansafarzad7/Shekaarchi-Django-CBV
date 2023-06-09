@@ -323,12 +323,23 @@ function LandType(value) {
                   </div>
                   <div class="col-lg-4">
                     <div class="form-group">
-                      <label class="form-label">محل </label
+                      <label class="form-label">شهر </label
                       ><input name="city" maxlength="20" id="id_city"
                               value="{{item.city|default_if_none:''}}"
                         type="text"
                         class="form-control"
-                        placeholder=" محل/شهر مورد نظر "
+                        placeholder=" شهر/شهرستان مورد نظر "
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-label">روستا </label
+                      ><input name="village" maxlength="20" id="id_village"
+                              value="{{item.village|default_if_none:''}}"
+                        type="text"
+                        class="form-control"
+                        placeholder=" محل/روستای مورد نظر "
                       />
                     </div>
                   </div>
@@ -474,6 +485,15 @@ function LandType(value) {
                                  {% if item.mdf %}checked{%else%}{%endif%}
                           /><label for="id_mdf" class="form-check-text"
                             >کابینت  </label
+                          >
+                        </li>
+                        <li>
+                          <input name="ceramic" id="id_ceramic"
+                            type="checkbox"
+                            class="form-check"
+                                 {% if item.ceramic %}checked{%else%}{%endif%}
+                          /><label for="id_ceramic" class="form-check-text"
+                            >کف سرامیک  </label
                           >
                         </li>
                         <li>

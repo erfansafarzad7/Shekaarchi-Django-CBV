@@ -220,7 +220,10 @@ function LandType(value) {
                         <input name="state" type="text" class="form-control" placeholder="استان" />
                       </li>
                       <li>
-                        <input name="city" type="text" class="form-control" placeholder="شهر/محل" />
+                        <input name="city" type="text" class="form-control" placeholder="شهر/شهرستان" />
+                      </li>
+                      <li>
+                        <input name="village" type="text" class="form-control" placeholder="محل/روستا" />
                       </li>
                       <li>
                         <input onkeyup="ToRial(this.value, 'ar');"
@@ -437,7 +440,7 @@ function LandType(value) {
                               {% elif item.land_type == 'garden' %}
                                   باغی
                               {% elif item.land_type == 'rice_field' %}
-                                  کشاورزی
+                                  شالیزار
                                   <!--rice field type-->
                                   {% if item.rice_field_type == 'mechanized' %}
                                        مکانیزه
@@ -457,9 +460,7 @@ function LandType(value) {
                               سند دار
                           {% endif %}
 
-                          {% if item.city != None %}
-                          در {{ item.city }}
-                          {% endif %}
+
 
                           </a>
                         </h5>
@@ -471,6 +472,10 @@ function LandType(value) {
                           <li>
                             <i class="fas fa-clock"></i>
                                 <p>ago | {{item.updated|timesince}}</p>
+                          </li>
+                          <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <p>{{ item.state|default_if_none:"" }} - {{ item.city|default_if_none:"" }} - {{ item.village|default_if_none:"" }}</p>
                           </li>
                         </ul>
                       </div>

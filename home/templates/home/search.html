@@ -160,7 +160,7 @@
                         {% elif item.land_type == 'garden' %}
                             باغی
                         {% elif item.land_type == 'rice_field' %}
-                            کشاورزی
+                            شالیزار
                             <!--rice field type-->
                             {% if item.rice_field_type == 'mechanized' %}
                                  مکانیزه
@@ -180,9 +180,7 @@
                         سند دار
                     {% endif %}
 
-                    {% if item.city != None %}
-                    در {{ item.city }}
-                    {% endif %}
+
 
                     </a>
                   </h5>
@@ -194,6 +192,10 @@
                     <li>
                       <i class="fas fa-clock"></i>
                           <p>ago |  {{item.updated|timesince}}</p>
+                    </li>
+                    <li>
+                      <i class="fas fa-map-marker-alt"></i>
+                      <p>{{ item.state|default_if_none:"" }} - {{ item.city|default_if_none:"" }} - {{ item.village|default_if_none:"" }}</p>
                     </li>
                   </ul>
                 </div>
